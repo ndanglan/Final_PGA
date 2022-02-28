@@ -8,7 +8,6 @@ import { AppState } from '../../../redux/reducer';
 import { Action } from 'redux';
 import { fetchThunk } from '../../common/redux/thunk';
 import { API_PATHS } from '../../../configs/api';
-import { RESPONSE_STATUS_SUCCESS } from '../../../utils/httpResponseCode';
 import { setUserInfo } from '../redux/authReducer';
 import Cookies from 'js-cookie';
 import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
@@ -16,23 +15,24 @@ import { ROUTES } from '../../../configs/routes';
 import { replace } from 'connected-react-router';
 import { getErrorMessageResponse } from '../../../utils';
 import { useStyles } from '../../../styles/makeStyles';
+import { setLoading } from '../../common/redux/loadingReducer';
 
 const LoginPage = () => {
   const classes = useStyles()
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
-  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const onLogin = React.useCallback(
     async (values: ILoginParams) => {
       setErrorMessage('');
-      setLoading(true);
+      dispatch(setLoading(true))
 
       const json = await dispatch(
         fetchThunk(API_PATHS.signIn, 'post', { email: values.email, password: values.password }),
       );
 
-      setLoading(false);
+      dispatch(setLoading(false))
+      console.log(json);
 
       if (json.success) {
         dispatch(setUserInfo(json.user));
@@ -57,9 +57,18 @@ const LoginPage = () => {
         flexDirection: 'column',
       }}
     >
-      <img src={logo} alt="" style={{ maxWidth: '250px', margin: '32px' }} />
-
-      <LoginForm onLogin={onLogin} loading={loading} errorMessage={errorMessage} />
+      <img
+        src={logo}
+        alt=""
+        style={{
+          maxWidth: '250px',
+          margin: '32px'
+        }}
+      />
+      <LoginForm
+        onLogin={onLogin}
+        errorMessage={errorMessage}
+      />
     </div>
   );
 };

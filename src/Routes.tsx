@@ -3,8 +3,9 @@ import { Route, Switch, useLocation } from 'react-router-dom';
 import { ROUTES } from './configs/routes';
 import ProtectedRoute from './modules/common/components/ProtectedRoute';
 
-const HomePage = lazy(() => import('./modules/home/pages/HomePage'));
 const LoginPage = lazy(() => import('./modules/auth/pages/LoginPage'));
+const ProductsPage = lazy(() => import('./modules/products/pages/ProductsPage'));
+const UsersPage = lazy(() => import('./modules/users/pages/UsersPage'));
 
 interface Props { }
 
@@ -15,7 +16,9 @@ export const Routes = (props: Props) => {
     <Suspense fallback={<div>Loading.....</div>}>
       <Switch location={location}>
         <Route path={ROUTES.login} component={LoginPage} />
-        <ProtectedRoute path={ROUTES.home} component={HomePage} />
+        {/* <ProtectedRoute path={ROUTES.productList} component={ProductsPage} /> */}
+        <Route path={ROUTES.productList} component={ProductsPage} />
+        <Route path={ROUTES.userList} component={UsersPage} />
         <Route path="/" component={LoginPage} />
       </Switch>
     </Suspense>

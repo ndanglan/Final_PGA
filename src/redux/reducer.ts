@@ -1,3 +1,4 @@
+import loadingReducer, { LoadingProps } from './../modules/common/redux/loadingReducer';
 import { connectRouter, RouterState } from 'connected-react-router';
 import { History } from 'history';
 import { combineReducers } from 'redux';
@@ -8,6 +9,7 @@ export interface AppState {
   router: RouterState;
   intl: IntlState;
   profile: AuthState;
+  loading: LoadingProps
 }
 
 export default function createRootReducer(history: History) {
@@ -15,5 +17,6 @@ export default function createRootReducer(history: History) {
     router: connectRouter(history),
     intl: intlReducer,
     profile: authReducer,
+    loading: loadingReducer
   });
 }

@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 
 interface Props {
   onLogin(values: ILoginParams): void;
-  loading: boolean;
   errorMessage: string;
 }
 
@@ -20,7 +19,7 @@ const LoginForm = (props: Props) => {
     }
   });
 
-  const { onLogin, loading, errorMessage } = props;
+  const { onLogin, errorMessage } = props;
 
   const onSubmit = useCallback((data: { email: string, password: string | number }) => {
     if (data) {
@@ -39,7 +38,7 @@ const LoginForm = (props: Props) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       {errorMessage && (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>
           <p>{errorMessage}</p>
         </div>
       )}
