@@ -26,6 +26,14 @@ const SideBar = (props: Props) => {
 
   return (
     <Drawer
+      sx={{
+        width: '280px',
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: '280px',
+          boxSizing: 'border-box',
+        },
+      }}
       variant="persistent"
       anchor="left"
       open={props.open}

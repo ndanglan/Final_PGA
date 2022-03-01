@@ -5,9 +5,9 @@ interface Props { }
 
 const UsersPage = (props: Props) => {
   return (
-    <MainLayout>
+    <>
       <div>test</div>
-    </MainLayout>
+    </>
   )
 }
 

@@ -6,12 +6,15 @@ export const useStyles = makeStyles({
   },
 
   appBar: {
+
     '&.MuiAppBar-root': {
       backgroundColor: '#323259'
     },
 
     '& .MuiToolbar-root': {
-      padding: '1rem'
+      padding: '1rem',
+      zIndex: '1000',
+      boxShadow: "0 0.5rem 1rem 0 #1a1f33",
     },
 
     '& .MuiTypography-h5': {

@@ -5,9 +5,9 @@ interface Props { }
 
 const ProductsPage = (props: Props) => {
   return (
-    <MainLayout>
+    <>
       <div>tesst</div>
-    </MainLayout>
+    </>
   )
 }
 

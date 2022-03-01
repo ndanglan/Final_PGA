@@ -1,18 +1,23 @@
+import React, { useState } from 'react'
 import { AppBar, IconButton, Toolbar, Typography, Button, Menu, MenuItem, Popover } from '@mui/material';
+import { IUser } from '../../../models/user'
 import MenuIcon from '@mui/icons-material/Menu';
 import { useStyles } from '../../../styles/makeStyles'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import React, { useState } from 'react'
+
 
 interface Props {
-  handleSideBarAction(): void
+  user?: IUser,
+  handleSideBarAction(): void,
+  handleLogOut(): void
 }
 
 const Header = (props: Props) => {
   const classes = useStyles();
 
+
   return (
-    <AppBar className={classes.appBar} position="fixed">
+    <AppBar className={classes.appBar} position="static">
       <Toolbar>
         <IconButton
           size="large"
@@ -51,11 +56,11 @@ const Header = (props: Props) => {
                   color: '#999'
                 }}
               >
-                Test@gmail.com
+                {props.user?.login}
               </Typography>
             </div>
             <div>
-              <a>
+              <a onClick={props.handleLogOut}>
                 Log out
               </a>
             </div>

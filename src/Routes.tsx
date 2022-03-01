@@ -16,9 +16,8 @@ export const Routes = (props: Props) => {
     <Suspense fallback={<div>Loading.....</div>}>
       <Switch location={location}>
         <Route path={ROUTES.login} component={LoginPage} />
-        {/* <ProtectedRoute path={ROUTES.productList} component={ProductsPage} /> */}
-        <Route path={ROUTES.productList} component={ProductsPage} />
-        <Route path={ROUTES.userList} component={UsersPage} />
+        <ProtectedRoute path={ROUTES.productList} component={ProductsPage} />
+        <ProtectedRoute path={ROUTES.userList} component={UsersPage} />
         <Route path="/" component={LoginPage} />
       </Switch>
     </Suspense>

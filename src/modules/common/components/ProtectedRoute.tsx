@@ -3,15 +3,18 @@ import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { ROUTES } from '../../../configs/routes';
 import Cookies from 'js-cookie';
 import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
+import MainLayout from '../layout/MainLayout';
 
-interface Props extends RouteProps {}
+interface Props extends RouteProps { }
 
 const ProtectedRoute = (props: Props) => {
   const { ...rest } = props;
   const auth = Cookies.get(ACCESS_TOKEN_KEY);
 
   if (auth) {
-    return <Route {...rest} />;
+    return <MainLayout>
+      <Route {...rest} />
+    </MainLayout>;
   }
 
   return (
