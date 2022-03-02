@@ -84,7 +84,11 @@ const LoginForm = (props: Props) => {
           justifyContent: 'center',
           marginTop: '15px'
         }}>
-        <Button type="submit" variant="contained" >Sign In</Button>
+        <Button
+          type="submit"
+          className={classes.mainButton}  >
+          Sign In
+        </Button>
       </div>
     </Box>
   );

@@ -1,5 +1,4 @@
 import React from 'react'
-import MainLayout from '../../common/layout/MainLayout'
 
 interface Props { }
 

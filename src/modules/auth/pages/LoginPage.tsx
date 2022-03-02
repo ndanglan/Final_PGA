@@ -14,11 +14,9 @@ import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
 import { ROUTES } from '../../../configs/routes';
 import { replace } from 'connected-react-router';
 import { getErrorMessageResponse } from '../../../utils';
-import { useStyles } from '../../../styles/makeStyles';
 import { setLoading } from '../../common/redux/loadingReducer';
 
 const LoginPage = () => {
-  const classes = useStyles()
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -32,7 +30,6 @@ const LoginPage = () => {
       );
 
       dispatch(setLoading(false))
-      console.log(json);
 
       if (json.success) {
         dispatch(setUserInfo(json.user));
@@ -48,8 +45,8 @@ const LoginPage = () => {
 
   return (
     <div
-      className={classes.bgRoot}
       style={{
+        backgroundColor: '#323259',
         height: '100vh',
         display: 'flex',
         alignItems: 'center',

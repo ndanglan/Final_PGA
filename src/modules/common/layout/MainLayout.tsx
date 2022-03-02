@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import { useSelector } from 'react-redux';
-import Header from '../components/Header'
-import SideBar from '../components/SideBar';
+import Header from '../components/Layout/Header'
+import SideBar from '../components/Layout/SideBar';
 import { Action } from 'redux';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
@@ -11,6 +11,7 @@ import Cookies from 'js-cookie';
 import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
 import { push } from 'connected-react-router';
 import { ROUTES } from '../../../configs/routes';
+import UtilComponent from '../components/Layout/UtilComponent';
 interface Props {
   children: any,
 }
@@ -29,7 +30,7 @@ const MainLayout = (props: Props) => {
   }
 
   return (
-    <div>
+    <div >
       <Header
         user={user}
         handleSideBarAction={handleSideBarAction}
@@ -42,8 +43,8 @@ const MainLayout = (props: Props) => {
       <div
         style={{
           flexGrow: 1,
-          padding: '36px',
-          marginLeft: sideBarOpen ? '280px' : 0,
+          padding: '110px 36px 36px 36px',
+          marginLeft: sideBarOpen ? '260px' : 0,
           transition: '0.225s',
           backgroundColor: '#191836',
           color: '#fff'

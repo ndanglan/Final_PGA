@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { AppBar, IconButton, Toolbar, Typography, Button, Menu, MenuItem, Popover } from '@mui/material';
-import { IUser } from '../../../models/user'
+import { IUser } from '../../../../models/user'
 import MenuIcon from '@mui/icons-material/Menu';
-import { useStyles } from '../../../styles/makeStyles'
+import { useStyles } from '../../../../styles/makeStyles'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 
@@ -16,8 +16,10 @@ const Header = (props: Props) => {
   const classes = useStyles();
 
 
+  console.log('render');
+
   return (
-    <AppBar className={classes.appBar} position="static">
+    <AppBar className={classes.appBar} position="fixed">
       <Toolbar>
         <IconButton
           size="large"
@@ -71,4 +73,4 @@ const Header = (props: Props) => {
   )
 }
 
-export default Header
+export default memo(Header)

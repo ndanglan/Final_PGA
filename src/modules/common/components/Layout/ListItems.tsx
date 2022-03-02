@@ -4,7 +4,7 @@ import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
-import { ROUTES } from '../../../configs/routes';
+import { ROUTES } from '../../../../configs/routes';
 
 interface Props {
   currentLocation: string,

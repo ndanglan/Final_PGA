@@ -1,13 +1,13 @@
 import React from 'react'
 import { Divider, Drawer, IconButton } from '@mui/material'
 import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined';
-import { useStyles } from '../../../styles/makeStyles'
-import ListItems from './ListItems';
+import { useStyles } from '../../../../styles/makeStyles'
+import ListItems from '../Layout/ListItems';
 import { useLocation } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import { ThunkDispatch } from 'redux-thunk';
-import { AppState } from '../../../redux/reducer';
+import { AppState } from '../../../../redux/reducer';
 import { Action } from 'typesafe-actions';
 
 interface Props {
@@ -27,10 +27,10 @@ const SideBar = (props: Props) => {
   return (
     <Drawer
       sx={{
-        width: '280px',
+        width: '260px',
         flexShrink: 0,
         '& .MuiDrawer-paper': {
-          width: '280px',
+          width: '260px',
           boxSizing: 'border-box',
         },
       }}
@@ -39,7 +39,12 @@ const SideBar = (props: Props) => {
       open={props.open}
       className={classes.sideBar}
     >
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end'
+        }}
+      >
         <IconButton onClick={props.handleSideBarAction}>
           <ChevronLeftOutlinedIcon style={{ color: '#fff' }} />
         </IconButton>

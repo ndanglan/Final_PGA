@@ -1,3 +1,4 @@
+import productsReducer, { ProductsState } from './../modules/products/redux/productsReducers';
 import loadingReducer, { LoadingProps } from './../modules/common/redux/loadingReducer';
 import { connectRouter, RouterState } from 'connected-react-router';
 import { History } from 'history';
@@ -9,7 +10,8 @@ export interface AppState {
   router: RouterState;
   intl: IntlState;
   profile: AuthState;
-  loading: LoadingProps
+  loading: LoadingProps;
+  products: ProductsState;
 }
 
 export default function createRootReducer(history: History) {
@@ -17,6 +19,7 @@ export default function createRootReducer(history: History) {
     router: connectRouter(history),
     intl: intlReducer,
     profile: authReducer,
-    loading: loadingReducer
+    loading: loadingReducer,
+    products: productsReducer,
   });
 }

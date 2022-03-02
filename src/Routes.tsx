@@ -1,7 +1,8 @@
 import React, { lazy, Suspense } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import { ROUTES } from './configs/routes';
-import ProtectedRoute from './modules/common/components/ProtectedRoute';
+import ProtectedRoute from './modules/common/components/Routes/ProtectedRoute';
+import SpinnerLoading from './modules/common/components/Loading/SpinnerLoading';
 
 const LoginPage = lazy(() => import('./modules/auth/pages/LoginPage'));
 const ProductsPage = lazy(() => import('./modules/products/pages/ProductsPage'));
@@ -13,7 +14,7 @@ export const Routes = (props: Props) => {
   const location = useLocation();
 
   return (
-    <Suspense fallback={<div>Loading.....</div>}>
+    <Suspense fallback={<SpinnerLoading />}>
       <Switch location={location}>
         <Route path={ROUTES.login} component={LoginPage} />
         <ProtectedRoute path={ROUTES.productList} component={ProductsPage} />
