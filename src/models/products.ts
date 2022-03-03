@@ -41,3 +41,14 @@ export interface FilterProps {
   vendor: string,
   availability: string
 }
+
+export interface EditProps {
+  id: string,
+  price: string,
+  stock: string
+}
+
+export interface DeleteProps {
+  id: string,
+  delete: number
+}

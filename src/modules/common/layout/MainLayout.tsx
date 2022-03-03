@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useCallback, useState } from 'react'
 import { useSelector } from 'react-redux';
 import Header from '../components/Layout/Header'
 import SideBar from '../components/Layout/SideBar';
@@ -21,13 +21,13 @@ const MainLayout = (props: Props) => {
   const user = useSelector((state: AppState) => state.profile.user);
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
 
-  const handleSideBarAction = () => setSideBarOpen(prev => !prev);
+  const handleSideBarAction = useCallback(() => setSideBarOpen(prev => !prev), []);
 
-  const handleLogOut = () => {
+  const handleLogOut = useCallback(() => {
     dispatch(setLogoutAction());
     Cookies.remove(ACCESS_TOKEN_KEY);
     dispatch(push(ROUTES.login))
-  }
+  }, [dispatch])
 
   return (
     <div >

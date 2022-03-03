@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'typesafe-actions';
 import { API_PATHS } from '../../../configs/api';
-import { FetchCategoryProps, CategoryProps, ProductsProps, FilterProps } from '../../../models/products';
+import { FetchCategoryProps, CategoryProps, ProductsProps, FilterProps, EditProps, DeleteProps } from '../../../models/products';
 import { AppState } from '../../../redux/reducer';
 import { useStyles } from '../../../styles/makeStyles'
 import TablePagination from '../../common/components/Layout/TablePagination';
@@ -14,6 +14,7 @@ import FilterForm from '../components/FilterForm';
 import { setCategories } from '../redux/productsReducers';
 import UtilComponent from '../../common/components/Layout/UtilComponent';
 import MainTable from '../components/MainTable';
+import ConfirmDialog, { DialogProps } from '../../common/components/ConfirmDialog';
 
 const ProductsPage = () => {
   const classes = useStyles();
@@ -39,10 +40,15 @@ const ProductsPage = () => {
     availability: 'all'
   });
 
-  // add filter values to filter state
-  const handleChangeFilter = useCallback(async (filters: FilterProps) => {
-    setFilters(filters);
-  }, []);
+  const [productsEdited, setProductsEdited] = useState<EditProps[] | []>([]);
+
+  const [productsDeleted, setProductsDeleted] = useState<DeleteProps[] | []>([]);
+
+  const [dialogOptions, setDialogOptions] = useState<DialogProps>({
+    open: false,
+    title: '',
+    content: '',
+  });
 
   // call api for category selection
   const fetchCategory = useCallback(async () => {
@@ -84,9 +90,156 @@ const ProductsPage = () => {
     fetchCategory();
   }, [fetchCategory]);
 
+  // add filter values to filter state
+  const handleChangeFilter = useCallback(async (filters: FilterProps) => {
+    setFilters(filters);
+  }, []);
+
   useEffect(() => {
     fetchProduct(filters)
   }, [filters, fetchProduct])
+
+  // call api edit product
+  const editProduct = useCallback(async (
+    params: EditProps[] | DeleteProps[]
+  ) => {
+
+    setDialogOptions({
+      open: false,
+      title: '',
+      content: ''
+    })
+
+    dispatch(setLoading(true));
+
+    const json = await dispatch(fetchThunk(API_PATHS.editProduct, 'post', {
+      params: params
+    }))
+
+    dispatch(setLoading(false));
+
+    if (json?.success) {
+      setFilters({
+        category: "0",
+        count: 25,
+        order_by: "ASC",
+        page: 1,
+        search: "",
+        search_type: "",
+        sort: "name",
+        stock_status: "all",
+        vendor: "",
+        availability: 'all'
+      })
+    }
+  }, [dispatch])
+
+  //  options dialog
+  const handleCloseDialog = useCallback(() => {
+    setDialogOptions({
+      open: false,
+      title: '',
+      content: ''
+    })
+  }, [])
+
+  // confirm delete or update
+  const handleOpenDialog = () => {
+    // ưu tiên delete trước nếu có cái cần delete thì sẽ call api delete trước
+    if (productsDeleted && productsDeleted.length > 0) {
+      setDialogOptions({
+        open: true,
+        title: 'Confirm Delete',
+        content: 'Do you want to delete all selected item ?',
+        onClose: () => handleCloseDialog(),
+        onConfirm: () => editProduct(productsDeleted)
+      })
+      return;
+    }
+
+    // sau đó mới đến update
+    if (productsEdited && productsEdited.length > 0) {
+      setDialogOptions({
+        open: true,
+        title: 'Confirm Update',
+        content: 'Do you want to update this product ?',
+        onClose: () => handleCloseDialog(),
+        onConfirm: () => editProduct(productsEdited)
+      })
+
+      return;
+    }
+  }
+  // add Product edited
+  const handleAddProductEdited = (changed: boolean, id: string, price: string, stock: string) => {
+    // nếu value sau khác value trước changed = true thì adđ vào array
+    if (changed) {
+      if (productsEdited?.length === 0) {
+        setProductsEdited([{
+          id: id,
+          price: price,
+          stock: stock
+        }])
+
+        return;
+      }
+
+      setProductsEdited((prev) => {
+        const isExisted = prev.findIndex(item => item.id === id);
+        if (isExisted >= 0) {
+          prev[isExisted] = {
+            id: id,
+            price: price,
+            stock: stock
+          }
+
+          return prev
+        }
+
+        return [...prev, {
+          id: id,
+          price: price,
+          stock: stock
+        }]
+      })
+    } else {
+      // nếu 2 value bằng nhau thì xóa cái đó trong array đi
+      if (productsEdited) {
+        const newArr = productsEdited?.filter(item => item.id !== id);
+        setProductsEdited(newArr);
+      }
+    }
+  }
+
+  // add product delete 
+  const handleAddDeleteProduct = (id: string, isDeleting: boolean) => {
+    // nếu đang được chọn thì cho vào mảng 
+    if (isDeleting) {
+      // xét nếu tồn tại thì không thêm còn tồn tại thì thêm
+      const isExisted = productsDeleted.findIndex(item => item.id === id);
+      console.log(isExisted);
+
+      if (isExisted < 0) {
+        setProductsDeleted(prev => {
+          return [
+            ...prev,
+            {
+              id: id,
+              delete: 1
+            }
+          ]
+        })
+      }
+      return;
+    }
+
+    // nếu đang không ở trạng thái isdeleting thì bỏ khỏi mảng
+    setProductsDeleted(prev => prev.filter(item => item.id !== id))
+  }
+
+  useEffect(() => {
+    console.log(productsDeleted);
+  }, [productsDeleted])
 
   return (
     <>
@@ -125,6 +278,8 @@ const ProductsPage = () => {
 
                 {/* Table */}
                 <MainTable
+                  handleAddProductEdited={handleAddProductEdited}
+                  handleAddDeleteProduct={handleAddDeleteProduct}
                   onChangeFilter={handleChangeFilter}
                   products={productsState.productsState}
                   filters={filters}
@@ -141,11 +296,18 @@ const ProductsPage = () => {
         </div>
         <UtilComponent>
           <div >
-            <Button sx={{
-              backgroundColor: "#f0ad4e",
-              color: '#fff'
-            }}>
-              Save changes
+            <Button
+              sx={{
+                backgroundColor: "#f0ad4e",
+                color: '#fff'
+              }}
+              disabled={
+                productsDeleted?.length === 0
+                && productsEdited.length === 0
+              }
+              onClick={handleOpenDialog}
+            >
+              {productsDeleted && productsDeleted.length > 0 ? 'Delete selected item' : 'Save changes'}
             </Button>
           </div>
           <div >
@@ -158,6 +320,7 @@ const ProductsPage = () => {
           </div>
         </UtilComponent>
       </div>
+      <ConfirmDialog {...dialogOptions} />
     </>
   )
 }

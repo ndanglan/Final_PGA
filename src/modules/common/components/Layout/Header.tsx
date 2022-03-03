@@ -15,8 +15,7 @@ interface Props {
 const Header = (props: Props) => {
   const classes = useStyles();
 
-
-  console.log('render');
+  console.log('header render');
 
   return (
     <AppBar className={classes.appBar} position="fixed">

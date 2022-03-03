@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Divider, Drawer, IconButton } from '@mui/material'
 import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined';
 import { useStyles } from '../../../../styles/makeStyles'
@@ -23,6 +23,7 @@ const SideBar = (props: Props) => {
   const handleSwitchPage = (values: string) => {
     dispatch(push(values))
   }
+  console.log('sidebar render');
 
   return (
     <Drawer
@@ -57,4 +58,4 @@ const SideBar = (props: Props) => {
   )
 }
 
-export default SideBar
+export default memo(SideBar)

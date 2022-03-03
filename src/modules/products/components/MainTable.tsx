@@ -5,17 +5,17 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useStyles } from '../../../styles/makeStyles'
 import { FilterProps, ProductsProps } from '../../../models/products';
 import MainTableRow from './MainTableRow';
-import { filter } from 'lodash';
-
 interface Props {
   products: ProductsProps[],
+  filters: FilterProps,
   onChangeFilter(filters: FilterProps): void,
-  filters: FilterProps
+  handleAddProductEdited(changed: boolean, id: string, price: string, stock: string): void,
+  handleAddDeleteProduct(id: string, isDeleting: boolean): void
 }
 
 const MainTable = (props: Props) => {
   const classes = useStyles();
-  const { products, onChangeFilter, filters } = props;
+  const { products, onChangeFilter, filters, handleAddProductEdited, handleAddDeleteProduct } = props;
 
   const onSorting = (type: string) => {
     if (filters.order_by === 'ASC') {
@@ -60,8 +60,18 @@ const MainTable = (props: Props) => {
                 <Checkbox sx={{ color: '#fff' }} />
               </Button>
             </th>
-            <th >
+            <th
+              style={{
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                onSorting('sku')
+              }}
+            >
               SKU
+              {
+                filters.sort === 'sku' && renderArrowIndication()
+              }
             </th>
             <th
               style={{
@@ -92,20 +102,54 @@ const MainTable = (props: Props) => {
                 filters.sort === 'price' && renderArrowIndication()
               }
             </th>
-            <th >
+            <th
+              style={{
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                onSorting('amount')
+              }}>
               In stock
+              {
+                filters.sort === 'amount' && renderArrowIndication()
+              }
             </th>
-            <th >
+            <th
+              style={{
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                onSorting('vendor')
+              }}
+            >
               Vendor
+              {
+                filters.sort === 'vendor' && renderArrowIndication()
+              }
             </th>
-            <th >
+            <th
+              style={{
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                onSorting('arrivalDate')
+              }}
+            >
               Arrival Date
+              {
+                filters.sort === 'arrivalDate' && renderArrowIndication()
+              }
             </th>
           </tr>
         </thead>
         <tbody>
           {products.map(product => (
-            <MainTableRow key={product.id} {...product} />
+            <MainTableRow
+              key={product.id}
+              product={product}
+              handleAddProductEdited={handleAddProductEdited}
+              handleAddDeleteProduct={handleAddDeleteProduct}
+            />
           ))}
         </tbody>
       </table>

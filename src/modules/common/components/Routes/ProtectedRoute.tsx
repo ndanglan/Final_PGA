@@ -12,9 +12,7 @@ const ProtectedRoute = (props: Props) => {
   const auth = Cookies.get(ACCESS_TOKEN_KEY);
 
   if (auth) {
-    return <MainLayout>
-      <Route {...rest} />
-    </MainLayout>;
+    return <Route {...rest} />
   }
 
   return (

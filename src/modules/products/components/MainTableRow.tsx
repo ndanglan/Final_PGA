@@ -7,31 +7,61 @@ import { ProductsProps } from '../../../models/products';
 import moment from 'moment';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
+import NumberFormat from "react-number-format";
+import { BG_HOVER } from '../../../configs/colors';
 
-const MainTableRow = (props: ProductsProps) => {
+interface Props {
+  product: ProductsProps,
+  handleAddProductEdited(changed: boolean, id: string, price: string, stock: string): void,
+  handleAddDeleteProduct(id: string, isDeleting: boolean): void
+}
+
+const MainTableRow = (props: Props) => {
+  const { product, handleAddProductEdited, handleAddDeleteProduct } = props;
   const classes = useStyles();
-  const [editState, setEditState] = useState({
-    price: false,
-    stock: false,
-  });
-  const priceInputRef = useRef<HTMLInputElement>(null);
-  const stockInputRef = useRef<HTMLInputElement>(null);
-  const intl = useIntl();
+
+  const [stockState, setStockState] = useState({
+    isEditing: false,
+    value: product.amount
+  })
+
+  const [priceState, setPriceState] = useState({
+    isEditing: false,
+    value: product.price
+  })
+
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
-
-    if (editState.price && priceInputRef.current !== null) {
-      priceInputRef.current?.focus();
+    if (+priceState.value === +product.price
+      && +stockState.value === +product.amount
+    ) {
+      handleAddProductEdited(
+        false,
+        product.id,
+        priceState.value,
+        stockState.value
+      );
+      return;
     }
 
-    if (editState.stock && stockInputRef.current !== null) {
-      stockInputRef.current?.focus();
-    }
+    handleAddProductEdited(
+      true,
+      product.id,
+      priceState.value,
+      stockState.value
+    );
 
-  }, [editState.price, editState.stock])
+  }, [priceState.value, stockState.value])
+
+  useEffect(() => {
+    handleAddDeleteProduct(product.id, isDeleting)
+  }, [isDeleting])
 
   return (
-    <tr>
+    <tr style={{
+      opacity: isDeleting ? '0.3' : '1'
+    }}>
       <td>
         <div className="cell">
           <div className="action">
@@ -46,7 +76,7 @@ const MainTableRow = (props: ProductsProps) => {
         <div className="cell">
           <div>
             <span>
-              {props.sku}
+              {product.sku}
             </span>
           </div>
         </div>
@@ -55,7 +85,7 @@ const MainTableRow = (props: ProductsProps) => {
         <div className="cell big-cell">
           <div>
             <Link to="/">
-              {props.name}
+              {product.name}
             </Link>
           </div>
         </div>
@@ -64,75 +94,126 @@ const MainTableRow = (props: ProductsProps) => {
         <div className="cell">
           <div>
             <span>
-              {props.category}
+              {product.category}
             </span>
           </div>
         </div>
       </td>
       <td>
         <div className="cell">
-          {!editState.price ? (
+          {!priceState.isEditing ? (
             <div
               className="editable"
               onClick={() => {
-                setEditState((prev) => ({
+                setPriceState((prev) => ({
                   ...prev,
-                  price: true
+                  isEditing: true
                 }))
               }}
             >
-              <span>
-                $
-                {intl.formatNumber(
-                  parseFloat(props.price),
-                  {
-                    minimumFractionDigits: 2,
-                  }
-                )}
-              </span>
+              <NumberFormat
+                displayType="text"
+                prefix="$"
+                autoFocus={true}
+                decimalSeparator="."
+                thousandSeparator={true}
+                decimalScale={2}
+                fixedDecimalScale={true}
+                value={
+                  priceState.value
+                }
+              />
             </div>
 
           ) : (
             <div
               className='input-group-edit'
-              onBlur={() => setEditState(prev => ({
+              onBlur={() => setPriceState(prev => ({
                 ...prev,
-                price: false
+                isEditing: false
               }))}
             >
               <span>$</span>
-              <input ref={priceInputRef} type="text" value={props.price} />
+              <NumberFormat
+                displayType="input"
+                defaultValue=""
+                autoFocus={true}
+                decimalSeparator="."
+                thousandSeparator={true}
+                decimalScale={2}
+                fixedDecimalScale={true}
+                value={
+                  priceState.value
+                }
+                onValueChange={(e) =>
+                  setPriceState((prev) => {
+                    if (e.formattedValue === '') {
+                      return {
+                        ...prev,
+                        value: '0'
+                      }
+                    }
+                    return {
+                      ...prev,
+                      value: e.value
+                    }
+                  })
+                }
+              />
             </div>
           )}
         </div>
       </td>
       <td>
         <div className="cell">
-          {!editState.stock ? (
+          {!stockState.isEditing ? (
             <div
               className="editable"
               onClick={() => {
-                setEditState((prev) => ({
+                setStockState((prev) => ({
                   ...prev,
-                  stock: true
+                  isEditing: true
                 }))
               }}
             >
               <span>
-                {props.amount}
+                {stockState.value}
               </span>
             </div>
 
           ) : (
             <div
               className='input-group-edit'
-              onBlur={() => setEditState(prev => ({
+              onBlur={() => setStockState(prev => ({
                 ...prev,
-                stock: false
+                isEditing: false
               }))}
             >
-              <span>$</span>
-              <input ref={stockInputRef} type="text" value={props.amount} />
+              <NumberFormat
+                thousandsGroupStyle="thousand"
+                displayType="input"
+                type="text"
+                defaultValue=""
+                autoFocus={true}
+                thousandSeparator={true}
+                value={
+                  stockState.value
+                }
+                onValueChange={(e) => {
+                  setStockState((prev) => {
+                    if (e.formattedValue === '') {
+                      return {
+                        ...prev,
+                        value: '0'
+                      }
+                    }
+                    return {
+                      ...prev,
+                      value: e.formattedValue
+                    }
+                  })
+                }}
+              />
             </div>
           )}
         </div>
@@ -141,7 +222,7 @@ const MainTableRow = (props: ProductsProps) => {
         <div className="cell small-cell">
           <div>
             <Link to="/">
-              {props.vendor}
+              {product.vendor}
             </Link>
           </div>
         </div>
@@ -150,7 +231,7 @@ const MainTableRow = (props: ProductsProps) => {
         <div className="cell">
           <div>
             <span>
-              {moment.unix(+props.arrivalDate).format('MMM DD,YYYY')}
+              {moment.unix(+product.arrivalDate).format('MMM DD,YYYY')}
             </span>
           </div>
         </div>
@@ -158,7 +239,10 @@ const MainTableRow = (props: ProductsProps) => {
       <td>
         <div className="cell">
           <div className={classes.mainButton}>
-            <Button>
+            <Button
+              onClick={() => {
+                setIsDeleting((prev) => !prev);
+              }}>
               <DeleteIcon />
             </Button>
           </div>

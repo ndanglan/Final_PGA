@@ -242,6 +242,7 @@ export const useStyles = makeStyles({
 
       '& tbody': {
         '& tr': {
+          backgroundColor: '#323259',
           '& .editable': {
             padding: '6px 10px 6px 9px',
             borderRadius: '4px',
@@ -288,7 +289,6 @@ export const useStyles = makeStyles({
           fontSize: '14px',
           padding: '10px 17px',
           whiteSpace: 'nowrap',
-          backgroundColor: '#323259',
           borderTop: '1px solid #13132b',
           minHeight: '80px',
 
