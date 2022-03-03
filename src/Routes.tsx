@@ -17,13 +17,15 @@ export const Routes = (props: Props) => {
   return (
     <Suspense fallback={<SpinnerLoading />}>
       <Switch location={location}>
+        {/* main layout cho cacs phaanf sau login */}
+        <Route exact path={ROUTES.login} component={LoginPage} />
+        <Route exact path="/" component={LoginPage} />
 
         <MainLayout>
-          <ProtectedRoute path={ROUTES.productList} component={ProductsPage} />
-          <ProtectedRoute path={ROUTES.userList} component={UsersPage} />
+          <ProtectedRoute exact path={ROUTES.productList} component={ProductsPage} />
+          <ProtectedRoute exact path={ROUTES.userList} component={UsersPage} />
         </MainLayout>
-        <Route path={ROUTES.login} component={LoginPage} />
-        <Route path="/" component={LoginPage} />
+
       </Switch>
     </Suspense>
   );

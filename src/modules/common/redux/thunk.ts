@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import { setLogoutAction } from '../../auth/redux/authReducer';
 import { push } from 'connected-react-router';
 
+
 export function fetchThunk(
   url: string,
   method: 'get' | 'post' | 'delete' | 'put' = 'get',

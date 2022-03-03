@@ -52,3 +52,10 @@ export interface DeleteProps {
   id: string,
   delete: number
 }
+
+export interface VendorsProps {
+  id: string,
+  companyName: string,
+  login: string,
+  name: string
+}

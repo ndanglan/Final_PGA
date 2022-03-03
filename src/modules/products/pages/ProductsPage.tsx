@@ -15,6 +15,7 @@ import { setCategories } from '../redux/productsReducers';
 import UtilComponent from '../../common/components/Layout/UtilComponent';
 import MainTable from '../components/MainTable';
 import ConfirmDialog, { DialogProps } from '../../common/components/ConfirmDialog';
+import FileSaver from 'file-saver';
 
 const ProductsPage = () => {
   const classes = useStyles();
@@ -23,9 +24,12 @@ const ProductsPage = () => {
   const [categoriesState, setCategoriesState] = useState<CategoryProps[]>([]);
 
   const [productsState, setProductsState] = useState<{
-    productsState: ProductsProps[],
+    productsState: ProductsProps[] | [],
     numberProducts: number
-  }>();
+  }>({
+    productsState: [],
+    numberProducts: 0
+  });
 
   const [filters, setFilters] = React.useState<FilterProps>({
     category: "0",
@@ -36,7 +40,7 @@ const ProductsPage = () => {
     search_type: "",
     sort: "name",
     stock_status: "all",
-    vendor: "",
+    vendor: '',
     availability: 'all'
   });
 
@@ -76,24 +80,30 @@ const ProductsPage = () => {
 
     dispatch(setLoading(false));
 
-    if (json.success) {
+    if (json.success && json.data) {
       setProductsState({
         productsState: json.data,
         numberProducts: json.recordsTotal
       });
+      return;
     }
+
+    setProductsState({
+      productsState: [],
+      numberProducts: 0
+    });
     return;
   }, [dispatch]);
-
-  useEffect(() => {
-    // fetch Category
-    fetchCategory();
-  }, [fetchCategory]);
 
   // add filter values to filter state
   const handleChangeFilter = useCallback(async (filters: FilterProps) => {
     setFilters(filters);
   }, []);
+
+  useEffect(() => {
+    // fetch Category
+    fetchCategory();
+  }, [fetchCategory]);
 
   useEffect(() => {
     fetchProduct(filters)
@@ -237,9 +247,23 @@ const ProductsPage = () => {
     setProductsDeleted(prev => prev.filter(item => item.id !== id))
   }
 
-  useEffect(() => {
-    console.log(productsDeleted);
-  }, [productsDeleted])
+  // fetch API để dowload file CSV
+  const fetchDataToExportCSV = useCallback(async () => {
+    setDialogOptions({
+      open: false,
+      title: '',
+      content: ''
+    })
+    dispatch(setLoading(true));
+    const json = await dispatch(fetchThunk(API_PATHS.fetchFileCSV, 'post', {}))
+    dispatch(setLoading(false));
+
+    // const data = await json.data.file.blob();
+
+
+    // chưa dowload
+
+  }, [dispatch])
 
   return (
     <>
@@ -311,14 +335,25 @@ const ProductsPage = () => {
             </Button>
           </div>
           <div >
-            <Button sx={{
-              backgroundColor: "#f0ad4e",
-              color: '#fff'
-            }}>
+            <Button
+              sx={{
+                backgroundColor: "#f0ad4e",
+                color: '#fff'
+              }}
+              onClick={() => {
+                setDialogOptions({
+                  open: true,
+                  title: 'Confirm Export',
+                  content: 'Do you want to export all products ?',
+                  onClose: () => handleCloseDialog(),
+                  onConfirm: () => fetchDataToExportCSV()
+                })
+              }}
+            >
               Export all: CSV
             </Button>
           </div>
-        </UtilComponent>
+        </UtilComponent >
       </div>
       <ConfirmDialog {...dialogOptions} />
     </>

@@ -4,5 +4,8 @@ export const API_PATHS = {
   signIn: `${APIHost}/api/authentication/login`,
   getCategory: `${APIHost}/api/categories/list`,
   getProductFiltering: `${APIHost}/api/products/list`,
-  editProduct: `https://api.gearfocus.div4.pgtest.co/apiAdmin/products/edit`,
+  editProduct: `${APIHost}/apiAdmin/products/edit`,
+  getVendors: `${APIHost}/apiAdmin/vendors/list`,
+  fetchFileCSV: `${APIHost}/apiExport/export/products`,
+  dowloadFileCSV: `${APIHost}/apiExport/export/dowload`
 };

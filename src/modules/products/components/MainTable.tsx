@@ -6,7 +6,7 @@ import { useStyles } from '../../../styles/makeStyles'
 import { FilterProps, ProductsProps } from '../../../models/products';
 import MainTableRow from './MainTableRow';
 interface Props {
-  products: ProductsProps[],
+  products: ProductsProps[] | [],
   filters: FilterProps,
   onChangeFilter(filters: FilterProps): void,
   handleAddProductEdited(changed: boolean, id: string, price: string, stock: string): void,

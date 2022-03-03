@@ -1,9 +1,17 @@
-import React, { useState, memo, useEffect } from 'react'
-import { FormControl, MenuItem, Select, Typography, FormGroup, FormControlLabel, Checkbox, Button } from '@mui/material';
+import React, { useState, memo, useCallback } from 'react'
+import { FormControl, MenuItem, Select, Typography, FormGroup, FormControlLabel, Checkbox, Button, CircularProgress } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { CategoryProps, FilterProps } from '../../../models/products';
-import { useStyles } from '../../../styles/makeStyles'
+import { CategoryProps, FilterProps, VendorsProps } from '../../../models/products';
+import { useDispatch } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppState } from '../../../redux/reducer';
+import { Action } from 'typesafe-actions';
+import { fetchThunk } from '../../common/redux/thunk';
+import { API_PATHS } from '../../../configs/api';
+import { debounce } from 'lodash';
+import { WHITE_COLOR } from '../../../configs/colors';
+import { useStyles } from '../../../styles/makeStyles';
 
 interface Props {
   categoriesState: CategoryProps[],
@@ -13,20 +21,29 @@ interface Props {
 
 const FilterForm = (props: Props) => {
   const classes = useStyles();
+  const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const { categoriesState, filters, onChangeFilter } = props;
+
   const [openMoreFilter, setOpenMoreFilter] = useState(false);
-  const [formValues, setFormValues] = useState<FilterProps>({
+
+  const [formValues, setFormValues] = useState({
     category: filters.category,
     search: filters.search,
     search_type: filters.search_type,
     stock_status: filters.stock_status,
-    vendor: filters.vendor,
+    vendor: {
+      value: '',
+      id: filters.vendor
+    },
     availability: filters.availability,
     count: filters.count,
     order_by: filters.order_by,
     page: filters.page,
     sort: filters.sort
-  })
+  });
+
+  const [vendorLoading, setVendorLoading] = useState(false);
+  const [dropdownVendorList, setDropdownVendorList] = useState<VendorsProps[] | []>([])
 
   const toggleFilter = () => {
     setOpenMoreFilter((prev) => !prev)
@@ -63,6 +80,27 @@ const FilterForm = (props: Props) => {
       return prev
     })
   }
+
+  const fetchVendorsBySearch = useCallback(async (searchValue: { search: string }) => {
+    setVendorLoading(true);
+
+    const json = await dispatch(fetchThunk(API_PATHS.getVendors, 'post', searchValue));
+
+    setVendorLoading(false);
+    console.log(json);
+
+    if (json?.success) {
+      setDropdownVendorList(json.data)
+    }
+  }, [dispatch]);
+
+  const debounceFetch = useCallback(
+    debounce((nextValue: { search: string }) => {
+      console.log('test');
+
+      fetchVendorsBySearch(nextValue)
+    }, 500)
+    , [])
 
   return (
     <form className="filter-form">
@@ -219,7 +257,11 @@ const FilterForm = (props: Props) => {
               className={classes.mainButton}
               onClick={(e) => {
                 e.preventDefault();
-                onChangeFilter(formValues);
+                onChangeFilter({
+                  ...formValues,
+                  // truyền vào obj thì truyền vào vendor là giá trị của id của vendor đã chọn
+                  vendor: formValues.vendor.id
+                });
               }}
             >Search
             </Button>
@@ -252,11 +294,24 @@ const FilterForm = (props: Props) => {
                 label="Name"
               />
               <FormControlLabel
-                control={<Checkbox value="sku" onChange={(e) => handleCheckboxChange(e.target.checked, e.target.value)} />}
+                control={
+                  <Checkbox
+                    value="sku"
+                    onChange={
+                      (e) =>
+                        handleCheckboxChange(e.target.checked, e.target.value)
+                    } />}
                 label="SKU"
               />
               <FormControlLabel
-                control={<Checkbox value="description" onChange={(e) => handleCheckboxChange(e.target.checked, e.target.value)} />}
+                control={
+                  <Checkbox
+                    value="description"
+                    onChange={
+                      (e) =>
+                        handleCheckboxChange(e.target.checked, e.target.value)
+                    }
+                  />}
                 label="Full Description"
               />
             </FormGroup>
@@ -344,18 +399,67 @@ const FilterForm = (props: Props) => {
             </div>
             <FormControl
               className={classes.filterFormControl}
+              sx={{
+                position: 'relative'
+              }}
             >
+              {/* giá trị của input chỉ để hiện thị lên màn hình và fetch vendor  */}
               <input
-                value={formValues.vendor}
+                value={formValues.vendor.value}
                 type="text"
                 placeholder="Search vendor"
                 onChange={
-                  (e) => setFormValues((prev) => ({
-                    ...prev,
-                    vendor: e.target.value
-                  }))
+                  (e) => {
+                    setFormValues((prev) => ({
+                      ...prev,
+                      vendor: {
+                        ...prev.vendor,
+                        value: e.target.value
+                      }
+                    }))
+
+                    debounceFetch({ search: e.target.value })
+                  }
                 }
               />
+              {vendorLoading && (
+                <CircularProgress sx={{
+                  position: 'absolute',
+                  color: WHITE_COLOR,
+                  right: '10px',
+                  top: '10px',
+                  transform: 'translateY(50%)',
+                  width: '25px !important',
+                  height: '25px !important'
+                }} />
+              )}
+              {dropdownVendorList.length > 0 && (
+                <div className={classes.dropdownVendorList}>
+                  <ul>
+                    {dropdownVendorList.map(item => (
+                      <li
+                        key={item.id}
+                        // khi chọn 1 vendor vào ô vendor search thì sẽ xét cả id để gửi lên server
+                        onClick={() => {
+                          setFormValues(prev => ({
+                            ...prev,
+                            vendor: {
+                              value: item.companyName,
+                              id: item.id
+                            }
+                          }))
+                          setDropdownVendorList([])
+                        }
+                        }
+                      >
+                        <div>
+                          <span>{item.companyName}</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </FormControl>
           </div>
         </div>

@@ -1,4 +1,6 @@
+import { BG_HOVER } from './../configs/colors';
 import { makeStyles } from "@mui/styles";
+import { DARK_BLUE, MEDIUM_PURPLE } from "../configs/colors";
 
 export const useStyles = makeStyles({
   appBar: {
@@ -211,6 +213,35 @@ export const useStyles = makeStyles({
       border: 'none',
     },
 
+  },
+  dropdownVendorList: {
+    position: 'absolute',
+    height: 'auto',
+    top: '40px',
+    border: '1px solid #000',
+    borderRadius: '5px',
+    minWidth: '220px',
+    boxShadow: "0px 0px 5px 1px rgba(0,0,0,0.8)",
+    overflow: 'hidden',
+
+    '& ul': {
+      padding: 0,
+      margin: 0,
+      maxHeight: '250px',
+      overflowY: 'auto',
+
+      '& li': {
+        padding: '10px',
+        textAlign: 'center',
+        backgroundColor: DARK_BLUE,
+        transition: '0.2s all ease-in-out',
+        cursor: 'pointer',
+
+        '&:hover': {
+          backgroundColor: MEDIUM_PURPLE
+        },
+      }
+    }
   },
 
   mainTable: {
