@@ -15,7 +15,8 @@ import { setCategories } from '../redux/productsReducers';
 import UtilComponent from '../../common/components/Layout/UtilComponent';
 import MainTable from '../components/MainTable';
 import ConfirmDialog, { DialogProps } from '../../common/components/ConfirmDialog';
-import FileSaver from 'file-saver';
+import { push } from 'connected-react-router';
+import { ROUTES } from '../../../configs/routes';
 
 const ProductsPage = () => {
   const classes = useStyles();
@@ -294,7 +295,10 @@ const ProductsPage = () => {
                   justifyContent: 'flex-start'
                 }}>
                   <div className={classes.mainButton}>
-                    <Button>
+                    <Button
+                      onClick={() => {
+                        dispatch(push(ROUTES.addProduct))
+                      }}>
                       Add Products
                     </Button>
                   </div>

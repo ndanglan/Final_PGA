@@ -7,6 +7,7 @@ import MainLayout from './modules/common/layout/MainLayout';
 
 const LoginPage = lazy(() => import('./modules/auth/pages/LoginPage'));
 const ProductsPage = lazy(() => import('./modules/products/pages/ProductsPage'));
+const ProductsFormPage = lazy(() => import('./modules/products/pages/ProductsFormPage'))
 const UsersPage = lazy(() => import('./modules/users/pages/UsersPage'));
 
 interface Props { }
@@ -23,6 +24,8 @@ export const Routes = (props: Props) => {
 
         <MainLayout>
           <ProtectedRoute exact path={ROUTES.productList} component={ProductsPage} />
+          <ProtectedRoute exact path={`${ROUTES.addProduct}`} component={ProductsFormPage} />
+          <ProtectedRoute exact path={`${ROUTES.productDetail}/:id`} component={ProductsFormPage} />
           <ProtectedRoute exact path={ROUTES.userList} component={UsersPage} />
         </MainLayout>
 

@@ -42,12 +42,13 @@ const MainLayout = (props: Props) => {
       />
       <div
         style={{
-          flexGrow: 1,
-          padding: '110px 36px 36px 36px',
           marginLeft: sideBarOpen ? '260px' : 0,
           transition: '0.225s',
           backgroundColor: '#191836',
-          color: '#fff'
+          color: '#fff',
+          // display: 'flex',
+          padding: '110px 36px 36px 36px',
+          flex: 1
         }}>
         {props.children}
       </div>

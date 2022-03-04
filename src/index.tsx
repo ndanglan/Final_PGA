@@ -1,3 +1,4 @@
+import { ThemeProvider } from '@mui/styles';
 import { ConnectedRouter } from 'connected-react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';

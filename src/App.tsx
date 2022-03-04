@@ -4,6 +4,8 @@ import { Routes } from './Routes';
 import { useSelector } from 'react-redux';
 import { AppState } from './redux/reducer';
 import SpinnerLoading from './modules/common/components/Loading/SpinnerLoading';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 
 function App() {
@@ -14,6 +16,7 @@ function App() {
       {loading && <SpinnerLoading />}
       <Routes />
     </>
+
   );
 }
 
