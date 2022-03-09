@@ -55,24 +55,6 @@ const ProductsPage = () => {
     content: '',
   });
 
-  // call api for category selection
-  const fetchCategory = useCallback(async () => {
-
-    const json = await dispatch(fetchThunk(API_PATHS.getCategory));
-
-    if (json.success) {
-
-      const newArr: CategoryProps[] = json?.data.map((item: FetchCategoryProps) => ({ id: item.id, name: item.name }))
-
-      if (newArr.length > 0) {
-        setCategoriesState(newArr);
-        dispatch(setCategories(newArr));
-      }
-      return;
-    }
-
-  }, [dispatch]);
-
   // call api products with filtering
   const fetchProduct = useCallback(async (filters: FilterProps) => {
     dispatch(setLoading(true));
@@ -100,11 +82,6 @@ const ProductsPage = () => {
   const handleChangeFilter = useCallback(async (filters: FilterProps) => {
     setFilters(filters);
   }, []);
-
-  useEffect(() => {
-    // fetch Category
-    fetchCategory();
-  }, [fetchCategory]);
 
   useEffect(() => {
     fetchProduct(filters)
@@ -282,7 +259,6 @@ const ProductsPage = () => {
             </Typography>
           </div>
           <FilterForm
-            categoriesState={categoriesState}
             filters={filters}
             onChangeFilter={handleChangeFilter}
           />

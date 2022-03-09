@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import Header from '../components/Layout/Header'
 import SideBar from '../components/Layout/SideBar';
@@ -11,7 +11,14 @@ import Cookies from 'js-cookie';
 import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
 import { push } from 'connected-react-router';
 import { ROUTES } from '../../../configs/routes';
-import UtilComponent from '../components/Layout/UtilComponent';
+import { fetchThunk } from '../redux/thunk';
+import { API_PATHS } from '../../../configs/api';
+import { setCategories } from '../redux/categoriesReducers';
+import { setVendors } from '../redux/vendorsReducers';
+import { setShipping } from '../redux/shippingReducers';
+import { setConditions } from '../redux/conditionsReducers';
+import { setBrands } from '../redux/brandsReducers';
+import { setLoading } from '../redux/loadingReducer';
 interface Props {
   children: any,
 }
@@ -21,8 +28,58 @@ const MainLayout = (props: Props) => {
   const user = useSelector((state: AppState) => state.profile.user);
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
 
+  const fetchData = useCallback(async (url: string) => {
+    const json = await dispatch(fetchThunk(url));
+
+    if (json.success) {
+      return json.data
+    }
+
+    // handle error
+  }, []);
+
+  const fetchAllData = useCallback(async () => {
+
+    const [
+      categoriesData
+      , vendorsData
+      , brandsData
+      , conditionsData
+      , shippingData
+    ] = await Promise.all([
+      fetchData(API_PATHS.getCategory),
+      fetchData(API_PATHS.getVendors),
+      fetchData(API_PATHS.getBrands),
+      fetchData(API_PATHS.getConditions),
+      fetchData(API_PATHS.getShipping)
+    ]);
+
+    if (
+      categoriesData.length >= 0
+      && vendorsData.length >= 0
+      && brandsData.length >= 0
+      && conditionsData.length >= 0
+      && shippingData.length >= 0
+    ) {
+
+      dispatch(setCategories(categoriesData))
+      dispatch(setVendors(vendorsData))
+      dispatch(setShipping(shippingData))
+      dispatch(setConditions(conditionsData))
+      dispatch(setBrands(brandsData))
+    }
+
+    // handle error
+  }, [dispatch, fetchData]);
+
+  useEffect(() => {
+    fetchAllData();
+  }, [fetchAllData])
+
+  // điều khiển side bar
   const handleSideBarAction = useCallback(() => setSideBarOpen(prev => !prev), []);
 
+  // logout function
   const handleLogOut = useCallback(() => {
     dispatch(setLogoutAction());
     Cookies.remove(ACCESS_TOKEN_KEY);

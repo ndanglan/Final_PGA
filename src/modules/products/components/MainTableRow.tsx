@@ -5,10 +5,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { ProductsProps } from '../../../models/products';
 import moment from 'moment';
-import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import NumberFormat from "react-number-format";
-import { BG_HOVER } from '../../../configs/colors';
+import { ROUTES } from '../../../configs/routes';
 
 interface Props {
   product: ProductsProps,
@@ -84,7 +83,7 @@ const MainTableRow = (props: Props) => {
       <td>
         <div className="cell big-cell">
           <div>
-            <Link to="/">
+            <Link to={`${ROUTES.productDetail}/${product.id}`}>
               {product.name}
             </Link>
           </div>

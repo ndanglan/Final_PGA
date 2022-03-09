@@ -1,12 +1,12 @@
-import { CategoryProps, ProductsProps } from './../../../models/products';
+import { CommonSelectProps, ProductsProps } from './../../../models/products';
 import { ActionType, createCustomAction, getType } from 'typesafe-actions';
 
 export interface ProductsState {
-  categories?: CategoryProps[];
+  categories?: CommonSelectProps[];
   products?: ProductsProps[]
 }
 
-export const setCategories = createCustomAction('auth/setCategories', (data: CategoryProps[]) => ({
+export const setCategories = createCustomAction('auth/setCategories', (data: CommonSelectProps[]) => ({
   data,
 }));
 

@@ -1,0 +1,71 @@
+import React, { memo } from 'react'
+import { Checkbox, MenuItem, Select } from '@mui/material'
+import { Controller, useFormContext } from 'react-hook-form'
+import InputGroup from '../../common/components/Layout/InputGroup'
+
+interface Props {
+  label: string,
+  name: string,
+  required: boolean,
+  data?: { value: string | number, name: string }[]
+  multiple?: boolean,
+}
+
+const ControlSelectInput = (props: Props) => {
+  const { control, formState: { errors } } = useFormContext()
+  return (
+    <InputGroup
+      label={props.label}
+      required={props.required}
+      errorsType={errors[`${props.name}`] ? 'required' : undefined}
+    >
+      <Controller
+        name={props.name}
+        control={control}
+        rules={{
+          required: props.required
+        }}
+        render={({ field }) => {
+          return (
+            <Select
+              {...field}
+              multiple={
+                props.multiple
+                  ? props.multiple
+                  : false}
+              value={field.value}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    backgroundColor: '#323259',
+                    color: '#fff',
+                  }
+                }
+              }}
+            >
+              {
+                props.data
+                && props.data.length > 0
+                && props.data.map(item => (
+                  <MenuItem
+                    key={item.value}
+                    value={item.value}
+                  >
+                    {props.multiple && (
+                      <Checkbox
+                        checked={field.value && field.value?.indexOf(4) > -1}
+                      />
+                    )}
+                    {item.name}
+                  </MenuItem>
+                ))
+              }
+            </Select>
+          )
+        }}
+      />
+    </InputGroup>
+  )
+}
+
+export default memo(ControlSelectInput)

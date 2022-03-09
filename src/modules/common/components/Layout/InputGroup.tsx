@@ -1,20 +1,24 @@
-import React from 'react'
-import { FormGroup, FormHelperText, FormLabel, Grid, Input, InputLabel } from '@mui/material'
+import React, { memo } from 'react'
+import { FormGroup, FormHelperText, Grid, } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import { BLACK_COLOR, BORDER_COLOR, DARK_BLUE, DARK_PURPLE, MEDIUM_BLUE, WHITE_COLOR } from '../../../../configs/colors'
+import { BORDER_COLOR, DARK_PURPLE, MEDIUM_BLUE, WHITE_COLOR } from '../../../../configs/colors'
+import { LiteralUnion } from 'react-hook-form';
 
 interface Props {
   label: string,
   helper?: string,
-  children: JSX.Element[] | JSX.Element,
+  children: any,
   required: boolean,
   labelSize?: number,
   inputSize?: number,
   error?: boolean;
+  errorsType?: LiteralUnion<"required" | "min" | "max" | "maxLength" | "minLength" | "pattern" | "validate" | "valueAsNumber" | "valueAsDate" | "value" | "setValueAs" | "shouldUnregister" | "onChange" | "onBlur" | "disabled" | "deps", string> | undefined
 }
 
 const useStyles = makeStyles(({
   formControl: {
+    position: 'relative',
+
     '&.MuiFormGroup-root': {
       flexDirection: 'row',
       color: WHITE_COLOR,
@@ -30,7 +34,7 @@ const useStyles = makeStyles(({
       }
     },
 
-    '& input, & button': {
+    '& input': {
       borderRadius: '0.25rem',
       fontSize: '15px',
       fontWeight: '500',
@@ -65,17 +69,28 @@ const useStyles = makeStyles(({
         '& legend': {
           display: 'none'
         }
-      }
+      },
+
+      '& .MuiFormHelperText-root': {
+        color: '#979797'
+      },
     },
 
-    '& .MuiFormHelperText-root': {
-      color: '#979797'
+    '& .MuiSelect-select': {
+      display: 'flex',
+      alignItems: 'center',
+      paddingLeft: '10px !important',
     },
+
+    '& .MuiSvgIcon-root': {
+      color: `${WHITE_COLOR} !important`
+    }
   }
 }))
 
 const InputGroup = (props: Props) => {
   const classes = useStyles();
+
   return (
     <FormGroup className={classes.formControl}>
       <Grid
@@ -105,14 +120,14 @@ const InputGroup = (props: Props) => {
           position: 'relative',
         }}>
         {props.children}
-        {props.helper && (
-          <FormHelperText error={props.error}>
-            {props.helper}
+        {props.errorsType &&
+          <FormHelperText error={true}>
+            This field is required
           </FormHelperText>
-        )}
+        }
       </Grid>
     </FormGroup>
   )
 }
 
-export default InputGroup
+export default memo(InputGroup)

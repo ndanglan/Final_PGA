@@ -2,7 +2,7 @@ import React, { useState, memo, useCallback } from 'react'
 import { FormControl, MenuItem, Select, Typography, FormGroup, FormControlLabel, Checkbox, Button, CircularProgress } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { CategoryProps, FilterProps, VendorsProps } from '../../../models/products';
+import { FilterProps, FetchVendorsProps } from '../../../models/products';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../../redux/reducer';
@@ -12,9 +12,9 @@ import { API_PATHS } from '../../../configs/api';
 import { debounce } from 'lodash';
 import { WHITE_COLOR } from '../../../configs/colors';
 import { useStyles } from '../../../styles/makeStyles';
+import { useSelector } from 'react-redux';
 
 interface Props {
-  categoriesState: CategoryProps[],
   filters: FilterProps,
   onChangeFilter(filters: FilterProps): void
 }
@@ -22,8 +22,8 @@ interface Props {
 const FilterForm = (props: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
-  const { categoriesState, filters, onChangeFilter } = props;
-
+  const { filters, onChangeFilter } = props;
+  const categoriesState = useSelector((state: AppState) => state.categories.categories)
   const [openMoreFilter, setOpenMoreFilter] = useState(false);
 
   const [formValues, setFormValues] = useState({
@@ -43,7 +43,7 @@ const FilterForm = (props: Props) => {
   });
 
   const [vendorLoading, setVendorLoading] = useState(false);
-  const [dropdownVendorList, setDropdownVendorList] = useState<VendorsProps[] | []>([])
+  const [dropdownVendorList, setDropdownVendorList] = useState<FetchVendorsProps[] | []>([])
 
   const toggleFilter = () => {
     setOpenMoreFilter((prev) => !prev)
@@ -87,7 +87,7 @@ const FilterForm = (props: Props) => {
     const json = await dispatch(fetchThunk(API_PATHS.getVendors, 'post', searchValue));
 
     setVendorLoading(false);
-    console.log(json);
+    // console.log(json);
 
     if (json?.success) {
       setDropdownVendorList(json.data)
@@ -96,7 +96,7 @@ const FilterForm = (props: Props) => {
 
   const debounceFetch = useCallback(
     debounce((nextValue: { search: string }) => {
-      console.log('test');
+      // console.log('test');
 
       fetchVendorsBySearch(nextValue)
     }, 500)

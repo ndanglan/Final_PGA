@@ -21,12 +21,11 @@ export const Routes = (props: Props) => {
         {/* main layout cho cacs phaanf sau login */}
         <Route exact path={ROUTES.login} component={LoginPage} />
         <Route exact path="/" component={LoginPage} />
-
         <MainLayout>
-          <ProtectedRoute exact path={ROUTES.productList} component={ProductsPage} />
-          <ProtectedRoute exact path={`${ROUTES.addProduct}`} component={ProductsFormPage} />
-          <ProtectedRoute exact path={`${ROUTES.productDetail}/:id`} component={ProductsFormPage} />
-          <ProtectedRoute exact path={ROUTES.userList} component={UsersPage} />
+          <ProtectedRoute path={ROUTES.productList} component={ProductsPage} />
+          <ProtectedRoute path={`${ROUTES.addProduct}`} component={ProductsFormPage} />
+          <ProtectedRoute path={`${ROUTES.productDetail}/:id`} component={ProductsFormPage} />
+          <ProtectedRoute path={ROUTES.userList} component={UsersPage} />
         </MainLayout>
 
       </Switch>

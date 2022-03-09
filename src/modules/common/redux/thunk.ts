@@ -38,3 +38,32 @@ export function fetchThunk(
     return json;
   };
 }
+
+
+export function fetchThunkImage(
+  url: string,
+  method: 'get' | 'post' | 'delete' | 'put' = 'get',
+  body: FormData,
+): ThunkAction<Promise<any>, AppState, null, Action<string>> {
+  return async (dispatch, getState) => {
+    const res = await fetch(url, {
+      credentials: 'include',
+      method,
+      body: body,
+      headers:
+      {
+        Authorization: Cookies.get(ACCESS_TOKEN_KEY) || '',
+      },
+      cache: 'no-store',
+    });
+
+    const json = await res.json();
+
+    if (res.status === RESPONSE_STATUS_UNAUTHORIZED) {
+      dispatch(setLogoutAction())
+      dispatch(push(ROUTES.login))
+    }
+
+    return json;
+  };
+} 
