@@ -1,22 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'typesafe-actions';
 import { API_PATHS } from '../../../configs/api';
-import { FetchCategoryProps, CategoryProps, ProductsProps, FilterProps, EditProps, DeleteProps } from '../../../models/products';
+import { CategoryProps, ProductsProps, FilterProps, EditProps, DeleteProps } from '../../../models/products';
 import { AppState } from '../../../redux/reducer';
 import { useStyles } from '../../../styles/makeStyles'
 import TablePagination from '../../common/components/Layout/TablePagination';
 import { setLoading } from '../../common/redux/loadingReducer';
 import { fetchThunk } from '../../common/redux/thunk';
 import FilterForm from '../components/FilterForm';
-import { setCategories } from '../redux/productsReducers';
 import UtilComponent from '../../common/components/Layout/UtilComponent';
 import MainTable from '../components/MainTable';
 import ConfirmDialog, { DialogProps } from '../../common/components/ConfirmDialog';
 import { push } from 'connected-react-router';
 import { ROUTES } from '../../../configs/routes';
+import ScrollBar from '../../common/components/ScrollBar';
 
 const ProductsPage = () => {
   const classes = useStyles();
@@ -25,7 +25,7 @@ const ProductsPage = () => {
   const [categoriesState, setCategoriesState] = useState<CategoryProps[]>([]);
 
   const [productsState, setProductsState] = useState<{
-    productsState: ProductsProps[] | [],
+    productsState: ProductsProps[],
     numberProducts: number
   }>({
     productsState: [],
@@ -54,6 +54,8 @@ const ProductsPage = () => {
     title: '',
     content: '',
   });
+
+  const tableRef = useRef<HTMLTableElement>(null);
 
   // call api products with filtering
   const fetchProduct = useCallback(async (filters: FilterProps) => {
@@ -129,7 +131,18 @@ const ProductsPage = () => {
       title: '',
       content: ''
     })
-  }, [])
+  }, []);
+
+  // open dialog cho enable
+  const openConfirmEnable = useCallback((params: EditProps[]) => {
+    setDialogOptions({
+      open: true,
+      title: 'Confirm Update',
+      content: 'Do you want to update this row?',
+      onClose: () => handleCloseDialog(),
+      onConfirm: () => editProduct(params)
+    })
+  }, [handleCloseDialog, editProduct])
 
   // confirm delete or update
   const handleOpenDialog = () => {
@@ -158,6 +171,7 @@ const ProductsPage = () => {
       return;
     }
   }
+
   // add Product edited
   const handleAddProductEdited = (changed: boolean, id: string, price: string, stock: string) => {
     // nếu value sau khác value trước changed = true thì adđ vào array
@@ -285,8 +299,10 @@ const ProductsPage = () => {
                   handleAddProductEdited={handleAddProductEdited}
                   handleAddDeleteProduct={handleAddDeleteProduct}
                   onChangeFilter={handleChangeFilter}
+                  openDialog={openConfirmEnable}
                   products={productsState.productsState}
                   filters={filters}
+                  ref={tableRef}
                 />
               </div>
               <TablePagination
@@ -334,6 +350,7 @@ const ProductsPage = () => {
             </Button>
           </div>
         </UtilComponent >
+        <ScrollBar tableRef={tableRef} />
       </div>
       <ConfirmDialog {...dialogOptions} />
     </>

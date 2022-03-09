@@ -2,7 +2,7 @@ export interface ProductsProps {
   id: string,
   sku: string,
   price: string,
-  enable: string,
+  enabled: string,
   weight: string,
   arrivalDate: string,
   name: string,
@@ -31,8 +31,9 @@ export interface FilterProps {
 
 export interface EditProps {
   id: string,
-  price: string,
-  stock: string
+  price?: string,
+  stock?: string,
+  enabled?: number
 }
 
 export interface DeleteProps {

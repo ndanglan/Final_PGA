@@ -3,19 +3,25 @@ import { Button, Checkbox } from '@mui/material';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useStyles } from '../../../styles/makeStyles'
-import { FilterProps, ProductsProps } from '../../../models/products';
+import { EditProps, FilterProps, ProductsProps } from '../../../models/products';
 import MainTableRow from './MainTableRow';
 interface Props {
-  products: ProductsProps[] | [],
+  products: ProductsProps[],
   filters: FilterProps,
   onChangeFilter(filters: FilterProps): void,
   handleAddProductEdited(changed: boolean, id: string, price: string, stock: string): void,
-  handleAddDeleteProduct(id: string, isDeleting: boolean): void
+  handleAddDeleteProduct(id: string, isDeleting: boolean): void,
+  openDialog(params: EditProps[]): void
 }
 
-const MainTable = (props: Props) => {
+const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) => {
   const classes = useStyles();
-  const { products, onChangeFilter, filters, handleAddProductEdited, handleAddDeleteProduct } = props;
+  const { products,
+    onChangeFilter,
+    filters,
+    handleAddProductEdited,
+    handleAddDeleteProduct,
+    openDialog } = props;
 
   const onSorting = (type: string) => {
     if (filters.order_by === 'ASC') {
@@ -51,8 +57,8 @@ const MainTable = (props: Props) => {
   }
 
   return (
-    <div className={classes.mainTable} >
-      <table>
+    <div ref={ref} className={classes.mainTable} id='product-table'>
+      <table  >
         <thead>
           <tr>
             <th>
@@ -149,12 +155,15 @@ const MainTable = (props: Props) => {
               product={product}
               handleAddProductEdited={handleAddProductEdited}
               handleAddDeleteProduct={handleAddDeleteProduct}
+              openDialog={openDialog}
             />
           ))}
         </tbody>
       </table>
     </div >
   )
-}
+})
+
+MainTable.displayName = 'MainTable';
 
 export default MainTable

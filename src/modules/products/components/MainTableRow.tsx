@@ -3,20 +3,27 @@ import { useStyles } from '../../../styles/makeStyles'
 import { Button, Checkbox } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { ProductsProps } from '../../../models/products';
+import { EditProps, ProductsProps } from '../../../models/products';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import NumberFormat from "react-number-format";
 import { ROUTES } from '../../../configs/routes';
+import { WHITE_COLOR } from '../../../configs/colors';
 
 interface Props {
   product: ProductsProps,
   handleAddProductEdited(changed: boolean, id: string, price: string, stock: string): void,
-  handleAddDeleteProduct(id: string, isDeleting: boolean): void
+  handleAddDeleteProduct(id: string, isDeleting: boolean): void,
+  openDialog(params: EditProps[]): void
 }
 
 const MainTableRow = (props: Props) => {
-  const { product, handleAddProductEdited, handleAddDeleteProduct } = props;
+  const {
+    product,
+    handleAddProductEdited,
+    handleAddDeleteProduct,
+    openDialog
+  } = props;
   const classes = useStyles();
 
   const [stockState, setStockState] = useState({
@@ -67,7 +74,17 @@ const MainTableRow = (props: Props) => {
             <Checkbox sx={{ color: '#fff' }} />
           </div>
           <div className="action action-next">
-            <PowerSettingsNewIcon />
+            <PowerSettingsNewIcon
+              sx={{
+                color: product.enabled === '1' ? '#72b25b' : WHITE_COLOR
+              }}
+              onClick={() => {
+                openDialog([{
+                  id: product.id,
+                  enabled: product.enabled === '1' ? 0 : 1
+                }])
+              }}
+            />
           </div>
         </div>
       </td>

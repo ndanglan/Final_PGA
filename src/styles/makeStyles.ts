@@ -1,12 +1,19 @@
-import { BG_HOVER } from './../configs/colors';
 import { makeStyles } from "@mui/styles";
-import { DARK_BLUE, MEDIUM_PURPLE } from "../configs/colors";
+import {
+  DARK_BLUE,
+  MEDIUM_PURPLE,
+  BORDER_COLOR,
+  DARK_PURPLE,
+  WHITE_COLOR,
+  BLACK_COLOR,
+  MEDIUM_BLUE
+} from "../configs/colors";
 
 export const useStyles = makeStyles({
   appBar: {
 
     '&.MuiAppBar-root': {
-      backgroundColor: '#323259'
+      backgroundColor: DARK_PURPLE
     },
 
     '& .MuiToolbar-root': {
@@ -30,19 +37,19 @@ export const useStyles = makeStyles({
       position: 'absolute',
       minWidth: "200px",
       padding: '0.5rem 1rem',
-      backgroundColor: '#fff',
+      backgroundColor: WHITE_COLOR,
       right: 0,
       borderRadius: '5px',
 
       '& .MuiTypography-subtitle1': {
-        color: '#000',
+        color: BLACK_COLOR,
         fontSize: '14px'
       },
 
       '& a': {
         display: 'block',
         marginTop: '10px',
-        color: '#000',
+        color: BLACK_COLOR,
         fontSize: '15px',
         cursor: 'pointer',
 
@@ -65,19 +72,19 @@ export const useStyles = makeStyles({
     '& .MuiPaper-root': {
       top: '80px',
       zIndex: '999',
-      backgroundColor: '#323259',
+      backgroundColor: DARK_PURPLE,
     },
 
     '& .MuiListItemButton-root': {
-      borderBottom: '1px solid #000',
-      color: '#fff',
+      borderBottom: `1px solid ${BLACK_COLOR}`,
+      color: WHITE_COLOR,
 
       '& .MuiTypography-root': {
         fontSize: "13px",
       },
 
       '& .MuiListItemIcon-root': {
-        color: '#fff',
+        color: WHITE_COLOR,
       }
     },
 
@@ -94,35 +101,36 @@ export const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     '& .MuiButton-root': {
-      backgroundColor: '#b18aff',
-      color: '#fff',
+      backgroundColor: MEDIUM_PURPLE,
+      color: WHITE_COLOR,
       transition: '0.3s all ease-in-out',
+
       '&:hover': {
         backgroundColor: '#b18aff',
-        color: '#1b1b38',
+        color: DARK_BLUE,
       }
     }
   },
 
   inputField: {
     '& .MuiInputLabel-root': {
-      color: '#fff',
+      color: WHITE_COLOR,
 
       '&.Mui-focused': {
-        color: "#fff"
+        color: WHITE_COLOR
       }
     },
     // đổi màu khi focus
     "& .MuiOutlinedInput-root": {
       "&.Mui-focused fieldset": {
-        borderColor: '#fff'
+        borderColor: WHITE_COLOR
       }
     },
 
     '& input': {
-      color: '#fff',
-      borderColor: '#fff',
-      backgroundColor: '#252547',
+      color: WHITE_COLOR,
+      borderColor: WHITE_COLOR,
+      backgroundColor: MEDIUM_BLUE,
       borderRadius: '5px'
     }
   },
@@ -131,14 +139,14 @@ export const useStyles = makeStyles({
 
     '& .title': {
       fontSize: '2rem',
-      color: '#fff',
+      color: WHITE_COLOR,
       lineHeigth: '2.5rem',
       marginBottom: '1rem'
     },
 
     '& .filter-box': {
-      border: '1px solid #13132b',
-      background: '#323259',
+      border: `1px solid ${BORDER_COLOR}`,
+      background: DARK_PURPLE,
       position: 'relative',
       marginBottom: '40px',
       padding: '20px 20px 0',
@@ -247,8 +255,12 @@ export const useStyles = makeStyles({
   mainTable: {
     width: '100%',
     height: '100%',
-    overflowX: 'auto',
+    overflowX: 'scroll',
     marginTop: '40px',
+
+    '&::-webkit-scrollbar': {
+      display: 'none'
+    },
 
     '& table': {
       backgroundColor: '#323259',
@@ -348,17 +360,15 @@ export const useStyles = makeStyles({
 
             '& .action': {
               paddingRight: '10px',
-              color: '#fff',
               borderRight: ' 1.5px dashed #bbb',
             },
 
             '& .action-next': {
-              color: '#72b25b',
               paddingLeft: '10px',
               cursor: 'pointer',
 
               '&:hover': {
-                color: '#fff'
+                color: WHITE_COLOR
               }
             }
           }
@@ -369,11 +379,11 @@ export const useStyles = makeStyles({
 
   pagination: {
     '& li button': {
-      color: '#fff',
+      color: WHITE_COLOR,
 
       '&.Mui-selected': {
         backgroundColor: '#b18aff',
-        color: '#fff',
+        color: WHITE_COLOR,
         borderColor: 'transparent'
       }
     }
