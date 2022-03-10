@@ -33,7 +33,7 @@ export interface EditProps {
   id: string,
   price?: string,
   stock?: string,
-  enabled?: number
+  enable?: number
 }
 
 export interface DeleteProps {

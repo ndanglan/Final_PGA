@@ -81,7 +81,7 @@ const MainTableRow = (props: Props) => {
               onClick={() => {
                 openDialog([{
                   id: product.id,
-                  enabled: product.enabled === '1' ? 0 : 1
+                  enable: product.enabled === '1' ? 0 : 1
                 }])
               }}
             />

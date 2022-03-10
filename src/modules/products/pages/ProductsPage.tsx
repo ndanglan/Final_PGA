@@ -100,13 +100,13 @@ const ProductsPage = () => {
       content: ''
     })
 
-    dispatch(setLoading(true));
+    // dispatch(setLoading(true));
 
     const json = await dispatch(fetchThunk(API_PATHS.editProduct, 'post', {
       params: params
     }))
 
-    dispatch(setLoading(false));
+    // dispatch(setLoading(false));
 
     if (json?.success) {
       setFilters({
