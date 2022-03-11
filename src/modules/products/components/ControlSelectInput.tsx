@@ -2,6 +2,7 @@ import React, { memo } from 'react'
 import { Checkbox, MenuItem, Select } from '@mui/material'
 import { Controller, useFormContext } from 'react-hook-form'
 import InputGroup from '../../common/components/Layout/InputGroup'
+import { DARK_BLUE, WHITE_COLOR } from '../../../configs/colors'
 
 interface Props {
   label: string,
@@ -37,8 +38,8 @@ const ControlSelectInput = (props: Props) => {
               MenuProps={{
                 PaperProps: {
                   style: {
-                    backgroundColor: '#323259',
-                    color: '#fff',
+                    backgroundColor: DARK_BLUE,
+                    color: WHITE_COLOR,
                   }
                 }
               }}

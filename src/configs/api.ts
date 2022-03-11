@@ -14,4 +14,8 @@ export const API_PATHS = {
   fetchFileCSV: `${APIHost}/apiExport/export/products`,
   dowloadFileCSV: `${APIHost}/apiExport/export/dowload`,
   uploadImg: `${APIHost}/api/products/upload-image`,
+  getUsersList: `${APIHost}/apiAdmin/users/list`,
+  editUsersList: `${APIHost}/apiAdmin/users/edit`,
+  getState: `${APIHost}/apiAdmin/commons/state`,
+  getCountry: `${APIHost}/apiAdmin/commons/country`
 };

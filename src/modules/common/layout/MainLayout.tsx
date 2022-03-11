@@ -18,7 +18,7 @@ import { setVendors } from '../redux/vendorsReducers';
 import { setShipping } from '../redux/shippingReducers';
 import { setConditions } from '../redux/conditionsReducers';
 import { setBrands } from '../redux/brandsReducers';
-import { setLoading } from '../redux/loadingReducer';
+import { setCountries } from '../redux/countriesReducers';
 interface Props {
   children: any,
 }
@@ -46,12 +46,14 @@ const MainLayout = (props: Props) => {
       , brandsData
       , conditionsData
       , shippingData
+      , countriesData
     ] = await Promise.all([
       fetchData(API_PATHS.getCategory),
       fetchData(API_PATHS.getVendors),
       fetchData(API_PATHS.getBrands),
       fetchData(API_PATHS.getConditions),
-      fetchData(API_PATHS.getShipping)
+      fetchData(API_PATHS.getShipping),
+      fetchData(API_PATHS.getCountry)
     ]);
 
     if (
@@ -60,6 +62,7 @@ const MainLayout = (props: Props) => {
       && brandsData.length >= 0
       && conditionsData.length >= 0
       && shippingData.length >= 0
+      && countriesData.length >= 0
     ) {
 
       dispatch(setCategories(categoriesData))
@@ -67,6 +70,7 @@ const MainLayout = (props: Props) => {
       dispatch(setShipping(shippingData))
       dispatch(setConditions(conditionsData))
       dispatch(setBrands(brandsData))
+      dispatch(setCountries(countriesData))
     }
 
     // handle error
@@ -103,7 +107,6 @@ const MainLayout = (props: Props) => {
           transition: '0.225s',
           backgroundColor: '#191836',
           color: '#fff',
-          // display: 'flex',
           padding: '110px 36px 36px 36px',
           flex: 1
         }}>

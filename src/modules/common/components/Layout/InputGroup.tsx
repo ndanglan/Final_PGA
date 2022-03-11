@@ -5,7 +5,7 @@ import { BORDER_COLOR, DARK_PURPLE, MEDIUM_BLUE, WHITE_COLOR } from '../../../..
 import { LiteralUnion } from 'react-hook-form';
 
 interface Props {
-  label: string,
+  label?: string,
   helper?: string,
   children: any,
   required: boolean,
@@ -93,6 +93,7 @@ const InputGroup = (props: Props) => {
 
   return (
     <FormGroup className={classes.formControl}>
+
       <Grid
         item
         md={props.labelSize ? props.labelSize : 2}
@@ -112,11 +113,12 @@ const InputGroup = (props: Props) => {
           </FormHelperText>
         )}
       </Grid>
+
       <Grid
         item
         md={props.inputSize ? props.inputSize : 4}
         sx={{
-          padding: '0 15px',
+          // padding: '0 15px',
           position: 'relative',
         }}>
         {props.children}

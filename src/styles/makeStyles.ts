@@ -156,7 +156,7 @@ export const useStyles = makeStyles({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        columnGap: '30px',
+        columnGap: '20px',
         marginBottom: '20px',
         transition: '0.3s all ease-in-out',
 

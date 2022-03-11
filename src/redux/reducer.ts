@@ -1,3 +1,4 @@
+import countriesReducers, { CountriesProps } from './../modules/common/redux/countriesReducers';
 import categoriesReducer, { CategoriesProps } from './../modules/common/redux/categoriesReducers';
 import productsReducer, { ProductsState } from './../modules/products/redux/productsReducers';
 import loadingReducer, { LoadingProps } from './../modules/common/redux/loadingReducer';
@@ -22,6 +23,7 @@ export interface AppState {
   brands: BrandsProps;
   shipping: ShippingProps;
   conditions: ConditionsProps;
+  countries: CountriesProps
 }
 
 export default function createRootReducer(history: History) {
@@ -36,5 +38,6 @@ export default function createRootReducer(history: History) {
     brands: brandsReducers,
     shipping: shippingReducers,
     conditions: conditionsReducers,
+    countries: countriesReducers
   });
 }

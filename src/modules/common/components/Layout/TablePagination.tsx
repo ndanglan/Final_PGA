@@ -6,8 +6,8 @@ import { FilterProps } from '../../../../models/products'
 interface Props {
   totalLengthProducts: number,
   numberProductsPerPage: number,
-  onChangeFilter(filters: FilterProps): void,
-  filters: FilterProps
+  onChangeFilter(filters: any): void,
+  filters: any
 }
 
 const optionsLengthPerPage = [

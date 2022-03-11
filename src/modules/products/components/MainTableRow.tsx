@@ -1,9 +1,19 @@
-import React, { memo, useState, useRef, useEffect } from 'react'
+import React, {
+  memo,
+  useState,
+  useRef,
+  useEffect
+} from 'react'
 import { useStyles } from '../../../styles/makeStyles'
 import { Button, Checkbox } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { EditProps, ProductsProps } from '../../../models/products';
+import {
+  DeleteIcon,
+  PowerSettingsNewIcon
+} from '../../common/components/Icons';
+import {
+  EditProps,
+  ProductsProps
+} from '../../../models/products';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import NumberFormat from "react-number-format";

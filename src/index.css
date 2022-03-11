@@ -10,7 +10,7 @@ body {
   padding: 0;
   font-family: 'Open Sans', sans-serif !important;
 }
-
+/* style scroll bar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -26,6 +26,18 @@ body {
 ::-webkit-scrollbar-thumb {
   border-radius: 15px;
   background-color: #b18aff;
+}
+
+/* ẩn đi mũi tên khi input type = number */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 

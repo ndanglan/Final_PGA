@@ -9,3 +9,4 @@ export const BLACK_COLOR = '#000';
 export const MEDIUM_BLUE = "#252547";
 export const BORDER_COLOR = "#13132b";
 export const BG_DISABLE = "#40405f";
+export const DATE_TEXT_COLOR = "#ababd2";

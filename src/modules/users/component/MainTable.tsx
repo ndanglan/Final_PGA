@@ -1,0 +1,158 @@
+import React from 'react'
+import { Button, Checkbox } from '@mui/material';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import { useStyles } from '../../../styles/makeStyles'
+import { UserDataProps, FilterUsersProps } from '../../../models/userlist';
+import MainTableRow from './MainTableRow';
+interface Props {
+  users: UserDataProps[],
+  filters: FilterUsersProps,
+  onChangeFilter(filters: FilterUsersProps): void,
+  handleAddDeleteUser(id: string, isDeleting: boolean): void,
+}
+
+const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) => {
+  const classes = useStyles();
+  const {
+    users,
+    onChangeFilter,
+    filters,
+    handleAddDeleteUser,
+  } = props;
+
+  const onSorting = (type: string) => {
+    if (filters.order_by === 'ASC') {
+      onChangeFilter({
+        ...filters,
+        sort: type,
+        order_by: 'DESC'
+      })
+      return;
+    }
+
+    onChangeFilter({
+      ...filters,
+      sort: type,
+      order_by: 'ASC'
+    })
+  }
+
+  const renderArrowIndication = () => {
+    if (filters.order_by === 'DESC') {
+      return <ArrowDownwardIcon sx={{
+        width: '0.6em',
+        height: '0.6em',
+        marginLeft: '5px'
+      }} />
+    }
+
+    return <ArrowUpwardIcon sx={{
+      width: '0.6em',
+      height: '0.6em',
+      marginLeft: '5px'
+    }} />
+  }
+
+  return (
+    <div ref={ref} className={classes.mainTable} id='product-table'>
+      <table  >
+        <thead>
+          <tr>
+            <th>
+              <Button>
+                <Checkbox sx={{ color: '#fff' }} />
+              </Button>
+            </th>
+            <th
+              style={{
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                onSorting('vendor')
+              }}
+            >
+              Login/Email
+              {
+                filters.sort === 'vendor' && renderArrowIndication()
+              }
+            </th>
+            <th
+              style={{
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                onSorting('fistName')
+              }}
+            >
+              Name
+              {
+                filters.sort === 'fistName' && renderArrowIndication()
+              }
+            </th>
+            <th
+              style={{
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                onSorting('access_level')
+              }}
+            >
+              Access level
+              {
+                filters.sort === 'access_level' && renderArrowIndication()
+              }
+            </th>
+            <th>
+              Products
+            </th>
+            <th>
+              Orders
+            </th>
+            <th>
+              Wishlist
+            </th>
+            <th
+              style={{
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                onSorting('created')
+              }}
+            >
+              Created
+              {
+                filters.sort === 'created' && renderArrowIndication()
+              }
+            </th>
+            <th
+              style={{
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                onSorting('last_login')
+              }}>
+              Last Login
+              {
+                filters.sort === 'last_login' && renderArrowIndication()
+              }
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map(user => (
+            <MainTableRow
+              key={user.profile_id}
+              user={user}
+              handleAddDeleteUser={handleAddDeleteUser}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div >
+  )
+})
+
+MainTable.displayName = 'MainTable';
+
+export default MainTable

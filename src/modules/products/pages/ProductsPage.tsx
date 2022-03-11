@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'typesafe-actions';
 import { API_PATHS } from '../../../configs/api';
-import { CategoryProps, ProductsProps, FilterProps, EditProps, DeleteProps } from '../../../models/products';
+import { ProductsProps, FilterProps, EditProps, DeleteProps } from '../../../models/products';
 import { AppState } from '../../../redux/reducer';
 import { useStyles } from '../../../styles/makeStyles'
 import TablePagination from '../../common/components/Layout/TablePagination';
@@ -21,8 +21,6 @@ import ScrollBar from '../../common/components/ScrollBar';
 const ProductsPage = () => {
   const classes = useStyles();
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
-
-  const [categoriesState, setCategoriesState] = useState<CategoryProps[]>([]);
 
   const [productsState, setProductsState] = useState<{
     productsState: ProductsProps[],
@@ -81,7 +79,7 @@ const ProductsPage = () => {
   }, [dispatch]);
 
   // add filter values to filter state
-  const handleChangeFilter = useCallback(async (filters: FilterProps) => {
+  const handleChangeFilter = useCallback((filters: FilterProps) => {
     setFilters(filters);
   }, []);
 
@@ -100,13 +98,9 @@ const ProductsPage = () => {
       content: ''
     })
 
-    // dispatch(setLoading(true));
-
     const json = await dispatch(fetchThunk(API_PATHS.editProduct, 'post', {
       params: params
     }))
-
-    // dispatch(setLoading(false));
 
     if (json?.success) {
       setFilters({
