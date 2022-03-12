@@ -396,6 +396,7 @@ const ProductForm = (props: Props) => {
 
           {/* categories autocomplete */}
           <ControlAutocompleteMultipleInput
+            required={true}
             label='Category'
             name='categories'
             data={categories.categories}
@@ -750,7 +751,7 @@ const ProductForm = (props: Props) => {
                               className={classes.priceInput}
                               placeholder="0.00"
                               decimalScale={2}
-                              value={field.price}
+                              value={value}
                               thousandSeparator
                               {...others}
                             />

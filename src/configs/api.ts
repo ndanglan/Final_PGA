@@ -16,6 +16,8 @@ export const API_PATHS = {
   uploadImg: `${APIHost}/api/products/upload-image`,
   getUsersList: `${APIHost}/apiAdmin/users/list`,
   editUsersList: `${APIHost}/apiAdmin/users/edit`,
+  getVendorDetail: `${APIHost}/apiVendor/profile/detail`,
+  createUser: `${APIHost}/apiAdmin/users/create`,
   getState: `${APIHost}/apiAdmin/commons/state`,
   getCountry: `${APIHost}/apiAdmin/commons/country`
 };

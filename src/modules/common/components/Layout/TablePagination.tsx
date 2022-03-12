@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { MenuItem, Pagination, Select, Stack } from '@mui/material'
 import { useStyles } from '../../../../styles/makeStyles'
-import { FilterProps } from '../../../../models/products'
+import { FilterUsersProps } from '../../../../models/userlist'
 
 interface Props {
   totalLengthProducts: number,
@@ -33,6 +33,7 @@ const TablePagination = (props: Props) => {
       columnGap: '30px'
     }}>
       <Pagination
+        page={props.filters.page}
         onChange={(e, value) =>
           props.onChangeFilter({
             ...props.filters,

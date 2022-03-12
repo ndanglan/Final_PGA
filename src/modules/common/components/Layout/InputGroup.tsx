@@ -93,7 +93,6 @@ const InputGroup = (props: Props) => {
 
   return (
     <FormGroup className={classes.formControl}>
-
       <Grid
         item
         md={props.labelSize ? props.labelSize : 2}
@@ -118,13 +117,22 @@ const InputGroup = (props: Props) => {
         item
         md={props.inputSize ? props.inputSize : 4}
         sx={{
-          // padding: '0 15px',
           position: 'relative',
         }}>
         {props.children}
-        {props.errorsType &&
+        {props.errorsType === 'required' &&
           <FormHelperText error={true}>
             This field is required
+          </FormHelperText>
+        }
+        {props.errorsType === 'pattern' &&
+          <FormHelperText error={true}>
+            Pattern is invalid
+          </FormHelperText>
+        }
+        {props.errorsType === 'validate' &&
+          <FormHelperText error={true}>
+            Password is not match
           </FormHelperText>
         }
       </Grid>

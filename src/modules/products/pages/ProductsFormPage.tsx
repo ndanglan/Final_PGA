@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useStyles } from '../../../styles/makeStyles'
 import { DARK_BLUE, WHITE_COLOR } from '../../../configs/colors';
 import ProductForm from '../components/ProductForm';
@@ -14,6 +13,7 @@ import { API_PATHS } from '../../../configs/api';
 import { FormValuesProps, detailsProductProps } from '../../../models/products';
 import { useParams } from 'react-router';
 import { setLoading } from '../../common/redux/loadingReducer';
+import { ArrowBackIcon } from '../../common/components/Icons';
 
 
 interface Props { }

@@ -10,6 +10,8 @@ interface Props {
   required: boolean,
   data?: { value: string | number, name: string }[]
   multiple?: boolean,
+  inputSize?: number,
+  labelSize?: number,
 }
 
 const ControlSelectInput = (props: Props) => {
@@ -19,6 +21,8 @@ const ControlSelectInput = (props: Props) => {
       label={props.label}
       required={props.required}
       errorsType={errors[`${props.name}`] ? 'required' : undefined}
+      inputSize={props.inputSize ? props.inputSize : 4}
+      labelSize={props.labelSize ? props.labelSize : 2}
     >
       <Controller
         name={props.name}

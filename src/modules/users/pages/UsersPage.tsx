@@ -119,6 +119,8 @@ const UsersPage = () => {
       params: params
     }))
 
+    setUsersDeleted([])
+
     if (json?.success) {
       setFilters({
         address: "",
@@ -167,7 +169,7 @@ const UsersPage = () => {
   const handleAddDeleteUser = (id: string, isDeleting: boolean) => {
     // nếu đang được chọn thì cho vào mảng 
     if (isDeleting) {
-      // xét nếu tồn tại thì không thêm còn tồn tại thì thêm
+      // xét nếu tồn tại thì không thêm còn không tồn tại thì thêm
       const isExisted = usersDeleted.findIndex(item => item.id === id);
 
       if (isExisted < 0) {
@@ -218,7 +220,7 @@ const UsersPage = () => {
                   <div className={classes.mainButton}>
                     <Button
                       onClick={() => {
-                        dispatch(push(ROUTES.addProduct))
+                        dispatch(push(ROUTES.addUser))
                       }}>
                       Add User
                     </Button>
@@ -229,8 +231,8 @@ const UsersPage = () => {
                 <MainTable
                   handleAddDeleteUser={handleAddDeleteUser}
                   onChangeFilter={handleChangeFilter}
-                  // openDialog={openConfirmEnable}
                   users={usersState.usersState}
+                  usersDeleted={usersDeleted}
                   filters={filters}
                   ref={tableRef}
                 />

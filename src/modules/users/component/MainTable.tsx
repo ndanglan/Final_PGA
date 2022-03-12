@@ -3,10 +3,11 @@ import { Button, Checkbox } from '@mui/material';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useStyles } from '../../../styles/makeStyles'
-import { UserDataProps, FilterUsersProps } from '../../../models/userlist';
+import { UserDataProps, FilterUsersProps, DeleteUsersProps } from '../../../models/userlist';
 import MainTableRow from './MainTableRow';
 interface Props {
   users: UserDataProps[],
+  usersDeleted: DeleteUsersProps[],
   filters: FilterUsersProps,
   onChangeFilter(filters: FilterUsersProps): void,
   handleAddDeleteUser(id: string, isDeleting: boolean): void,
@@ -16,6 +17,7 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
   const classes = useStyles();
   const {
     users,
+    usersDeleted,
     onChangeFilter,
     filters,
     handleAddDeleteUser,
@@ -60,9 +62,36 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
         <thead>
           <tr>
             <th>
-              <Button>
-                <Checkbox sx={{ color: '#fff' }} />
-              </Button>
+              <Checkbox
+                checked={usersDeleted.length === users.length}
+                // onClick={(e) => {
+                //   if()
+                //   for (let i = 0; i < users.length; i++) {
+                //     handleAddDeleteUser(users[i].profile_id, true)
+                //   }
+                //   // console.log(e.target.value)
+                //   // if (e.target.checked) {
+                //   //   
+                //   // }
+
+                //   // for (let i = 0; i < users.length; i++) {
+                //   //   handleAddDeleteUser(users[i].profile_id, false)
+                //   // }
+                // }}
+                onChange={(e) => {
+                  console.log(e.target.checked);
+                  if (e.target.checked) {
+                    for (let i = 0; i < users.length; i++) {
+                      handleAddDeleteUser(users[i].profile_id, true)
+                    }
+                    return;
+                  }
+                  for (let i = 0; i < users.length; i++) {
+                    handleAddDeleteUser(users[i].profile_id, false)
+                  }
+                }}
+                sx={{ color: '#fff' }}
+              />
             </th>
             <th
               style={{
@@ -145,6 +174,7 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
               key={user.profile_id}
               user={user}
               handleAddDeleteUser={handleAddDeleteUser}
+              isDeleting={usersDeleted.find(item => item.id === user.profile_id) ? true : false}
             />
           ))}
         </tbody>

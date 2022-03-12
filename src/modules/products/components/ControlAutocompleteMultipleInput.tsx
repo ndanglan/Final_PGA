@@ -14,7 +14,10 @@ import {
 interface Props {
   label: string,
   name: string,
+  required: boolean,
   data?: CommonSelectProps[],
+  labelSize?: number,
+  inputSize?: number
 }
 
 const useStyles = makeStyles(({
@@ -62,20 +65,21 @@ const useStyles = makeStyles(({
 }))
 
 const ControlAutocompleteMultipleInput = (props: Props) => {
-  const { control, watch, formState: { errors } } = useFormContext();
+  const { control, formState: { errors } } = useFormContext();
 
   const classes = useStyles();
 
   return (
     <InputGroup
       label={props.label}
-      required={true}
-      inputSize={6}
+      required={props.required}
+      inputSize={props.inputSize ? props.inputSize : 6}
+      labelSize={props.labelSize ? props.labelSize : 2}
       errorsType={errors[`${props.name}`] ? 'required' : undefined}
     >
       <Controller
         control={control}
-        name="categories"
+        name={props.name}
         render={({
           field: { onChange, onBlur, value, ...others }
         }) => {

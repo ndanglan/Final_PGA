@@ -10,16 +10,12 @@ import moment from 'moment';
 interface Props {
   user: UserDataProps,
   handleAddDeleteUser(id: string, isDeleting: boolean): void,
+  isDeleting: boolean
 }
 
 const MainTableRow = (props: Props) => {
-  const { user, handleAddDeleteUser } = props;
+  const { user, handleAddDeleteUser, isDeleting } = props;
   const classes = useStyles();
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  useEffect(() => {
-    handleAddDeleteUser(user.profile_id, isDeleting)
-  }, [isDeleting])
 
   return (
     <tr
@@ -30,14 +26,20 @@ const MainTableRow = (props: Props) => {
       <td>
         <div className="cell">
           <div className="action">
-            <Checkbox sx={{ color: '#fff' }} />
+            <Checkbox
+              checked={isDeleting}
+              sx={{ color: '#fff' }}
+              onChange={(e) => {
+                handleAddDeleteUser(user.profile_id, !isDeleting)
+              }}
+            />
           </div>
         </div>
       </td>
       <td>
         <div className="cell">
           <div>
-            <Link to='/'>
+            <Link to={`${ROUTES.userDetail}/${user.profile_id}`}>
               {user.vendor}
             </Link>
             <div
@@ -118,7 +120,7 @@ const MainTableRow = (props: Props) => {
           <div className={classes.mainButton}>
             <Button
               onClick={() => {
-                setIsDeleting((prev) => !prev);
+                handleAddDeleteUser(user.profile_id, !isDeleting)
               }}>
               <DeleteIcon />
             </Button>
