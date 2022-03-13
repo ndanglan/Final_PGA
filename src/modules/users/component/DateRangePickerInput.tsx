@@ -4,18 +4,14 @@ import InputGroup from '../../common/components/Layout/InputGroup';
 import moment from 'moment';
 import { makeStyles } from '@mui/styles';
 import { DARK_PURPLE, WHITE_COLOR, DATE_TEXT_COLOR, MEDIUM_PURPLE } from '../../../configs/colors';
+import { Controller, useFormContext } from 'react-hook-form';
 
 interface Props {
-  range: {
-    startDate: Date | undefined,
-    endDate: Date | undefined,
-    key: string
-  }[]
   label?: string,
+  name: string,
   placeHolder?: string,
   inputSize?: number,
   required: boolean,
-  onChange(e: any): void,
 }
 
 const useStyles = makeStyles(({
@@ -79,7 +75,8 @@ const useStyles = makeStyles(({
 }))
 
 const DateRangePickerInput = (props: Props) => {
-  const { range, label, placeHolder, inputSize, required, onChange } = props;
+  const { label, placeHolder, inputSize, required, name } = props;
+  const { control } = useFormContext()
 
   const classes = useStyles();
 
@@ -110,25 +107,33 @@ const DateRangePickerInput = (props: Props) => {
         onClick={() => setShowDateRangePicker(prev => !prev)}
       />
       {showDateRangePicker && (
-        <DateRange
-          ranges={dateRange}
-          className={classes.dateRange}
-          showMonthAndYearPickers={false}
-          onChange={item => {
-            if (
-              item?.selection.key
-              && item?.selection.startDate
-              && item?.selection.endDate
-            ) {
-              setDateRange([{
-                startDate: item.selection.startDate,
-                endDate: item.selection.endDate,
-                key: item.selection.key,
-              }])
+        <Controller
+          control={control}
+          name={name}
+          render={({ field }) => (
+            <DateRange
+              ranges={dateRange}
+              className={classes.dateRange}
+              showMonthAndYearPickers={false}
+              showPreview={false}
+              showDateDisplay={false}
+              onChange={item => {
+                if (
+                  item?.selection.key
+                  && item?.selection.startDate
+                  && item?.selection.endDate
+                ) {
+                  setDateRange([{
+                    startDate: item.selection.startDate,
+                    endDate: item.selection.endDate,
+                    key: item.selection.key,
+                  }])
 
-              onChange(item)
-            }
-          }}
+                  field.onChange(item)
+                }
+              }}
+            />
+          )}
         />
       )}
     </InputGroup>

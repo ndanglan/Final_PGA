@@ -8,13 +8,14 @@ import { AppState } from '../../../redux/reducer';
 import { Action } from 'typesafe-actions';
 import { useStyles } from '../../../styles/makeStyles';
 import { FilterUsersProps } from '../../../models/userlist';
-import SelectMultiGroupInput from './SelectMultiGroupInput';
-import SelectInput from './SelectInput';
+import ControlSelectMultiGroupInput from '../../common/components/ControlSelectMultiGroupInput';
 import { fetchThunk } from '../../common/redux/thunk';
 import { API_PATHS } from '../../../configs/api';
 import DateRangePickerInput from './DateRangePickerInput';
-import TextInput from './TextInput';
 import { MEMBERSHIP_DATA, STATUS_DATA, TYPES_DATA } from '../utils';
+import { FormProvider, useForm } from 'react-hook-form';
+import ControlNormalInput from '../../common/components/ControlNormalInput';
+import ControlSelectInput from '../../common/components/ControlSelectInput';
 
 interface Props {
   filters: FilterUsersProps,
@@ -28,29 +29,33 @@ const FilterUserForm = (props: Props) => {
   const countries = useSelector((state: AppState) => state.countries.countries)?.map(item => ({ value: item.code, name: item.country }))
   const [openMoreFilter, setOpenMoreFilter] = useState(false);
 
-  const [formValues, setFormValues] = useState<{
+  const methods = useForm<{
     address: string,
     country: string,
     date_range: FilterUsersProps['date_range'],
     date_type: string,
-    memberships: string[],
+    memberships: FilterUsersProps['memberships'],
     phone: string,
     search: string,
     state: string,
-    status: string[],
-    types: string[],
+    status: string,
+    types: FilterUsersProps['types'],
   }>({
-    address: filters.address,
-    country: filters.country,
-    date_range: filters.date_range,
-    date_type: filters.date_type,
-    memberships: filters.memberships,
-    phone: filters.phone,
-    search: filters.search,
-    state: filters.state,
-    status: filters.status,
-    types: filters.types,
+    defaultValues: {
+      address: filters.address,
+      country: filters.country,
+      date_range: filters.date_range,
+      date_type: filters.date_type,
+      memberships: filters.memberships,
+      phone: filters.phone,
+      search: filters.search,
+      state: filters.state,
+      status: filters.status[0] ? filters.status[0] : '',
+      types: filters.types,
+    }
   });
+
+  const country = methods.watch('country');
 
   const [states, setStates] = useState<{
     code: string,
@@ -60,6 +65,32 @@ const FilterUserForm = (props: Props) => {
     state_id: string
   }[]>([])
 
+  // const onSubmit = (data: {
+  //   address: string,
+  //   country: string,
+  //   date_range: FilterUsersProps['date_range'],
+  //   date_type: string,
+  //   memberships: string[],
+  //   phone: string,
+  //   search: string,
+  //   state: string,
+  //   status: string[],
+  //   types: string[],
+  // }) => {
+  //   props.onChangeFilter({
+  //     ...props.filters,
+  //     ...data
+  //   })
+  // }
+
+  const onSubmit = (data: any) => {
+
+    props.onChangeFilter({
+      ...props.filters,
+      ...data
+    })
+
+  }
 
   const toggleFilter = () => {
     setOpenMoreFilter((prev) => !prev)
@@ -77,216 +108,178 @@ const FilterUserForm = (props: Props) => {
   }, [dispatch])
 
   useEffect(() => {
-    if (formValues.country) {
-      fetchState(formValues.country)
+    if (country) {
+      fetchState(country)
     }
-  }, [formValues.country, fetchState])
+  }, [country, fetchState])
+
+  console.log(methods.watch('date_range'))
 
   return (
-    <form
-      className="filter-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        // format lại date_range
-        onChangeFilter({
-          ...filters,
-          ...formValues
-        })
-      }}>
-      <div className="filter-box">
-        {/* First row filter */}
-        <div className="filter-options">
-          <Grid item md={3}>
-            <TextInput
-              placeHolder="Type to search"
-              required={false}
-              inputSize={12}
-              onChange={(e) => setFormValues({
-                ...formValues,
-                search: e
-              })}
-            />
-          </Grid>
-          <Grid item md={3}>
-            <SelectMultiGroupInput
-              required={false}
-              inputSize={12}
-              data={MEMBERSHIP_DATA}
-              onChange={(e) => setFormValues({
-                ...formValues,
-                memberships: e
-              })}
-            />
-          </Grid>
-          <Grid item md={3}>
-            <SelectMultiGroupInput
-              required={false}
-              inputSize={12}
-              data={TYPES_DATA}
-              onChange={(e) => setFormValues({
-                ...formValues,
-                types: e
-              })}
-            />
-          </Grid>
-          <Grid item md={2}>
-            <SelectInput
-              inputSize={12}
-              data={STATUS_DATA}
-              required={false}
-              onChange={(e) => {
-                if (e === 'clear') {
-                  setFormValues({
-                    ...formValues,
-                    status: []
-                  })
-                  return;
-                }
+    <FormProvider {...methods}>
+      <form
+        className="filter-form"
+        onSubmit={methods.handleSubmit(onSubmit)}>
+        <div className="filter-box">
+          {/* First row filter */}
+          <div className="filter-options">
+            <Grid item md={6}>
+              <ControlNormalInput
+                name="search"
+                required={false}
+                label=""
+                inputSize={12}
+                labelSize={0}
+                placeHolder="Search keyword"
+              />
+            </Grid>
+            <Grid item md={3}>
+              <ControlSelectMultiGroupInput
+                name='memberships'
+                required={false}
+                inputSize={12}
+                labelSize={0}
+                data={MEMBERSHIP_DATA}
+              />
+            </Grid>
+            <Grid item md={3}>
+              <ControlSelectMultiGroupInput
+                name='types'
+                required={false}
+                inputSize={12}
+                labelSize={0}
+                data={TYPES_DATA}
+              />
+            </Grid>
+            <Grid item md={2}>
+              <ControlSelectInput
+                label=''
+                name='status'
+                required={false}
+                data={STATUS_DATA}
+                labelSize={0}
+                inputSize={12}
+              />
+            </Grid>
+            <div className={classes.mainButton} style={{
+              marginBottom: '1.5rem'
+            }}>
+              <Button
+                type="submit"
+                className={classes.mainButton}
+              >Search
+              </Button>
+            </div>
+          </div>
 
-                setFormValues({
-                  ...formValues,
-                  status: [e]
-                })
-              }}
-            />
-          </Grid>
-          <div className={classes.mainButton} style={{
-            marginBottom: '1.5rem'
-          }}>
-            <Button
-              type="submit"
-              className={classes.mainButton}
-            >Search
-            </Button>
+          {/* toggle button */}
+          <div className="toggle-btn" onClick={toggleFilter}>
+            {openMoreFilter ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </div>
+
+          {/* Second row hidden*/}
+          <div
+            className="filter-options"
+            style={{
+              alignItems: 'flex-start',
+              height: openMoreFilter ? '270px' : '0',
+              opacity: openMoreFilter ? '1' : '0',
+              pointerEvents: openMoreFilter ? 'auto' : 'none'
+            }}>
+            <Grid item md={5}>
+              <ControlSelectInput
+                label="Country"
+                name='country'
+                required={false}
+                data={countries ? countries : []}
+                inputSize={7}
+              />
+              {states.length > 0 ? (
+                <ControlSelectInput
+                  label="State"
+                  name='state'
+                  required={false}
+                  data={states.map(item => (
+                    {
+                      value: item.state,
+                      name: item.state
+                    }))}
+                  inputSize={7}
+                />
+              ) : (
+                <ControlNormalInput
+                  name="state"
+                  required={false}
+                  label="State"
+                  inputSize={7}
+                  placeHolder="Type your state"
+                />
+              )}
+              <ControlNormalInput
+                name="address"
+                required={false}
+                label="Address"
+                inputSize={7}
+                placeHolder="Type your address"
+              />
+              <ControlNormalInput
+                name="phone"
+                required={false}
+                label="Phone"
+                inputSize={7}
+                placeHolder="Type your phone"
+              />
+            </Grid>
+            <Grid container md={5}>
+              <Grid item md={4} sx={{
+                padding: '9px'
+              }}>
+                User Activity
+              </Grid>
+              <Grid item md={8}>
+                {/* radio */}
+                <div style={{
+                  marginBottom: '5px'
+                }}>
+                  <RadioGroup
+                    defaultValue="R"
+                    sx={{
+                      flexDirection: 'row'
+                    }}
+                    onChange={(e) => {
+                      methods.setValue('date_type', e.target.value)
+
+                    }}
+                  >
+                    <FormControlLabel
+                      sx={{
+                        display: 'inline'
+                      }}
+                      value="R"
+                      control={<Radio />}
+                      label="Register"
+                    />
+                    <FormControlLabel
+                      sx={{
+                        display: 'inline'
+                      }}
+                      value="L"
+                      control={<Radio />}
+                      label="Last logged in"
+                    />
+                  </RadioGroup>
+                </div>
+                <DateRangePickerInput
+                  inputSize={12}
+                  required={false}
+                  name="date_range"
+                />
+              </Grid>
+            </Grid>
           </div>
         </div>
-
-        {/* toggle button */}
-        <div className="toggle-btn" onClick={toggleFilter}>
-          {openMoreFilter ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-        </div>
-
-        {/* Second row hidden*/}
-        <div
-          className="filter-options"
-          style={{
-            alignItems: 'flex-start',
-            height: openMoreFilter ? '270px' : '0',
-            opacity: openMoreFilter ? '1' : '0',
-            pointerEvents: openMoreFilter ? 'auto' : 'none'
-          }}>
-          <Grid item md={5}>
-            <SelectInput
-              inputSize={7}
-              data={countries ? countries : []}
-              required={false}
-              label="Country"
-              onChange={(e) => setFormValues({
-                ...formValues,
-                country: e
-              })}
-            />
-            {states.length > 0 ? (
-              <SelectInput
-                inputSize={7}
-                data={states.map(item => (
-                  {
-                    value: item.code,
-                    name: item.state
-                  }))}
-                required={false}
-                label="State"
-                onChange={(e) => setFormValues({
-                  ...formValues,
-                  state: e
-                })}
-              />
-            ) : (
-              <TextInput
-                label="State"
-                placeHolder="Type your state"
-                required={false}
-                inputSize={7}
-                onChange={(e) => setFormValues({
-                  ...formValues,
-                  state: e
-                })}
-              />
-            )}
-            <TextInput
-              label="Address"
-              placeHolder="Type your address"
-              required={false}
-              inputSize={7}
-              onChange={(e) => setFormValues({
-                ...formValues,
-                address: e
-              })}
-            />
-            <TextInput
-              label="Phone"
-              placeHolder="Type your phone"
-              required={false}
-              inputSize={7}
-              onChange={(e) => setFormValues({
-                ...formValues,
-                phone: e
-              })}
-            />
-          </Grid>
-          <Grid container md={5}>
-            <Grid item md={4} sx={{
-              padding: '9px'
-            }}>
-              User Activity
-            </Grid>
-            <Grid item md={8}>
-              {/* radio */}
-              <div style={{
-                marginBottom: '5px'
-              }}>
-                <RadioGroup
-                  defaultValue="R"
-                  sx={{
-                    flexDirection: 'row'
-                  }}
-                >
-                  <FormControlLabel
-                    sx={{
-                      display: 'inline'
-                    }}
-                    value="R"
-                    control={<Radio />}
-                    label="Register"
-                  />
-                  <FormControlLabel
-                    sx={{
-                      display: 'inline'
-                    }}
-                    value="L"
-                    control={<Radio />}
-                    label="Last logged in"
-                  />
-                </RadioGroup>
-              </div>
-              <DateRangePickerInput
-                range={formValues.date_range}
-                inputSize={12}
-                required={false}
-                onChange={(e) => setFormValues({
-                  ...formValues,
-                  date_range: [{
-                    startDate: e.selection.startDate,
-                    endDate: e.selection.endDate,
-                    key: e.selection.key,
-                  }]
-                })}
-              />
-            </Grid>
-          </Grid>
-        </div>
-      </div>
-    </form>
+      </form>
+    </FormProvider>
   )
 }
 

@@ -3,21 +3,18 @@ import {
   Controller,
   useFormContext
 } from 'react-hook-form'
-import InputGroup from '../../common/components/Layout/InputGroup';
+import InputGroup from '../Layout/InputGroup';
 import { makeStyles } from '@mui/styles';
 import { Autocomplete, TextField } from '@mui/material';
-import { CommonSelectProps } from '../../../models/products'
+import { CommonSelectProps } from '../../../../models/products'
 import {
   MEDIUM_PURPLE,
-} from '../../../configs/colors';
+} from '../../../../configs/colors';
 
 interface Props {
   label: string,
   name: string,
-  required: boolean,
   data?: CommonSelectProps[],
-  labelSize?: number,
-  inputSize?: number
 }
 
 const useStyles = makeStyles(({
@@ -64,35 +61,31 @@ const useStyles = makeStyles(({
   }
 }))
 
-const ControlAutocompleteMultipleInput = (props: Props) => {
-  const { control, formState: { errors } } = useFormContext();
+const ControlAutocompleteInput = (props: Props) => {
+  const { control, watch, formState: { errors } } = useFormContext();
 
   const classes = useStyles();
 
   return (
     <InputGroup
       label={props.label}
-      required={props.required}
-      inputSize={props.inputSize ? props.inputSize : 6}
-      labelSize={props.labelSize ? props.labelSize : 2}
+      required={true}
       errorsType={errors[`${props.name}`] ? 'required' : undefined}
     >
       <Controller
         control={control}
         name={props.name}
-        render={({
-          field: { onChange, onBlur, value, ...others }
-        }) => {
+        render={({ field: { onChange, value, onBlur } }) => {
+          const defaultVal = props?.data?.filter(item => item.id === value);
 
           return (
             <Autocomplete
-              {...others}
-              onBlur={onBlur}
-              value={value}
-              multiple
-              filterSelectedOptions
               className={classes.autocomplete}
               disablePortal
+              value={{
+                id: value,
+                name: defaultVal && defaultVal[0] ? defaultVal[0].name : ''
+              }}
               options={props.data ? props.data : []}
               getOptionLabel={(option) => option?.name ? option.name : ''}
               renderInput={
@@ -103,8 +96,11 @@ const ControlAutocompleteMultipleInput = (props: Props) => {
                   />
               }
               onChange={(_, data) => {
-                onChange(data);
+                if (typeof data?.id === 'string' || typeof data?.id === 'number') {
+                  onChange(data?.id)
+                }
               }}
+              onBlur={onBlur}
             />
           )
         }}
@@ -116,4 +112,4 @@ const ControlAutocompleteMultipleInput = (props: Props) => {
   )
 }
 
-export default ControlAutocompleteMultipleInput
+export default ControlAutocompleteInput

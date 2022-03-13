@@ -1,6 +1,6 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form';
-import InputGroup from '../../common/components/Layout/InputGroup'
+import InputGroup from '../Layout/InputGroup'
 
 interface Props {
   label: string,
@@ -26,7 +26,7 @@ const ControlNormalInput = (props: Props) => {
       label={props.label}
       required={props.required}
       inputSize={props.inputSize ? props.inputSize : undefined}
-      labelSize={props.labelSize ? props.labelSize : 2}
+      labelSize={props.labelSize || props.labelSize === 0 ? props.labelSize : 2}
       errorsType={errors[`${props.name}`]?.type}
       helper={props.helperText ? props.helperText : undefined}
     >

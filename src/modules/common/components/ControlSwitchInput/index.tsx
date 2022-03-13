@@ -1,9 +1,9 @@
 import { Switch } from '@mui/material';
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form';
-import InputGroup from '../../common/components/Layout/InputGroup';
+import InputGroup from '../Layout/InputGroup';
 import { makeStyles } from '@mui/styles';
-import { MEDIUM_PURPLE, WHITE_COLOR } from '../../../configs/colors';
+import { MEDIUM_PURPLE, WHITE_COLOR } from '../../../../configs/colors';
 
 interface Props {
   label: string,

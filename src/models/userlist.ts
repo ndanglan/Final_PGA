@@ -1,3 +1,5 @@
+import { RangeKeyDict } from "react-date-range"
+
 export interface UserDataProps {
   access_level: string
   created: string
@@ -20,13 +22,13 @@ export interface FilterUsersProps {
   address: string
   count: number
   country: string
-  date_range: {
-    startDate: Date | undefined,
-    endDate: Date | undefined,
-    key: string
-  }[]
+  date_range: RangeKeyDict
   date_type: string
-  memberships: string[]
+  memberships: {
+    group: string,
+    value: string,
+    name: string
+  }[]
   order_by: string
   page: number
   phone: string
@@ -34,7 +36,11 @@ export interface FilterUsersProps {
   sort: string
   state: string
   status: string[]
-  types: string[]
+  types: {
+    groups: string,
+    value: string,
+    name: string
+  }[]
   tz: number
 }
 

@@ -35,18 +35,18 @@ import {
 import FormSeperateSpace from '../../common/components/Layout/FormSeperateSpace';
 import { Calendar } from 'react-date-range';
 import UtilComponent from '../../common/components/Layout/UtilComponent';
-import ControlAutocompleteInput from './ControlAutocompleteInput'
+import ControlAutocompleteInput from '../../common/components/ControlAutocompleteInput'
 import { detailsProductProps, FormValuesProps } from '../../../models/products';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../redux/reducer'
 import NumberFormat from 'react-number-format';
 import moment from 'moment';
-import ControlNormalInput from './ControlNormalInput';
-import ControlSelectInput from './ControlSelectInput';
-import ControlFileInput from './ControlFileInput';
-import ControlAutocompleteMultipleInput from './ControlAutocompleteMultipleInput';
+import ControlNormalInput from '../../common/components/ControlNormalInput';
+import ControlSelectInput from '../../common/components/ControlSelectInput';
+import ControlFileInput from '../../common/components/ControlFileInput';
+import ControlAutocompleteMultipleInput from '../../common/components/ControlAutocompleteMultipleInput';
 import ControlTextEditorInput from './ControlTextEditorInput';
-import ControlSwitchInput from './ControlSwitchInput';
+import ControlSwitchInput from '../../common/components/ControlSwitchInput';
 import { formatDateTime } from '../../common/utils';
 
 interface Props {

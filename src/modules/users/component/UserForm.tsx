@@ -3,10 +3,10 @@ import { Button, Grid, Typography } from '@mui/material';
 import { FormProvider, useForm } from 'react-hook-form'
 import FormSeperateSpace from '../../common/components/Layout/FormSeperateSpace';
 import UtilComponent from '../../common/components/Layout/UtilComponent';
-import ControlNormalInput from '../../products/components/ControlNormalInput';
-import ControlSelectInput from '../../products/components/ControlSelectInput';
+import ControlNormalInput from '../../common/components/ControlNormalInput';
+import ControlSelectInput from '../../common/components/ControlSelectInput';
 import InputCheckBox from '../../common/components/InputCheckBox'
-import ControlAutocompleteMultipleInput from '../../products/components/ControlAutocompleteMultipleInput';
+import ControlAutocompleteMultipleInput from '../../common/components/ControlAutocompleteMultipleInput';
 import { UserFormValues, VendorDataProps } from '../../../models/userlist';
 import { emailRegex } from '../utils';
 import TextAreaAutoSizeInput from '../../common/components/TextAreaAutoSizeInput';

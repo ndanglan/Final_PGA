@@ -3,18 +3,24 @@ import {
   Controller,
   useFormContext
 } from 'react-hook-form'
-import InputGroup from '../../common/components/Layout/InputGroup';
+import InputGroup from '../Layout/InputGroup';
 import { makeStyles } from '@mui/styles';
 import { Autocomplete, TextField } from '@mui/material';
-import { CommonSelectProps } from '../../../models/products'
+import { CommonSelectProps } from '../../../../models/products'
 import {
+  DARK_PURPLE,
   MEDIUM_PURPLE,
-} from '../../../configs/colors';
+  WHITE_COLOR,
+} from '../../../../configs/colors';
 
 interface Props {
   label: string,
   name: string,
+  required: boolean,
   data?: CommonSelectProps[],
+  labelSize?: number,
+  inputSize?: number,
+  placeHolder?: string
 }
 
 const useStyles = makeStyles(({
@@ -61,46 +67,55 @@ const useStyles = makeStyles(({
   }
 }))
 
-const ControlAutocompleteInput = (props: Props) => {
-  const { control, watch, formState: { errors } } = useFormContext();
+const ControlAutocompleteMultipleInput = (props: Props) => {
+  const { control, formState: { errors } } = useFormContext();
 
   const classes = useStyles();
 
   return (
     <InputGroup
       label={props.label}
-      required={true}
+      required={props.required}
+      inputSize={props.inputSize ? props.inputSize : 6}
+      labelSize={props.labelSize ? props.labelSize : 2}
       errorsType={errors[`${props.name}`] ? 'required' : undefined}
     >
       <Controller
         control={control}
         name={props.name}
-        render={({ field: { onChange, value, onBlur } }) => {
-          const defaultVal = props?.data?.filter(item => item.id === value);
+        render={({
+          field: { onChange, onBlur, value, ...others }
+        }) => {
 
           return (
             <Autocomplete
+              {...others}
+              onBlur={onBlur}
+              value={value}
+              multiple
+              disableCloseOnSelect
               className={classes.autocomplete}
               disablePortal
-              value={{
-                id: value,
-                name: defaultVal && defaultVal[0] ? defaultVal[0].name : ''
-              }}
               options={props.data ? props.data : []}
               getOptionLabel={(option) => option?.name ? option.name : ''}
+              ListboxProps={{
+                style: {
+                  backgroundColor: DARK_PURPLE,
+                  color: WHITE_COLOR
+                }
+              }}
               renderInput={
                 (params) =>
                   <TextField
                     {...params}
-                    placeholder={`Type to search ${props.label}`}
+                    placeholder={props.placeHolder ? props.placeHolder : ''}
+                    variant='outlined'
+                    disabled
                   />
               }
               onChange={(_, data) => {
-                if (typeof data?.id === 'string' || typeof data?.id === 'number') {
-                  onChange(data?.id)
-                }
+                onChange(data);
               }}
-              onBlur={onBlur}
             />
           )
         }}
@@ -112,4 +127,4 @@ const ControlAutocompleteInput = (props: Props) => {
   )
 }
 
-export default ControlAutocompleteInput
+export default ControlAutocompleteMultipleInput

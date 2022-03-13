@@ -36,7 +36,13 @@ const UsersPage = () => {
     address: "",
     count: 25,
     country: "",
-    date_range: [],
+    date_range: {
+      selection: {
+        startDate: undefined,
+        endDate: undefined,
+        key: ''
+      }
+    },
     date_type: "R",
     memberships: [],
     order_by: "DESC",
@@ -62,16 +68,23 @@ const UsersPage = () => {
 
   // call api products with filtering
   const fetchUsers = useCallback(async (filters: FilterUsersProps) => {
-
+    console.log(filters)
     // format lại filter để gửi lên server
     const newFormatFilter = {
       ...filters,
-      date_range: filters.date_range.length > 0 ? (
+      date_range: filters.date_range.selection.key ? (
         [
-          moment(filters.date_range[0].startDate).format("YYYY-MM-DD"),
-          moment(filters.date_range[0].endDate).format("YYYY-MM-DD")
+          moment(filters.date_range.selection.startDate).format("YYYY-MM-DD"),
+          moment(filters.date_range.selection.endDate).format("YYYY-MM-DD")
         ]
-      ) : []
+      ) : [],
+      types: filters.types.length > 0
+        ? filters.types.map(type => type.value)
+        : [],
+      memberships: filters.memberships.length > 0
+        ? filters.memberships.map(membership => membership.value)
+        : [],
+      status: [filters.status]
     }
 
     dispatch(setLoading(true));
@@ -97,6 +110,8 @@ const UsersPage = () => {
 
   // add filter values to filter state
   const handleChangeFilter = useCallback((filters: FilterUsersProps) => {
+    console.log(filters);
+
     setFilters(filters);
   }, []);
 
@@ -126,7 +141,13 @@ const UsersPage = () => {
         address: "",
         count: 25,
         country: "",
-        date_range: [],
+        date_range: {
+          selection: {
+            startDate: new Date(),
+            endDate: new Date(),
+            key: 'selection'
+          }
+        },
         date_type: "R",
         memberships: [],
         order_by: "DESC",

@@ -1,8 +1,8 @@
 import React, { memo } from 'react'
 import { Checkbox, MenuItem, Select } from '@mui/material'
 import { Controller, useFormContext } from 'react-hook-form'
-import InputGroup from '../../common/components/Layout/InputGroup'
-import { DARK_BLUE, WHITE_COLOR } from '../../../configs/colors'
+import InputGroup from '../Layout/InputGroup'
+import { DARK_BLUE, DARK_PURPLE, WHITE_COLOR } from '../../../../configs/colors'
 
 interface Props {
   label: string,
@@ -12,6 +12,7 @@ interface Props {
   multiple?: boolean,
   inputSize?: number,
   labelSize?: number,
+  defaultValue?: string
 }
 
 const ControlSelectInput = (props: Props) => {
@@ -22,7 +23,7 @@ const ControlSelectInput = (props: Props) => {
       required={props.required}
       errorsType={errors[`${props.name}`] ? 'required' : undefined}
       inputSize={props.inputSize ? props.inputSize : 4}
-      labelSize={props.labelSize ? props.labelSize : 2}
+      labelSize={props.labelSize || props.labelSize === 0 ? props.labelSize : 2}
     >
       <Controller
         name={props.name}
@@ -39,11 +40,14 @@ const ControlSelectInput = (props: Props) => {
                   ? props.multiple
                   : false}
               value={field.value}
+              defaultValue={props.defaultValue}
               MenuProps={{
                 PaperProps: {
                   style: {
-                    backgroundColor: DARK_BLUE,
+                    backgroundColor: DARK_PURPLE,
                     color: WHITE_COLOR,
+                    maxHeight: '300px',
+                    maxWidth: '280px'
                   }
                 }
               }}

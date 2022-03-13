@@ -1,10 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
-import { CloseIcon, CameraAltIcon } from '../../common/components/Icons';
-import InputGroup from '../../common/components/Layout/InputGroup';
-import defaultImg from '../../../no-image-icon.png';
-import { DARK_PURPLE } from '../../../configs/colors'
+import { CloseIcon, CameraAltIcon } from '../Icons';
+import InputGroup from '../Layout/InputGroup';
+import defaultImg from '../../../../no-image-icon.png';
+import { DARK_PURPLE } from '../../../../configs/colors'
 
 
 interface IFileInputProps {

@@ -1,5 +1,5 @@
 import React, { useState, memo, useCallback } from 'react'
-import { FormControl, MenuItem, Select, Typography, FormGroup, FormControlLabel, Checkbox, Button, CircularProgress } from '@mui/material';
+import { FormControl, MenuItem, Select, Typography, FormGroup, FormControlLabel, Checkbox, Button, CircularProgress, Grid } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { FilterProps, FetchVendorsProps } from '../../../models/products';
@@ -13,6 +13,9 @@ import { debounce } from 'lodash';
 import { WHITE_COLOR } from '../../../configs/colors';
 import { useStyles } from '../../../styles/makeStyles';
 import { useSelector } from 'react-redux';
+import { FormProvider, useForm } from 'react-hook-form';
+import ControlNormalInput from '../../common/components/ControlNormalInput';
+import ControlSelectInput from '../../common/components/ControlSelectInput';
 
 interface Props {
   filters: FilterProps,
@@ -26,21 +29,47 @@ const FilterForm = (props: Props) => {
   const categoriesState = useSelector((state: AppState) => state.categories.categories)
   const [openMoreFilter, setOpenMoreFilter] = useState(false);
 
-  const [formValues, setFormValues] = useState({
-    category: filters.category,
-    search: filters.search,
-    search_type: filters.search_type,
-    stock_status: filters.stock_status,
-    vendor: {
-      value: '',
-      id: filters.vendor
-    },
-    availability: filters.availability,
-    count: filters.count,
-    order_by: filters.order_by,
-    page: filters.page,
-    sort: filters.sort
+  const methods = useForm({
+    defaultValues: {
+      category: filters.category,
+      search: filters.search,
+      search_type: filters.search_type,
+      stock_status: filters.stock_status,
+      vendor: {
+        value: '',
+        id: filters.vendor
+      },
+      availability: filters.availability,
+      count: filters.count,
+      order_by: filters.order_by,
+      page: filters.page,
+      sort: filters.sort
+    }
   });
+
+  const onSubmit = (data: {
+    category: string;
+    search: string;
+    search_type: string;
+    stock_status: string;
+    vendor: {
+      value: string;
+      id: string;
+    };
+    availability: string;
+    count: number;
+    order_by: string;
+    page: number;
+    sort: string;
+  }) => {
+    console.log(data);
+    const formatedData = {
+      ...data,
+      vendor: data.vendor.id
+    }
+
+    props.onChangeFilter(formatedData)
+  }
 
   const [vendorLoading, setVendorLoading] = useState(false);
   const [dropdownVendorList, setDropdownVendorList] = useState<FetchVendorsProps[] | []>([])
@@ -51,11 +80,11 @@ const FilterForm = (props: Props) => {
 
   const handleCheckboxChange = (checked: boolean, values: string) => {
     let newArr: string[] = []
-    // plit giá trị của search_type  thành mảng
-    if (!filters.search_type) {
+    // split giá trị của search_type  thành mảng
+    if (!methods.getValues('search_type')) {
       newArr = []
     } else {
-      newArr = [...filters.search_type.split(',')]
+      newArr = [...methods.getValues('search_type').split(',')]
     }
 
     // nếu đã checked và không có trong search_type thì cộng vào 
@@ -68,17 +97,7 @@ const FilterForm = (props: Props) => {
       newArr = newArr.filter(item => item !== values)
     }
 
-    // add vào filter với kiểu là mảng và cách nhau bằng dấu ,
-    setFormValues((prev) => {
-      if (prev) {
-        return {
-          ...prev,
-          search_type: newArr.join(',')
-        }
-      }
-
-      return prev
-    })
+    methods.setValue('search_type', newArr.join(','))
   }
 
   const fetchVendorsBySearch = useCallback(async (searchValue: { search: string }) => {
@@ -103,368 +122,229 @@ const FilterForm = (props: Props) => {
     , [])
 
   return (
-    <form className="filter-form">
-      <div className="filter-box">
-        {/* First row filter */}
-        <div className="filter-options">
-          <FormControl
-            className={classes.filterFormControl}
-            style={{
-              width: '50%'
-            }}
-          >
-            <input
-              value={formValues.search}
-              type="text"
-              placeholder="Search keyword"
-              onChange={
-                (e) => setFormValues((prev) => ({
-                  ...prev,
-                  search: e.target.value
-                }))
-              }
-            />
-          </FormControl>
-          <FormControl
-            style={{
-              width: '25%'
-            }}
-            className={classes.filterFormControl}
-          >
-            <Select
-              onChange={
-                (e) => setFormValues((prev) => ({
-                  ...prev,
-                  category: e.target.value
-                }))
-              }
-              value={formValues.category}
-              displayEmpty
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: '20rem',
-                    width: '270px',
-                    backgroundColor: '#323259',
-                    color: '#fff',
-                  }
-                }
-              }}
-              sx={{
-                color: '#fff',
-                border: '1px solid #000'
-              }}
+    <FormProvider {...methods}>
+      <form className="filter-form" onSubmit={methods.handleSubmit(onSubmit)}>
+        <div className="filter-box">
+          {/* First row filter */}
+          <div className="filter-options">
+            <Grid item md={5}>
+              <ControlNormalInput
+                label=''
+                name='search'
+                required={false}
+                placeHolder='Type to search keyword'
+                inputSize={12}
+                labelSize={0}
+              />
+            </Grid>
+            <Grid item md={3}>
+              <ControlSelectInput
+                label=''
+                name='category'
+                required={false}
+                inputSize={12}
+                labelSize={0}
+                data={categoriesState
+                  ? categoriesState.map(
+                    item =>
+                      ({ value: item.id, name: item.name })
+                  )
+                  : undefined}
+              />
+            </Grid>
+            <Grid item md={3}>
+              <ControlSelectInput
+                label=''
+                name='stock_status'
+                required={false}
+                inputSize={12}
+                labelSize={0}
+                defaultValue={'all'}
+                data={[
+                  {
+                    value: 'all',
+                    name: 'Any stock status'
+                  },
+                  {
+                    value: 'in',
+                    name: 'In stock'
+                  },
+                  {
+                    value: 'low',
+                    name: 'Low stock'
+                  },
+                  {
+                    value: 'out',
+                    name: 'SOLD'
+                  },
 
-            >
-              <MenuItem
-                value="0"
-                key="any category"
-              >
-                Any Category
-              </MenuItem>
-              {categoriesState && (
-                categoriesState.map(category => (
-                  <MenuItem
-                    key={category.id}
-                    value={category.id}
-                    sx={{
-                      '&:hover': {
-                        backgroundColor: 'rgba(180,180,219,0.16)'
-                      }
-                    }}
-                  >
-                    {category.name}
-                  </MenuItem>
-                ))
-              )}
-            </Select>
-          </FormControl>
-          <FormControl
-            style={{
-              width: '25%'
-            }}
-            className={classes.filterFormControl}
-          >
-            <Select
-              onChange={
-                (e) => setFormValues((prev) => ({
-                  ...prev,
-                  stock_status: e.target.value
-                }))
-              }
-              value={formValues.stock_status}
-              displayEmpty
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: '20rem',
-                    width: '270px',
-                    backgroundColor: '#323259',
-                    color: '#fff',
-                  }
-                }
-              }}
-              sx={{
-                color: '#fff',
-                border: '1px solid #000'
-              }}
-
-            >
-              <MenuItem
-                value="all"
-                key="any category"
-              >
-                Any stock status
-              </MenuItem>
-              <MenuItem
-                key={1}
-                value={'in'}
-                sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(180,180,219,0.16)'
-                  }
-                }}
-              >
-                In stock
-              </MenuItem>
-              <MenuItem
-                key={1}
-                value={'low'}
-                sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(180,180,219,0.16)'
-                  }
-                }}
-              >
-                Low stock
-              </MenuItem>
-              <MenuItem
-                key={1}
-                value={'out'}
-                sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(180,180,219,0.16)'
-                  }
-                }}
-              >
-                SOLD
-              </MenuItem>
-            </Select>
-          </FormControl>
-          <div className={classes.mainButton}>
-            <Button
-              type="submit"
+                ]}
+              />
+            </Grid>
+            <div
               className={classes.mainButton}
-              onClick={(e) => {
-                e.preventDefault();
-                onChangeFilter({
-                  ...formValues,
-                  // truyền vào obj thì truyền vào vendor là giá trị của id của vendor đã chọn
-                  vendor: formValues.vendor.id
-                });
-              }}
-            >Search
-            </Button>
-          </div>
-        </div>
-
-        {/* toggle button */}
-        <div className="toggle-btn" onClick={toggleFilter}>
-          {openMoreFilter ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-        </div>
-
-        {/* Second row hidden*/}
-        <div
-          className="filter-options"
-          style={{
-            alignItems: 'flex-start',
-            height: openMoreFilter ? '140px' : '0',
-            opacity: openMoreFilter ? '1' : '0',
-            pointerEvents: openMoreFilter ? 'auto' : 'none'
-          }}>
-          <div className="search-in">
-            <div className="search-in-title">
-              <Typography variant="subtitle1">
-                Search in:
-              </Typography>
-            </div>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox value="name" onChange={(e) => handleCheckboxChange(e.target.checked, e.target.value)} />}
-                label="Name"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    value="sku"
-                    onChange={
-                      (e) =>
-                        handleCheckboxChange(e.target.checked, e.target.value)
-                    } />}
-                label="SKU"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    value="description"
-                    onChange={
-                      (e) =>
-                        handleCheckboxChange(e.target.checked, e.target.value)
-                    }
-                  />}
-                label="Full Description"
-              />
-            </FormGroup>
-          </div>
-          <div style={{
-            paddingTop: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            columnGap: '10px'
-          }}>
-            <div>
-              <Typography variant="subtitle1">
-                Availability
-              </Typography>
-            </div>
-            <FormControl
-              className={classes.filterFormControl}
-            >
-              <Select
-                onChange={
-                  (e) => setFormValues((prev) => ({
-                    ...prev,
-                    availability: e.target.value
-                  }))
-                }
-                value={formValues.availability}
-                displayEmpty
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      maxHeight: '20rem',
-                      width: '270px',
-                      backgroundColor: '#323259',
-                      color: '#fff',
-                    }
-                  }
-                }}
-                sx={{
-                  color: '#fff',
-                  border: '1px solid #000'
-                }}
-
-              >
-                <MenuItem
-                  value="all"
-                  key="Any availability status"
-                >
-                  Any availability status
-                </MenuItem>
-                <MenuItem
-                  key={1}
-                  value={'E'}
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'rgba(180,180,219,0.16)'
-                    }
-                  }}
-                >
-                  Only enabled
-                </MenuItem>
-                <MenuItem
-                  key={1}
-                  value={'D'}
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'rgba(180,180,219,0.16)'
-                    }
-                  }}
-                >
-                  OnlyDisabled
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <div style={{
-            paddingTop: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            columnGap: '10px'
-          }}>
-            <div>
-              <Typography variant="subtitle1">
-                Vendor
-              </Typography>
-            </div>
-            <FormControl
-              className={classes.filterFormControl}
-              sx={{
-                position: 'relative'
+              style={{
+                marginBottom: '1.5rem'
               }}
             >
-              {/* giá trị của input chỉ để hiện thị lên màn hình và fetch vendor  */}
-              <input
-                value={formValues.vendor.value}
-                type="text"
-                placeholder="Search vendor"
-                onChange={
-                  (e) => {
-                    setFormValues((prev) => ({
-                      ...prev,
-                      vendor: {
-                        ...prev.vendor,
-                        value: e.target.value
+              <Button
+                type="submit"
+              >Search
+              </Button>
+            </div>
+          </div>
+
+          {/* toggle button */}
+          <div className="toggle-btn" onClick={toggleFilter}>
+            {openMoreFilter ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </div>
+
+          {/* Second row hidden*/}
+          <div
+            className="filter-options"
+            style={{
+              alignItems: 'flex-start',
+              height: openMoreFilter ? '140px' : '0',
+              opacity: openMoreFilter ? '1' : '0',
+              pointerEvents: openMoreFilter ? 'auto' : 'none'
+            }}>
+            <div className="search-in">
+              <div className="search-in-title">
+                <Typography variant="subtitle1">
+                  Search in:
+                </Typography>
+              </div>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value="name"
+                      onChange={(e) => handleCheckboxChange(e.target.checked, e.target.value)}
+                    />}
+                  label="Name"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value="sku"
+                      onChange={
+                        (e) =>
+                          handleCheckboxChange(e.target.checked, e.target.value)
+                      } />}
+                  label="SKU"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value="description"
+                      onChange={
+                        (e) =>
+                          handleCheckboxChange(e.target.checked, e.target.value)
                       }
-                    }))
-
-                    debounceFetch({ search: e.target.value })
-                  }
-                }
+                    />}
+                  label="Full Description"
+                />
+              </FormGroup>
+            </div>
+            <Grid item md={4} >
+              <ControlSelectInput
+                label='Availability'
+                name='availability'
+                required={false}
+                inputSize={7}
+                labelSize={3}
+                defaultValue={'all'}
+                data={[
+                  {
+                    value: 'all',
+                    name: 'Any availability status'
+                  },
+                  {
+                    value: 'E',
+                    name: 'Only enabled'
+                  },
+                  {
+                    value: 'D',
+                    name: 'Only Disabled'
+                  },
+                ]}
               />
-              {vendorLoading && (
-                <CircularProgress sx={{
-                  position: 'absolute',
-                  color: WHITE_COLOR,
-                  right: '10px',
-                  top: '10px',
-                  transform: 'translateY(50%)',
-                  width: '25px !important',
-                  height: '25px !important'
-                }} />
-              )}
-              {dropdownVendorList.length > 0 && (
-                <div className={classes.dropdownVendorList}>
-                  <ul>
-                    {dropdownVendorList.map(item => (
-                      <li
-                        key={item.id}
-                        // khi chọn 1 vendor vào ô vendor search thì sẽ xét cả id để gửi lên server
-                        onClick={() => {
-                          setFormValues(prev => ({
-                            ...prev,
-                            vendor: {
+            </Grid>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              columnGap: '10px',
+              marginBottom: '1.5rem'
+            }}>
+              <div>
+                <Typography variant="subtitle1">
+                  Vendor
+                </Typography>
+              </div>
+              <FormControl
+                className={classes.filterFormControl}
+                sx={{
+                  position: 'relative'
+                }}
+              >
+                {/* giá trị của input chỉ để hiện thị lên màn hình và fetch vendor  */}
+                <input
+                  value={methods.getValues('vendor').value}
+                  type="text"
+                  placeholder="Search vendor"
+                  onChange={
+                    (e) => {
+                      methods.setValue('vendor', {
+                        ...methods.getValues('vendor'),
+                        value: e.target.value
+                      })
+
+                      debounceFetch({ search: e.target.value })
+                    }
+                  }
+                />
+                {vendorLoading && (
+                  <CircularProgress sx={{
+                    position: 'absolute',
+                    color: WHITE_COLOR,
+                    right: '10px',
+                    top: '10px',
+                    transform: 'translateY(50%)',
+                    width: '25px !important',
+                    height: '25px !important'
+                  }} />
+                )}
+                {dropdownVendorList.length > 0 && (
+                  <div className={classes.dropdownVendorList}>
+                    <ul>
+                      {dropdownVendorList.map(item => (
+                        <li
+                          key={item.id}
+                          // khi chọn 1 vendor vào ô vendor search thì sẽ xét cả id để gửi lên server
+                          onClick={() => {
+                            methods.setValue('vendor', {
                               value: item.companyName,
                               id: item.id
-                            }
-                          }))
-                          setDropdownVendorList([])
-                        }
-                        }
-                      >
-                        <div>
-                          <span>{item.companyName}</span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </FormControl>
+                            })
+
+                            setDropdownVendorList([])
+                          }
+                          }
+                        >
+                          <div>
+                            <span>{item.name}</span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </FormControl>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </FormProvider>
   )
 }
 

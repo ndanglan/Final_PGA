@@ -98,6 +98,9 @@ const InputGroup = (props: Props) => {
         md={props.labelSize ? props.labelSize : 2}
         className='grid-label'
         component="label"
+        sx={{
+          display: props.labelSize === 0 ? 'none' : 'inline-block'
+        }}
       >
         {props.label}
         {props.required && (
