@@ -65,25 +65,18 @@ const FilterUserForm = (props: Props) => {
     state_id: string
   }[]>([])
 
-  // const onSubmit = (data: {
-  //   address: string,
-  //   country: string,
-  //   date_range: FilterUsersProps['date_range'],
-  //   date_type: string,
-  //   memberships: string[],
-  //   phone: string,
-  //   search: string,
-  //   state: string,
-  //   status: string[],
-  //   types: string[],
-  // }) => {
-  //   props.onChangeFilter({
-  //     ...props.filters,
-  //     ...data
-  //   })
-  // }
-
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: {
+    address: string,
+    country: string,
+    date_range: FilterUsersProps['date_range'],
+    date_type: string,
+    memberships: FilterUsersProps['memberships'],
+    phone: string,
+    search: string,
+    state: string,
+    status: string,
+    types: FilterUsersProps['types'],
+  }) => {
 
     props.onChangeFilter({
       ...props.filters,
@@ -112,8 +105,6 @@ const FilterUserForm = (props: Props) => {
       fetchState(country)
     }
   }, [country, fetchState])
-
-  console.log(methods.watch('date_range'))
 
   return (
     <FormProvider {...methods}>

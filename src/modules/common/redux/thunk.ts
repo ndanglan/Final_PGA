@@ -40,7 +40,7 @@ export function fetchThunk(
 }
 
 
-export function fetchThunkImage(
+export function fetchThunkFormData(
   url: string,
   method: 'get' | 'post' | 'delete' | 'put' = 'get',
   body: FormData,

@@ -8,43 +8,39 @@ import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../../redux/reducer';
 import { Action } from 'typesafe-actions';
-import { fetchThunk, fetchThunkImage } from '../../common/redux/thunk';
+import { fetchThunk, fetchThunkFormData } from '../../common/redux/thunk';
 import { API_PATHS } from '../../../configs/api';
 import { FormValuesProps, detailsProductProps } from '../../../models/products';
 import { useParams } from 'react-router';
 import { setLoading } from '../../common/redux/loadingReducer';
 import { ArrowBackIcon } from '../../common/components/Icons';
-
+import { dateTypeToStringType } from '../../common/utils';
+import SnackBarCustom from '../../common/components/SnackBarCustom';
+import { SnackBarProps } from '../../../models/snackbar';
 
 interface Props { }
 
 const ProductsFormPage = (props: Props) => {
   const classes = useStyles();
+
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
+
   const params = useParams<{ id: string }>();
+
   const [detailsProduct, setDetailsProduct] = useState<detailsProductProps>();
 
-  const onPostFile = useCallback(async (formData: FormData) => {
-    const json = await dispatch(fetchThunk(API_PATHS.createProduct, 'post', formData));
+  const [snackbarOptions, setSnackbarOptions] = useState<SnackBarProps>({
+    message: '',
+    open: false,
+  })
 
-    console.log(json)
-  }, [])
-
-  const onPostProduct = useCallback(async (values: FormValuesProps) => {
-    const { images, ...others } = values;
-    const newData = {
-      ...others,
-      shipping_to_zones: others.shipping_to_zones.map(item => ({ id: item.id, price: item.price }))
-    }
-
-    const formData = new FormData();
-    formData.append('productDetail', JSON.stringify(newData))
-
-    const json = await dispatch(fetchThunkImage(API_PATHS.createProduct, 'post', formData));
-
-    console.log(json);
-
-  }, [dispatch])
+  // close snackbar
+  const onCloseSnackBar = () => {
+    setSnackbarOptions({
+      message: '',
+      open: false,
+    })
+  }
 
   const fetchProductDetails = useCallback(async (id: string) => {
 
@@ -59,6 +55,125 @@ const ProductsFormPage = (props: Props) => {
     }
   }, [dispatch])
 
+  const onPostFile = useCallback(async (id: string, data: File[]) => {
+
+    // const status=[];
+    const uploadFile = [];
+    if (data.length > 0) {
+      for (let i = 0; i < data.length; i++) {
+        const formDataFile = new FormData();
+        formDataFile.append('productId', id);
+        formDataFile.append('order', `${i}`);
+        formDataFile.append('images[]', data[i]);
+        uploadFile.push(dispatch(fetchThunkFormData(API_PATHS.uploadImg, 'post', formDataFile)))
+      }
+
+      return await Promise.all(uploadFile)
+    }
+
+    return []
+  }, [dispatch])
+
+  const onPostProduct = useCallback(async (values: FormValuesProps) => {
+    const { images, id, categories, shipping_to_zones, arrival_date, ...others } = values;
+
+    let newData;
+    // format lại values trước khi gửi lên server
+    if (id) {
+      // có id là đang update
+      newData = {
+        ...others,
+        id: id,
+        shipping_to_zones: shipping_to_zones.map(item => ({ id: item.id, price: item.price })),
+        categories: categories.length > 0 ? categories.map(item => {
+          if (item.id) {
+            return +item.id
+          }
+
+          return item.id
+        }) : [],
+        arrival_date: dateTypeToStringType(arrival_date)
+      }
+    } else {
+      // không có id là đang create 
+      newData = {
+        ...others,
+        shipping_to_zones: shipping_to_zones.map(item => ({ id: item.id, price: item.price })),
+        categories: categories.length > 0 ? categories.map(item => {
+          if (item.id) {
+            return +item.id
+          }
+
+          return item.id
+        }) : [],
+        arrival_date: dateTypeToStringType(arrival_date)
+      }
+    }
+
+    const formData = new FormData();
+    formData.append('productDetail', JSON.stringify(newData))
+
+    dispatch(setLoading(true));
+
+    // gọi api tạo  create product trước
+    const json = await dispatch(fetchThunkFormData(API_PATHS.createProduct, 'post', formData));
+
+    // trường hợp success
+    if (json.success) {
+      const status = await onPostFile(json?.data, images);
+
+      dispatch(setLoading(false));
+
+      if (status.length > 0 && status.every(item => item.success === true)) {
+        // nếu status có độ dài lớn hơn 0 nghĩa là đã có image up lên  và check tất cả phải success thì show snackbar thành công
+
+        setSnackbarOptions({
+          open: true,
+          message: 'Your change is success!',
+          type: 'success',
+          duration: 1000
+        });
+
+        // sau khi show snackbar thành công check nếu không có id thì push đến trang detail
+        if (!id) {
+          // nếu không có id là đang ở trang create chuyển sang trang detail
+          setTimeout(() => {
+            dispatch(push(`${ROUTES.productDetail}/${json.data}`))
+          }, 1000)
+
+          return;
+        }
+
+        // nếu có id thì ở lại 
+        fetchProductDetails(id)
+        return;
+      }
+
+
+      // nếu không upload ảnh thì show snackbar luôn và không chuyển trang 
+      setSnackbarOptions({
+        open: true,
+        message: 'Your change is success!',
+        type: 'success',
+        duration: 1000
+      })
+
+      // nếu có id thì fetch lại detail sau khi update
+      fetchProductDetails(id)
+      return;
+    }
+
+    // trường hợp call api creaate product failed
+    dispatch(setLoading(false));
+
+    setSnackbarOptions({
+      open: true,
+      message: json.data.errors,
+      type: 'error'
+    })
+
+  }, [dispatch, onPostFile, fetchProductDetails])
+
   useEffect(() => {
     if (params?.id) {
       fetchProductDetails(params.id)
@@ -66,51 +181,65 @@ const ProductsFormPage = (props: Props) => {
   }, [params.id, fetchProductDetails])
 
   return (
-    <div className={classes.mainPage} >
-      <div style={{
-        height: 'auto',
-      }}>
+    <>
+      <div className={classes.mainPage} >
         <div style={{
-          marginBottom: '30px'
+          height: 'auto',
         }}>
+          <div style={{
+            marginBottom: '30px'
+          }}>
+            <div>
+              <button
+                style={{
+                  color: DARK_BLUE,
+                  backgroundColor: WHITE_COLOR,
+                  width: '32px !important',
+                  minWidth: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  outline: 'none',
+                  border: `1px solid ${WHITE_COLOR}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: "center"
+                }}
+                onClick={() => {
+                  dispatch(push(ROUTES.productList))
+                }}
+              >
+                <ArrowBackIcon sx={{
+                  width: '20px',
+                  height: '20px'
+                }} />
+              </button>
+            </div>
+          </div>
           <div>
-            <button
-              style={{
-                color: DARK_BLUE,
-                backgroundColor: WHITE_COLOR,
-                width: '32px !important',
-                minWidth: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                outline: 'none',
-                border: `1px solid ${WHITE_COLOR}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: "center"
-              }}
-              onClick={() => {
-                dispatch(push(ROUTES.productList))
-              }}
-            >
-              <ArrowBackIcon sx={{
-                width: '20px',
-                height: '20px'
-              }} />
-            </button>
+            <ProductForm
+              productDetails={
+                detailsProduct
+                  ? detailsProduct
+                  : undefined}
+              title={
+                detailsProduct?.name
+                  ? detailsProduct?.name
+                  : 'Add product'
+              }
+              onPostProduct={
+                (values: FormValuesProps) =>
+                  onPostProduct(values)
+              }
+            />
           </div>
         </div>
-        <div>
-          <ProductForm
-            productDetails={detailsProduct ? detailsProduct : undefined}
-            title={detailsProduct?.name ? detailsProduct?.name : 'Add product'}
-            onPostProduct={
-              (values: FormValuesProps) =>
-                onPostProduct(values)
-            }
-          />
-        </div>
       </div>
-    </div>
+      <SnackBarCustom
+        open={snackbarOptions.open}
+        message={snackbarOptions.message}
+        onClose={onCloseSnackBar}
+      />
+    </>
   )
 }
 

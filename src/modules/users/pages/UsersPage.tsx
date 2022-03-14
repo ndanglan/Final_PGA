@@ -51,7 +51,7 @@ const UsersPage = () => {
     search: "",
     sort: "last_login",
     state: "",
-    status: [],
+    status: '',
     types: [],
     tz: 7
   });
@@ -68,7 +68,6 @@ const UsersPage = () => {
 
   // call api products with filtering
   const fetchUsers = useCallback(async (filters: FilterUsersProps) => {
-    console.log(filters)
     // format lại filter để gửi lên server
     const newFormatFilter = {
       ...filters,
@@ -84,7 +83,7 @@ const UsersPage = () => {
       memberships: filters.memberships.length > 0
         ? filters.memberships.map(membership => membership.value)
         : [],
-      status: [filters.status]
+      status: filters.status ? [filters.status] : []
     }
 
     dispatch(setLoading(true));
@@ -108,7 +107,7 @@ const UsersPage = () => {
     return;
   }, [dispatch]);
 
-  // add filter values to filter state
+  // // add filter values to filter state
   const handleChangeFilter = useCallback((filters: FilterUsersProps) => {
     console.log(filters);
 
@@ -145,7 +144,7 @@ const UsersPage = () => {
           selection: {
             startDate: new Date(),
             endDate: new Date(),
-            key: 'selection'
+            key: ''
           }
         },
         date_type: "R",
@@ -156,7 +155,7 @@ const UsersPage = () => {
         search: "",
         sort: "last_login",
         state: "",
-        status: [],
+        status: '',
         types: [],
         tz: 7
       })

@@ -64,20 +64,6 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
             <th>
               <Checkbox
                 checked={usersDeleted.length === users.length}
-                // onClick={(e) => {
-                //   if()
-                //   for (let i = 0; i < users.length; i++) {
-                //     handleAddDeleteUser(users[i].profile_id, true)
-                //   }
-                //   // console.log(e.target.value)
-                //   // if (e.target.checked) {
-                //   //   
-                //   // }
-
-                //   // for (let i = 0; i < users.length; i++) {
-                //   //   handleAddDeleteUser(users[i].profile_id, false)
-                //   // }
-                // }}
                 onChange={(e) => {
                   console.log(e.target.checked);
                   if (e.target.checked) {

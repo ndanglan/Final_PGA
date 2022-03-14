@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { CloseIcon, CameraAltIcon } from '../Icons';
@@ -11,38 +11,63 @@ interface IFileInputProps {
   name: string,
   label: string,
   required: boolean,
-  images?: string[]
+  images?: { file: string, id: string }[]
 }
 
 const ControlFileInput = (props: IFileInputProps) => {
   const {
-    register,
-    unregister,
-    watch,
     setValue,
     getValues,
-    formState: { errors } } = useFormContext();
+    formState: { errors }
+  } = useFormContext();
 
   const [images, setImages] = useState<string[]>([]);
 
   const removeImage = (id: number) => {
-    const newArr = images.slice(0);
-    const afterDeleted = newArr.splice(id, 1);
+    // lấy file array từ react hook form 
+    const fileArray: File[] = getValues('images');
+    // lấy giá trị imagesOrder từ react hook form 
+    const imagesOrderArray = getValues('imagesOrder');
+    // lấy giá trị deleted_images từ react hook form 
+    const imagesDeletedArray = getValues('deleted_images');
 
-    setImages(newArr)
+    // xóa trong images và imagesOrder
+    const afterDeletedFileArray = fileArray.filter((item, index) => index !== id);
+    const afterDeletedImageOrdersArray = imagesOrderArray.filter((item: string, index: number) => index !== id);
 
-    setValue('deleted_images', [...getValues('deleted_images'), ...afterDeleted])
+    setValue('images', afterDeletedFileArray);
+    setValue('imagesOrder', afterDeletedImageOrdersArray);
+
+    // lưu id của image được xóa vào mảng deleted_images
+    if (props.images && props.images.length > 0) {
+      const deletedImagesArray = props.images.filter((image, index) => index === id).map(item => +item.id);
+
+      setValue('deleted_images', [...imagesDeletedArray, ...deletedImagesArray])
+    }
+
+    const newArrayDisplayImages = images.filter((image, index) => index !== id);
+    setImages(newArrayDisplayImages)
+  }
+
+  const addImages = (files: any) => {
+    // create URL để hiển thị 
+    const urlArray = [...files].map(file => URL.createObjectURL(file));
+
+    // lọc name để thêm vào imagesOrder
+    const nameArray = [...files].map(file => file.name);
+
+    setImages((prev) => ([...prev, ...urlArray]))
+
+    // lưu tên theo order
+    setValue('imagesOrder', [...getValues('imagesOrder'), ...nameArray])
+
+    // set các file vào images trong react hook form 
+    setValue('images', [...getValues('images'), ...files])
   }
 
   useEffect(() => {
-    register(props.name)
-
-    return () => unregister(props.name)
-  }, [props.name, register, unregister])
-
-  useEffect(() => {
     if (props.images && props.images.length > 0) {
-      setImages(props.images)
+      setImages(props.images.map(image => image.file))
     }
   }, [props.images])
 
@@ -59,18 +84,18 @@ const ControlFileInput = (props: IFileInputProps) => {
     >
       <Dropzone
         onDrop={(e) => {
-          const newUrlArr = e.map(item => URL.createObjectURL(item));
-          const newNameArr = e.map(item => item.name);
-
-          setImages((prev) => ([...prev, ...newUrlArr]))
-
-          setValue('imagesOrder', [...getValues('imagesOrder'), ...newNameArr])
+          addImages(e);
         }}>
         {({ getRootProps, getInputProps }) => (
           <>
             <input
               {...getInputProps()}
               name={props.name}
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]) {
+                  addImages(e.target.files);
+                }
+              }}
             />
             <div style={{
               display: 'flex',

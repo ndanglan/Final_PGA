@@ -17,6 +17,8 @@ import ConfirmDialog, { DialogProps } from '../../common/components/ConfirmDialo
 import { push } from 'connected-react-router';
 import { ROUTES } from '../../../configs/routes';
 import ScrollBar from '../../common/components/ScrollBar';
+import SnackBarCustom from '../../common/components/SnackBarCustom';
+import { SnackBarProps } from '../../../models/snackbar';
 
 const ProductsPage = () => {
   const classes = useStyles();
@@ -53,7 +55,20 @@ const ProductsPage = () => {
     content: '',
   });
 
+  const [snackbarOptions, setSnackbarOptions] = useState<SnackBarProps>({
+    message: '',
+    open: false,
+  })
+
   const tableRef = useRef<HTMLTableElement>(null);
+
+  // close snackbar
+  const onCloseSnackBar = () => {
+    setSnackbarOptions({
+      message: '',
+      open: false,
+    })
+  }
 
   // call api products with filtering
   const fetchProduct = useCallback(async (filters: FilterProps) => {
@@ -98,24 +113,44 @@ const ProductsPage = () => {
       content: ''
     })
 
+    dispatch(setLoading(true))
+
     const json = await dispatch(fetchThunk(API_PATHS.editProduct, 'post', {
       params: params
     }))
 
+    dispatch(setLoading(false))
+
     if (json?.success) {
-      setFilters({
-        category: "0",
-        count: 25,
-        order_by: "ASC",
-        page: 1,
-        search: "",
-        search_type: "",
-        sort: "name",
-        stock_status: "all",
-        vendor: "",
-        availability: 'all'
-      })
+      setSnackbarOptions({
+        open: true,
+        message: 'Your change is success!',
+        type: 'success'
+      });
+
+      setTimeout(() => {
+        setFilters({
+          category: "0",
+          count: 25,
+          order_by: "ASC",
+          page: 1,
+          search: "",
+          search_type: "",
+          sort: "name",
+          stock_status: "all",
+          vendor: "",
+          availability: 'all'
+        });
+      }, 1500)
+
+      return;
     }
+
+    setSnackbarOptions({
+      open: false,
+      message: 'Your change is failed!',
+      type: 'error'
+    });
   }, [dispatch])
 
   //  options dialog
@@ -213,7 +248,6 @@ const ProductsPage = () => {
     if (isDeleting) {
       // xét nếu tồn tại thì không thêm còn tồn tại thì thêm
       const isExisted = productsDeleted.findIndex(item => item.id === id);
-      console.log(isExisted);
 
       if (isExisted < 0) {
         setProductsDeleted(prev => {
@@ -347,6 +381,11 @@ const ProductsPage = () => {
         <ScrollBar tableRef={tableRef} />
       </div>
       <ConfirmDialog {...dialogOptions} />
+      <SnackBarCustom
+        open={snackbarOptions.open}
+        message={snackbarOptions.message}
+        onClose={onCloseSnackBar}
+      />
     </>
   )
 }

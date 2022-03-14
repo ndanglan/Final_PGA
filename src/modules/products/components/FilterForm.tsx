@@ -62,7 +62,6 @@ const FilterForm = (props: Props) => {
     page: number;
     sort: string;
   }) => {
-    console.log(data);
     const formatedData = {
       ...data,
       vendor: data.vendor.id

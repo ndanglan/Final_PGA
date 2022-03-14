@@ -35,7 +35,7 @@ export interface FilterUsersProps {
   search: string
   sort: string
   state: string
-  status: string[]
+  status: string
   types: {
     groups: string,
     value: string,

@@ -47,7 +47,7 @@ import ControlFileInput from '../../common/components/ControlFileInput';
 import ControlAutocompleteMultipleInput from '../../common/components/ControlAutocompleteMultipleInput';
 import ControlTextEditorInput from './ControlTextEditorInput';
 import ControlSwitchInput from '../../common/components/ControlSwitchInput';
-import { formatDateTime } from '../../common/utils';
+import { timeToDateType, dateTypeToStringType } from '../../common/utils';
 
 interface Props {
   productDetails?: detailsProductProps,
@@ -121,6 +121,7 @@ const useStyles = makeStyles(({
 
   dateRange: {
     position: 'absolute',
+    zIndex: '1000',
     right: '-30%',
     top: '-100px',
     background: DARK_PURPLE,
@@ -171,13 +172,12 @@ const useStyles = makeStyles(({
 }))
 
 const ProductForm = (props: Props) => {
-  const { title, productDetails } = props;
+  const { title, productDetails, onPostProduct } = props;
 
   const classes = useStyles();
   const {
     brands,
     categories,
-    conditions,
     shipping,
     vendors } = useSelector((state: AppState) => state);
 
@@ -197,12 +197,13 @@ const ProductForm = (props: Props) => {
       shipping_to_zones: [{
         id: '1',
         price: '',
+        zone_id: '',
         zone_name: 'Continental U.S.'
       }],
       tax_exempt: 0,
       price: "",
       sale_price_type: "$",
-      arrival_date: moment(`${new Date()}`).format('YYYY-MM-DD'),
+      arrival_date: new Date(),
       inventory_tracking: 0,
       quantity: '',
       sku: '1' + Math.floor(Math.random() * 1000000000000).toString(),
@@ -240,8 +241,7 @@ const ProductForm = (props: Props) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const onSubmit = (data: FormValuesProps) => {
-    console.log(data)
-    // props.onPostProduct(data)
+    onPostProduct(data)
   };
 
   useEffect(() => {
@@ -260,8 +260,11 @@ const ProductForm = (props: Props) => {
       methods.setValue('condition_id',
         productDetails.condition_id)
 
+      // chuyển categories ở server về định dạng format của inputMultipleselect
       methods.setValue('categories',
-        productDetails.categories)
+        productDetails.categories.map(item =>
+          ({ id: item.category_id, name: item.name })
+        ))
 
       methods.setValue('description',
         productDetails.description)
@@ -287,7 +290,7 @@ const ProductForm = (props: Props) => {
         productDetails.sale_price)
 
       methods.setValue('arrival_date',
-        formatDateTime(productDetails.arrival_date))
+        timeToDateType(+productDetails.arrival_date))
 
       methods.setValue('inventory_tracking',
         parseInt(productDetails.inventory_tracking))
@@ -322,7 +325,19 @@ const ProductForm = (props: Props) => {
 
       methods.setValue('imagesOrder', productDetails.images.map(item => item.file))
 
-      replace(productDetails.shipping)
+      if (productDetails.shipping.length > 0) {
+        replace(productDetails.shipping.map(item => ({
+          zone_id: item.id,
+          zone_name: item.zone_name,
+          price: item.price
+        })))
+      } else {
+        replace([{
+          id: '1',
+          price: '',
+          zone_name: 'Continental U.S.'
+        }])
+      }
     }
   }, [productDetails, methods, replace])
 
@@ -389,7 +404,10 @@ const ProductForm = (props: Props) => {
             images={
               productDetails
                 && productDetails.images
-                ? productDetails?.images.map(image => image.thumbs[0])
+                ? productDetails?.images.map(image => ({
+                  id: image.id,
+                  file: image.thumbs[0]
+                }))
                 : undefined
             }
           />
@@ -674,11 +692,10 @@ const ProductForm = (props: Props) => {
               </Grid>
               <Grid item md={6}>
                 <input
-                  value={methods.watch('arrival_date')}
+                  value={dateTypeToStringType(methods.watch('arrival_date'))}
                   type="text"
                   className={classes.priceInput}
-                  onClick={() => setShowDatePicker(true)}
-                  onBlur={() => setShowDatePicker(false)}
+                  onClick={() => setShowDatePicker((prev) => !prev)}
                 />
               </Grid>
               {showDatePicker && (
@@ -691,12 +708,11 @@ const ProductForm = (props: Props) => {
                     <Calendar
                       {...others}
                       color={MEDIUM_PURPLE}
-                      date={new Date()}
+                      date={others.value}
                       className={classes.dateRange}
                       onChange={(e) => {
                         if (e) {
-                          const formatedDate = moment(e).format('YYYY-MM-DD')
-                          onChange(formatedDate);
+                          onChange(e);
                         }
                       }}
                     />
@@ -725,7 +741,7 @@ const ProductForm = (props: Props) => {
             if (index === 0) {
               return (
                 <InputGroup
-                  key={index}
+                  key={field.id}
                   label={field.zone_name}
                   required={true}
                   inputSize={6}
@@ -981,7 +997,9 @@ const ProductForm = (props: Props) => {
               }}
               disabled={!methods.formState.isValid}
             >
-              Add Product
+              {methods.watch('id')
+                ? 'Update Product'
+                : 'Add Product'}
             </Button>
           </div>
         </UtilComponent >

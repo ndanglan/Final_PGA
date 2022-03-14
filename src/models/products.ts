@@ -70,19 +70,20 @@ export interface FormValuesProps {
   name: string,
   brand_id: string,
   condition_id: string,
-  categories: { categories_id: string, name: string }[],
+  categories: CommonSelectProps[],
   description: string,
   enabled: number,
   memberships: number[],
   shipping_to_zones: {
     id: string,
     zone_name: string,
+    zone_id: string,
     price: string
   }[],
   tax_exempt: number,
   price: string,
   sale_price_type: string,
-  arrival_date: string,
+  arrival_date: Date,
   inventory_tracking: number,
   quantity: string,
   sku: string,
@@ -104,7 +105,7 @@ export interface FormValuesProps {
 export interface detailsProductProps {
   arrival_date: string
   brand_id: string
-  categories: { categories_id: string, name: string }[]
+  categories: { category_id: string, name: string }[]
   cleanURL: string
   code: string
   description: string
