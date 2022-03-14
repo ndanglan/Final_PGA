@@ -12,11 +12,12 @@ import {
   MEDIUM_PURPLE,
   WHITE_COLOR,
 } from '../../../../configs/colors';
+import { RequiredRuleProps } from '../../../../models/input';
 
 interface Props {
   label: string,
   name: string,
-  required: boolean,
+  required: RequiredRuleProps,
   data?: CommonSelectProps[],
   labelSize?: number,
   inputSize?: number,
@@ -75,10 +76,10 @@ const ControlAutocompleteMultipleInput = (props: Props) => {
   return (
     <InputGroup
       label={props.label}
-      required={props.required}
+      required={props.required.value}
       inputSize={props.inputSize ? props.inputSize : 6}
       labelSize={props.labelSize ? props.labelSize : 2}
-      errorsType={errors[`${props.name}`] ? 'required' : undefined}
+      errrorMessage={errors[`${props.name}`]?.message}
     >
       <Controller
         control={control}
@@ -120,7 +121,7 @@ const ControlAutocompleteMultipleInput = (props: Props) => {
           )
         }}
         rules={{
-          required: true
+          required: props.required
         }}
       />
     </InputGroup>

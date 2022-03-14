@@ -5,12 +5,13 @@ import { CloseIcon, CameraAltIcon } from '../Icons';
 import InputGroup from '../Layout/InputGroup';
 import defaultImg from '../../../../no-image-icon.png';
 import { DARK_PURPLE } from '../../../../configs/colors'
+import { RequiredRuleProps } from '../../../../models/input';
 
 
 interface IFileInputProps {
   name: string,
   label: string,
-  required: boolean,
+  required: RequiredRuleProps,
   images?: { file: string, id: string }[]
 }
 
@@ -74,12 +75,10 @@ const ControlFileInput = (props: IFileInputProps) => {
   return (
     <InputGroup
       label={props.label}
-      required={props.required}
+      required={props.required.value}
       inputSize={8}
-      errorsType={
-        errors[`${props.name}`]
-          ? 'required'
-          : undefined
+      errrorMessage={
+        errors[`${props.name}`]?.message
       }
     >
       <Dropzone

@@ -117,7 +117,10 @@ const FilterUserForm = (props: Props) => {
             <Grid item md={6}>
               <ControlNormalInput
                 name="search"
-                required={false}
+                required={{
+                  value: false,
+                  message: ''
+                }}
                 label=""
                 inputSize={12}
                 labelSize={0}
@@ -146,7 +149,10 @@ const FilterUserForm = (props: Props) => {
               <ControlSelectInput
                 label=''
                 name='status'
-                required={false}
+                required={{
+                  value: false,
+                  message: ''
+                }}
                 data={STATUS_DATA}
                 labelSize={0}
                 inputSize={12}
@@ -181,7 +187,10 @@ const FilterUserForm = (props: Props) => {
               <ControlSelectInput
                 label="Country"
                 name='country'
-                required={false}
+                required={{
+                  value: false,
+                  message: ''
+                }}
                 data={countries ? countries : []}
                 inputSize={7}
               />
@@ -189,7 +198,10 @@ const FilterUserForm = (props: Props) => {
                 <ControlSelectInput
                   label="State"
                   name='state'
-                  required={false}
+                  required={{
+                    value: false,
+                    message: ''
+                  }}
                   data={states.map(item => (
                     {
                       value: item.state,
@@ -200,7 +212,10 @@ const FilterUserForm = (props: Props) => {
               ) : (
                 <ControlNormalInput
                   name="state"
-                  required={false}
+                  required={{
+                    value: false,
+                    message: ''
+                  }}
                   label="State"
                   inputSize={7}
                   placeHolder="Type your state"
@@ -208,14 +223,20 @@ const FilterUserForm = (props: Props) => {
               )}
               <ControlNormalInput
                 name="address"
-                required={false}
+                required={{
+                  value: false,
+                  message: ''
+                }}
                 label="Address"
                 inputSize={7}
                 placeHolder="Type your address"
               />
               <ControlNormalInput
                 name="phone"
-                required={false}
+                required={{
+                  value: false,
+                  message: ''
+                }}
                 label="Phone"
                 inputSize={7}
                 placeHolder="Type your phone"

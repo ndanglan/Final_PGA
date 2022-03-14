@@ -56,6 +56,17 @@ export const useStyles = makeStyles({
         '&:hover': {
           color: '#5ca1e7'
         }
+      },
+
+      '&:after': {
+        content: '""',
+        height: '10px',
+        width: '150px',
+        backgroundColor: 'transparent',
+        display: 'block',
+        position: 'absolute',
+        top: '-8px',
+        right: '2px'
       }
     },
 

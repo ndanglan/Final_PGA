@@ -1,18 +1,22 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form';
+import { RequiredRuleProps } from '../../../../models/input';
 import InputGroup from '../Layout/InputGroup'
 
 interface Props {
   label: string,
   name: string,
-  required: boolean,
+  required: RequiredRuleProps,
   placeHolder?: string,
   inputSize?: number,
   labelSize?: number,
   helperText?: string,
   type?: string,
   validate?(value: string): boolean | string,
-  pattern?: RegExp,
+  pattern?: {
+    value: RegExp,
+    message: string
+  }
 }
 
 const ControlNormalInput = (props: Props) => {
@@ -24,11 +28,11 @@ const ControlNormalInput = (props: Props) => {
   return (
     <InputGroup
       label={props.label}
-      required={props.required}
+      required={props.required.value}
       inputSize={props.inputSize ? props.inputSize : undefined}
       labelSize={props.labelSize || props.labelSize === 0 ? props.labelSize : 2}
-      errorsType={errors[`${props.name}`]?.type}
       helper={props.helperText ? props.helperText : undefined}
+      errrorMessage={errors[`${props.name}`]?.message}
     >
       <input
         type={props.type ? props.type : 'text'}
@@ -39,10 +43,8 @@ const ControlNormalInput = (props: Props) => {
             props.validate ?
               props.validate
               : undefined,
-          pattern:
-            props.pattern
-              ? props.pattern
-              : undefined
+          pattern: props.pattern ? props.pattern : undefined
+
         })}
       />
     </InputGroup>

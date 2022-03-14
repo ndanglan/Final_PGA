@@ -3,11 +3,12 @@ import { Checkbox, MenuItem, Select } from '@mui/material'
 import { Controller, useFormContext } from 'react-hook-form'
 import InputGroup from '../Layout/InputGroup'
 import { DARK_BLUE, DARK_PURPLE, WHITE_COLOR } from '../../../../configs/colors'
+import { RequiredRuleProps } from '../../../../models/input'
 
 interface Props {
   label: string,
   name: string,
-  required: boolean,
+  required: RequiredRuleProps,
   data?: { value: string | number, name: string }[]
   multiple?: boolean,
   inputSize?: number,
@@ -20,8 +21,8 @@ const ControlSelectInput = (props: Props) => {
   return (
     <InputGroup
       label={props.label}
-      required={props.required}
-      errorsType={errors[`${props.name}`] ? 'required' : undefined}
+      required={props.required.value}
+      errrorMessage={errors[`${props.name}`]?.message}
       inputSize={props.inputSize ? props.inputSize : 4}
       labelSize={props.labelSize || props.labelSize === 0 ? props.labelSize : 2}
     >

@@ -110,7 +110,10 @@ const UserForm = (props: Props) => {
           {/* name input */}
           <ControlNormalInput
             label="First Name"
-            required={true}
+            required={{
+              value: true,
+              message: 'This field is required'
+            }}
             placeHolder=""
             name="firstName"
             inputSize={3}
@@ -120,7 +123,10 @@ const UserForm = (props: Props) => {
           {/* name input */}
           <ControlNormalInput
             label="Last Name "
-            required={true}
+            required={{
+              value: true,
+              message: 'This field is required'
+            }}
             placeHolder=""
             name="lastName"
             inputSize={3}
@@ -130,19 +136,28 @@ const UserForm = (props: Props) => {
           {/* name input */}
           <ControlNormalInput
             label="Email"
-            required={true}
+            required={{
+              value: true,
+              message: 'This field is required'
+            }}
             placeHolder=""
             name="email"
             inputSize={3}
             labelSize={3}
-            pattern={emailRegex}
+            pattern={{
+              value: emailRegex,
+              message: 'Email format is invalid'
+            }}
           />
 
           {/* name input */}
           <ControlNormalInput
             label="Password"
             type="password"
-            required={vendorDetails ? false : true}
+            required={{
+              value: vendorDetails ? false : true,
+              message: 'This field is required'
+            }}
             placeHolder=""
             name="password"
             inputSize={3}
@@ -153,7 +168,10 @@ const UserForm = (props: Props) => {
           <ControlNormalInput
             label="Confirm Password"
             type="password"
-            required={vendorDetails ? false : true}
+            required={{
+              value: vendorDetails ? false : true,
+              message: 'This field is required'
+            }}
             placeHolder=""
             name="confirm_password"
             inputSize={3}
@@ -166,7 +184,10 @@ const UserForm = (props: Props) => {
           {/* condition select */}
           <ControlSelectInput
             label="Type"
-            required={false}
+            required={{
+              value: false,
+              message: ''
+            }}
             inputSize={3}
             labelSize={3}
             name="paymentRailsType"
@@ -216,7 +237,10 @@ const UserForm = (props: Props) => {
           </Typography>
           <ControlSelectInput
             label="Access level "
-            required={true}
+            required={{
+              value: true,
+              message: 'This field is required'
+            }}
             inputSize={3}
             labelSize={3}
             name="access_level"
@@ -228,7 +252,10 @@ const UserForm = (props: Props) => {
           {methods.watch('access_level') === '100' && (
             <ControlAutocompleteMultipleInput
               label="Roles"
-              required={false}
+              required={{
+                value: false,
+                message: ''
+              }}
               inputSize={3}
               labelSize={3}
               name="roles"
@@ -238,7 +265,10 @@ const UserForm = (props: Props) => {
           {vendorDetails && (
             <ControlSelectInput
               label="Account status"
-              required={true}
+              required={{
+                value: true,
+                message: 'This field is required'
+              }}
               inputSize={3}
               labelSize={3}
               name="status"
@@ -260,7 +290,10 @@ const UserForm = (props: Props) => {
           )}
           <ControlSelectInput
             label="Membership"
-            required={false}
+            required={{
+              value: false,
+              message: ''
+            }}
             inputSize={3}
             labelSize={3}
             name="membership_id"

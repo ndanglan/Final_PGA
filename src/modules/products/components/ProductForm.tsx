@@ -356,12 +356,19 @@ const ProductForm = (props: Props) => {
             label='vendor'
             name="vendor_id"
             data={vendors.vendors}
+            required={{
+              value: true,
+              message: 'This field is required'
+            }}
           />
 
           {/* name input */}
           <ControlNormalInput
             label="Product Title"
-            required={true}
+            required={{
+              value: true,
+              message: 'This field is required'
+            }}
             placeHolder="Type title "
             name="name"
           />
@@ -371,19 +378,29 @@ const ProductForm = (props: Props) => {
             label='Brand'
             name="brand_id"
             data={brands.brands}
+            required={{
+              value: true,
+              message: 'This field is required'
+            }}
           />
 
           {/* condition select */}
           <ControlSelectInput
             label="Condition"
-            required={true}
+            required={{
+              value: true,
+              message: 'This field is required'
+            }}
             name="condition_id"
             data={[{ value: '292', name: 'Used' }]}
           />
           {methods.watch('condition_id') && (
             <ControlSelectInput
               label="Used Conditions"
-              required={false}
+              required={{
+                value: false,
+                message: ''
+              }}
               name="inventory_tracking"
               data={[]}
             />
@@ -393,14 +410,20 @@ const ProductForm = (props: Props) => {
           <ControlNormalInput
             label="SKU"
             name='sku'
-            required={false}
+            required={{
+              value: false,
+              message: ''
+            }}
           />
 
           {/* file input */}
           <ControlFileInput
             name='images'
             label='Image'
-            required={true}
+            required={{
+              value: true,
+              message: 'This field is required'
+            }}
             images={
               productDetails
                 && productDetails.images
@@ -414,7 +437,10 @@ const ProductForm = (props: Props) => {
 
           {/* categories autocomplete */}
           <ControlAutocompleteMultipleInput
-            required={true}
+            required={{
+              value: true,
+              message: "This field is required"
+            }}
             label='Category'
             name='categories'
             data={categories.categories}
@@ -424,13 +450,19 @@ const ProductForm = (props: Props) => {
           <ControlTextEditorInput
             label='Description'
             name='description'
-            required={true}
+            required={{
+              value: true,
+              message: "This field is required"
+            }}
           />
 
           {/* switch input control enable for sale */}
           <ControlSwitchInput
             label={'Available for sale'}
-            required={true}
+            required={{
+              value: true,
+              message: "This field is required"
+            }}
             name='enabled'
           />
         </div >
@@ -445,7 +477,10 @@ const ProductForm = (props: Props) => {
           {/* membership input */}
           <ControlSelectInput
             label="Memberships"
-            required={false}
+            required={{
+              value: false,
+              message: ''
+            }}
             name="memberships"
             multiple={true}
             data={[{
@@ -482,11 +517,12 @@ const ProductForm = (props: Props) => {
                         sx={{
                           padding: 0
                         }}
-                        checked={value === 1}
+                        checked={value === 1 ? true : false}
                         onBlur={onBlur}
                         onChange={(e) => {
                           if (e.target.checked) {
-                            onChange(1)
+                            onChange(1);
+                            return;
                           }
 
                           onChange(0)
@@ -724,7 +760,10 @@ const ProductForm = (props: Props) => {
 
           <ControlNormalInput
             label="Quantity in stock"
-            required={true}
+            required={{
+              value: true,
+              message: 'This field is required'
+            }}
             name='quantity'
             inputSize={2}
           />
@@ -920,7 +959,10 @@ const ProductForm = (props: Props) => {
           <ControlSelectInput
             label="Open Graph meta tags"
             name="og_tags_type"
-            required={false}
+            required={{
+              value: false,
+              message: ''
+            }}
             data={[
               {
                 value: '0',
@@ -936,13 +978,19 @@ const ProductForm = (props: Props) => {
             <ControlNormalInput
               name='og_tags'
               label=''
-              required={false}
+              required={{
+                value: false,
+                message: ''
+              }}
             />
           )}
           <ControlSelectInput
             label="Meta description"
             name="meta_desc_type"
-            required={false}
+            required={{
+              value: false,
+              message: ''
+            }}
             data={[
               {
                 value: 'A',
@@ -958,32 +1006,47 @@ const ProductForm = (props: Props) => {
             <ControlNormalInput
               name='meta_description'
               label=''
-              required={false}
+              required={{
+                value: false,
+                message: ''
+              }}
             />
           )}
 
           <ControlNormalInput
             name='meta_keywords'
             label="Meta keywords"
-            required={false}
+            required={{
+              value: false,
+              message: ''
+            }}
           />
 
           <ControlNormalInput
             name='product_page_title'
             label="Product page title"
-            required={false}
+            required={{
+              value: false,
+              message: ''
+            }}
             helperText='Leave blank to use product name as Page Title.'
           />
 
           <ControlSwitchInput
             label="Add to Facebook product feed"
-            required={false}
+            required={{
+              value: false,
+              message: ""
+            }}
             name='facebook_marketing_enabled'
           />
 
           <ControlSwitchInput
             label="Add to Google product feed"
-            required={false}
+            required={{
+              value: false,
+              message: ""
+            }}
             name='google_feed_enabled'
           />
         </div>

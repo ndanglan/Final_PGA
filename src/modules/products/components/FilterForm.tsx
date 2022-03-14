@@ -130,7 +130,10 @@ const FilterForm = (props: Props) => {
               <ControlNormalInput
                 label=''
                 name='search'
-                required={false}
+                required={{
+                  value: true,
+                  message: 'This field is required'
+                }}
                 placeHolder='Type to search keyword'
                 inputSize={12}
                 labelSize={0}
@@ -140,7 +143,10 @@ const FilterForm = (props: Props) => {
               <ControlSelectInput
                 label=''
                 name='category'
-                required={false}
+                required={{
+                  value: false,
+                  message: ''
+                }}
                 inputSize={12}
                 labelSize={0}
                 data={categoriesState
@@ -155,7 +161,10 @@ const FilterForm = (props: Props) => {
               <ControlSelectInput
                 label=''
                 name='stock_status'
-                required={false}
+                required={{
+                  value: false,
+                  message: ''
+                }}
                 inputSize={12}
                 labelSize={0}
                 defaultValue={'all'}
@@ -249,7 +258,10 @@ const FilterForm = (props: Props) => {
               <ControlSelectInput
                 label='Availability'
                 name='availability'
-                required={false}
+                required={{
+                  value: false,
+                  message: ''
+                }}
                 inputSize={7}
                 labelSize={3}
                 defaultValue={'all'}

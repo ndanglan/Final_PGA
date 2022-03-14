@@ -15,6 +15,10 @@ interface Props {
   label: string,
   name: string,
   data?: CommonSelectProps[],
+  required: {
+    value: boolean,
+    message: string
+  }
 }
 
 const useStyles = makeStyles(({
@@ -62,15 +66,15 @@ const useStyles = makeStyles(({
 }))
 
 const ControlAutocompleteInput = (props: Props) => {
-  const { control, watch, formState: { errors } } = useFormContext();
+  const { control, formState: { errors } } = useFormContext();
 
   const classes = useStyles();
 
   return (
     <InputGroup
       label={props.label}
-      required={true}
-      errorsType={errors[`${props.name}`] ? 'required' : undefined}
+      required={props.required.value}
+      errrorMessage={errors[`${props.name}`]?.message}
     >
       <Controller
         control={control}
@@ -105,7 +109,7 @@ const ControlAutocompleteInput = (props: Props) => {
           )
         }}
         rules={{
-          required: true
+          required: props.required
         }}
       />
     </InputGroup>

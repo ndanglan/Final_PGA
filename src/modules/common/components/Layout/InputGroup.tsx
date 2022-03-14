@@ -12,6 +12,7 @@ interface Props {
   labelSize?: number,
   inputSize?: number,
   error?: boolean;
+  errrorMessage?: string;
   errorsType?: LiteralUnion<"required" | "min" | "max" | "maxLength" | "minLength" | "pattern" | "validate" | "valueAsNumber" | "valueAsDate" | "value" | "setValueAs" | "shouldUnregister" | "onChange" | "onBlur" | "disabled" | "deps", string> | undefined
 }
 
@@ -138,6 +139,10 @@ const InputGroup = (props: Props) => {
             Password is not match
           </FormHelperText>
         }
+        {props.errrorMessage &&
+          <FormHelperText error={true}>
+            {props.errrorMessage}
+          </FormHelperText>}
       </Grid>
     </FormGroup>
   )

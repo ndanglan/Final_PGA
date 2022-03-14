@@ -3,20 +3,24 @@ import { Editor } from '@tinymce/tinymce-react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { API_TYNY_KEY, contentCSS, plugins } from '../../../configs/textEditor';
 import InputGroup from '../../common/components/Layout/InputGroup'
+import { DARK_BLUE } from '../../../configs/colors';
+import { RequiredRuleProps } from '../../../models/input';
 
 interface Props {
   label: string,
   name: string,
-  required: boolean
+  required: RequiredRuleProps
 }
 
 const ControlTextEditorInput = (props: Props) => {
   const { control, formState: { errors } } = useFormContext();
+
   return (
     <InputGroup
       label={props.label}
-      required={props.required}
+      required={props.required.value}
       inputSize={6}
+      errrorMessage={errors[`${props.name}`]?.message}
     >
       <Controller
         control={control}
@@ -41,7 +45,7 @@ const ControlTextEditorInput = (props: Props) => {
                 'bold | italic | code' +
                 ' bullist numlist | ',
               toolbar_mode: 'sliding',
-              content_style: 'body { font-family:OpenSans,Arial,sans-serif; font-size:16px }',
+              content_style: `body { font-family:OpenSans,Arial,sans-serif; font-size:16px;background-color:${DARK_BLUE}}`,
               statusbar: false,
               skin: 'oxide'
             }}

@@ -4,10 +4,11 @@ import { Controller, useFormContext } from 'react-hook-form';
 import InputGroup from '../Layout/InputGroup';
 import { makeStyles } from '@mui/styles';
 import { MEDIUM_PURPLE, WHITE_COLOR } from '../../../../configs/colors';
+import { RequiredRuleProps } from '../../../../models/input';
 
 interface Props {
   label: string,
-  required: boolean,
+  required: RequiredRuleProps,
   name: string
 }
 
@@ -55,9 +56,9 @@ const ControlSwitchInput = (props: Props) => {
   return (
     <InputGroup
       label={props.label}
-      required={props.required}
+      required={props.required.value}
       inputSize={6}
-      errorsType={errors[`${props.name}`] ? 'required' : undefined}
+      errrorMessage={errors[`${props.name}`]?.message}
     >
       <Controller
         control={control}
@@ -76,7 +77,7 @@ const ControlSwitchInput = (props: Props) => {
             className={classes.switch}
           />
         )}
-        rules={{ required: true }}
+        rules={{ required: props.required }}
       />
     </InputGroup>
   )
