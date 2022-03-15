@@ -4,6 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import InputGroup from '../Layout/InputGroup'
 import { DARK_BLUE, DARK_PURPLE, WHITE_COLOR } from '../../../../configs/colors'
 import { RequiredRuleProps } from '../../../../models/input'
+import { makeStyles } from '@mui/styles'
 
 interface Props {
   label: string,
@@ -16,8 +17,27 @@ interface Props {
   defaultValue?: string
 }
 
+const useStyles = makeStyles(({
+  select: {
+    '&.MuiOutlinedInput-root': {
+      '& .MuiOutlinedInput-notchedOutline': {
+        border: `none`,
+
+        '& legend': {
+          display: 'none'
+        }
+      },
+
+      '& .MuiSelect-select': {
+        border: `1px solid ${DARK_BLUE}`,
+      },
+    }
+  }
+}))
+
 const ControlSelectInput = (props: Props) => {
-  const { control, formState: { errors } } = useFormContext()
+  const { control, formState: { errors } } = useFormContext();
+  const classes = useStyles()
   return (
     <InputGroup
       label={props.label}
@@ -42,6 +62,8 @@ const ControlSelectInput = (props: Props) => {
                   : false}
               value={field.value}
               defaultValue={props.defaultValue}
+              displayEmpty
+              className={classes.select}
               MenuProps={{
                 PaperProps: {
                   style: {

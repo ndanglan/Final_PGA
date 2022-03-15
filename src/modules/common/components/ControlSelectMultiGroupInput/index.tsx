@@ -20,6 +20,7 @@ interface Props {
     value: string,
     name: string
   }[],
+  placeHolder?: string
 }
 
 const useStyles = makeStyles(({
@@ -32,6 +33,10 @@ const useStyles = makeStyles(({
         '& input': {
           padding: '0 0 0 10px',
           border: 'none',
+
+          '& ::placeholder': {
+            color: DATE_TEXT_COLOR
+          }
         },
 
         '& fieldset': {
@@ -48,7 +53,7 @@ const useStyles = makeStyles(({
           color: WHITE_COLOR
         }
       }
-    }
+    },
   },
 
   list: {
@@ -64,6 +69,12 @@ const useStyles = makeStyles(({
 
     '& .MuiSvgIcon-root': {
       color: WHITE_COLOR,
+    },
+
+    '& .MuiAutocomplete-groupUl': {
+      '& .MuiAutocomplete-option': {
+        padding: '3px 5px'
+      }
     }
   }
 }))
@@ -75,7 +86,8 @@ const ControlSelectMultiGroupInput = (props: Props) => {
     required,
     inputSize,
     labelSize,
-    data
+    data,
+    placeHolder
   } = props;
 
   const { control } = useFormContext();
@@ -92,43 +104,46 @@ const ControlSelectMultiGroupInput = (props: Props) => {
       <Controller
         control={control}
         name={name}
-        render={({ field }) => (
-          <Autocomplete
-            {...field}
-            multiple
-            className={classes.input}
-            options={data}
-            disableCloseOnSelect
-            disableClearable
-            ListboxProps={{
-              className: classes.list
-            }}
-            onChange={(e, data) => {
-              field.onChange(data)
-            }}
-            groupBy={(option) => String(option.group)}
-            getOptionLabel={(option) => {
-              if (option?.name) {
-                return option.name
-              }
-            }}
-            renderOption={(props, option, { selected }) => {
-              return <li {...props}>
-                <Checkbox
-                  checked={selected}
+        render={({ field }) => {
+          return (
+            <Autocomplete
+              {...field}
+              multiple
+              className={classes.input}
+              options={data}
+              disableCloseOnSelect
+              disableClearable
+              ListboxProps={{
+                className: classes.list
+              }}
+              onChange={(e, data) => {
+                field.onChange(data)
+              }}
+              groupBy={(option) => String(option.group)}
+              getOptionLabel={(option) => {
+                if (option?.name) {
+                  return option.name
+                }
+              }}
+              renderOption={(props, option, { selected }) => {
+                return <li {...props}>
+                  <Checkbox
+                    checked={selected}
+                  />
+                  {option.name}
+                </li>
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant='outlined'
+                  // disabled
+                  placeholder={placeHolder}
                 />
-                {option.name}
-              </li>
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant='outlined'
-                disabled
-              />
-            )}
-          />
-        )}
+              )}
+            />
+          )
+        }}
       />
     </InputGroup>
   )

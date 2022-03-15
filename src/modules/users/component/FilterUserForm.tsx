@@ -50,7 +50,7 @@ const FilterUserForm = (props: Props) => {
       phone: filters.phone,
       search: filters.search,
       state: filters.state,
-      status: filters.status[0] ? filters.status[0] : '',
+      status: filters.status[0] ? filters.status[0] : '0',
       types: filters.types,
     }
   });
@@ -77,7 +77,10 @@ const FilterUserForm = (props: Props) => {
     status: string,
     types: FilterUsersProps['types'],
   }) => {
-
+    // console.log({
+    //   ...props.filters,
+    //   ...data
+    // })
     props.onChangeFilter({
       ...props.filters,
       ...data
@@ -134,6 +137,7 @@ const FilterUserForm = (props: Props) => {
                 inputSize={12}
                 labelSize={0}
                 data={MEMBERSHIP_DATA}
+                placeHolder={'All memberships'}
               />
             </Grid>
             <Grid item md={3}>
@@ -143,6 +147,7 @@ const FilterUserForm = (props: Props) => {
                 inputSize={12}
                 labelSize={0}
                 data={TYPES_DATA}
+                placeHolder={'All user types'}
               />
             </Grid>
             <Grid item md={2}>

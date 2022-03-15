@@ -83,9 +83,9 @@ const UsersPage = () => {
       memberships: filters.memberships.length > 0
         ? filters.memberships.map(membership => membership.value)
         : [],
-      status: filters.status ? [filters.status] : []
+      status: filters.status && filters.status !== '0' ? [filters.status] : []
     }
-
+    // console.log(newFormatFilter)
     dispatch(setLoading(true));
 
     const json = await dispatch(fetchThunk(API_PATHS.getUsersList, 'post', newFormatFilter));

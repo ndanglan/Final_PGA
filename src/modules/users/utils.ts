@@ -56,7 +56,7 @@ export const TYPES_DATA = [
 
 export const STATUS_DATA = [
   {
-    value: 'clear',
+    value: '0',
     name: 'Any status'
   },
   {
