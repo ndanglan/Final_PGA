@@ -8,7 +8,9 @@ import { makeStyles } from '@mui/styles';
 import { Autocomplete, TextField } from '@mui/material';
 import { CommonSelectProps } from '../../../../models/products'
 import {
+  DARK_PURPLE,
   MEDIUM_PURPLE,
+  WHITE_COLOR,
 } from '../../../../configs/colors';
 
 interface Props {
@@ -89,6 +91,12 @@ const ControlAutocompleteInput = (props: Props) => {
               value={{
                 id: value,
                 name: defaultVal && defaultVal[0] ? defaultVal[0].name : ''
+              }}
+              ListboxProps={{
+                style: {
+                  backgroundColor: DARK_PURPLE,
+                  color: WHITE_COLOR
+                }
               }}
               options={props.data ? props.data : []}
               getOptionLabel={(option) => option?.name ? option.name : ''}

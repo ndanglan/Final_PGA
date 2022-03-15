@@ -113,13 +113,10 @@ const ProductsPage = () => {
       content: ''
     })
 
-    dispatch(setLoading(true))
-
     const json = await dispatch(fetchThunk(API_PATHS.editProduct, 'post', {
       params: params
     }))
 
-    dispatch(setLoading(false))
 
     if (json?.success) {
       setSnackbarOptions({
@@ -141,7 +138,7 @@ const ProductsPage = () => {
           vendor: "",
           availability: 'all'
         });
-      }, 1500)
+      }, 500)
 
       return;
     }

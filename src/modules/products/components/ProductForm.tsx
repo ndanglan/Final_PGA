@@ -325,8 +325,9 @@ const ProductForm = (props: Props) => {
 
       methods.setValue('imagesOrder', productDetails.images.map(item => item.file))
 
-      if (productDetails.shipping.length > 0) {
+      if (productDetails.shipping.length > 1) {
         replace(productDetails.shipping.map(item => ({
+          id: item.id,
           zone_id: item.id,
           zone_name: item.zone_name,
           price: item.price
@@ -334,12 +335,13 @@ const ProductForm = (props: Props) => {
       } else {
         replace([{
           id: '1',
+          zone_id: '1',
           price: '',
           zone_name: 'Continental U.S.'
         }])
       }
     }
-  }, [productDetails, methods, replace])
+  }, [productDetails, methods, replace, append])
 
   return (
     <FormProvider {...methods}>

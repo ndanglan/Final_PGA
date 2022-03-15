@@ -131,8 +131,8 @@ const FilterForm = (props: Props) => {
                 label=''
                 name='search'
                 required={{
-                  value: true,
-                  message: 'This field is required'
+                  value: false,
+                  message: ''
                 }}
                 placeHolder='Type to search keyword'
                 inputSize={12}
@@ -149,11 +149,9 @@ const FilterForm = (props: Props) => {
                 }}
                 inputSize={12}
                 labelSize={0}
+                defaultValue={'0'}
                 data={categoriesState
-                  ? categoriesState.map(
-                    item =>
-                      ({ value: item.id, name: item.name })
-                  )
+                  ? [{ value: '0', name: 'Any category' }, ...categoriesState.map(item => ({ value: item.id, name: item.name }))]
                   : undefined}
               />
             </Grid>
@@ -271,11 +269,11 @@ const FilterForm = (props: Props) => {
                     name: 'Any availability status'
                   },
                   {
-                    value: 'E',
+                    value: '1',
                     name: 'Only enabled'
                   },
                   {
-                    value: 'D',
+                    value: '0',
                     name: 'Only Disabled'
                   },
                 ]}
