@@ -18,6 +18,7 @@ import { ROUTES } from '../../../configs/routes';
 import ScrollBar from '../../common/components/ScrollBar';
 import { FilterUsersProps, UserDataProps, DeleteUsersProps } from '../../../models/userlist';
 import moment from 'moment';
+import { GroupInputProps } from '../../../models/input';
 
 const UsersPage = () => {
   const classes = useStyles();
@@ -31,7 +32,7 @@ const UsersPage = () => {
     numberUsers: 0
   });
 
-  const [filters, setFilters] = React.useState<FilterUsersProps>({
+  const [filters, setFilters] = useState<FilterUsersProps>({
     address: "",
     count: 25,
     country: "",
@@ -55,6 +56,8 @@ const UsersPage = () => {
     tz: 7
   });
 
+  const [roles, setRoles] = useState<GroupInputProps[]>([])
+
   const [usersDeleted, setUsersDeleted] = useState<DeleteUsersProps[]>([]);
 
   const [dialogOptions, setDialogOptions] = useState<DialogProps>({
@@ -64,6 +67,21 @@ const UsersPage = () => {
   });
 
   const tableRef = useRef<HTMLTableElement>(null);
+
+  const fetchRoles = useCallback(async () => {
+    const json = await dispatch(fetchThunk(API_PATHS.getRoles, 'post', {}));
+
+    if (json.success) {
+      let formatedData: GroupInputProps[] = []
+      for (const i in json.data) {
+        formatedData = [...formatedData, ...json.data[i].map((item: any) => ({ value: item.id, name: item.name, group: i }))]
+      }
+
+      setRoles(formatedData);
+      return;
+    }
+
+  }, [dispatch])
 
   // call api products with filtering
   const fetchUsers = useCallback(async (filters: FilterUsersProps) => {
@@ -113,7 +131,11 @@ const UsersPage = () => {
 
   useEffect(() => {
     fetchUsers(filters)
-  }, [fetchUsers, filters])
+  }, [fetchUsers, filters]);
+
+  useEffect(() => {
+    fetchRoles()
+  }, [fetchRoles])
 
   // // call api edit product
   const deleteUsers = useCallback(async (
@@ -204,6 +226,7 @@ const UsersPage = () => {
             </Typography>
           </div>
           <FilterUserForm
+            roles={roles}
             filters={filters}
             onChangeFilter={handleChangeFilter}
           />

@@ -19,5 +19,6 @@ export const API_PATHS = {
   getVendorDetail: `${APIHost}/apiVendor/profile/detail`,
   createUser: `${APIHost}/apiAdmin/users/create`,
   getState: `${APIHost}/apiAdmin/commons/state`,
-  getCountry: `${APIHost}/apiAdmin/commons/country`
+  getCountry: `${APIHost}/apiAdmin/commons/country`,
+  getRoles: `${APIHost}/apiAdmin/commons/role`
 };

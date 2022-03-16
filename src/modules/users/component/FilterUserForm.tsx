@@ -16,15 +16,17 @@ import { MEMBERSHIP_DATA, STATUS_DATA, TYPES_DATA } from '../utils';
 import { FormProvider, useForm } from 'react-hook-form';
 import ControlNormalInput from '../../common/components/ControlNormalInput';
 import ControlSelectInput from '../../common/components/ControlSelectInput';
+import { GroupInputProps } from '../../../models/input';
 
 interface Props {
   filters: FilterUsersProps,
-  onChangeFilter(filters: FilterUsersProps): void
+  onChangeFilter(filters: FilterUsersProps): void,
+  roles: GroupInputProps[]
 }
 
 const FilterUserForm = (props: Props) => {
   const classes = useStyles();
-  const { filters, onChangeFilter } = props;
+  const { filters, roles, onChangeFilter } = props;
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const countries = useSelector((state: AppState) => state.countries.countries)?.map(item => ({ value: item.code, name: item.country }))
   const [openMoreFilter, setOpenMoreFilter] = useState(false);
@@ -77,7 +79,7 @@ const FilterUserForm = (props: Props) => {
     status: string,
     types: FilterUsersProps['types'],
   }) => {
-    props.onChangeFilter({
+    onChangeFilter({
       ...props.filters,
       ...data
     })
@@ -142,7 +144,7 @@ const FilterUserForm = (props: Props) => {
                 required={false}
                 inputSize={12}
                 labelSize={0}
-                data={TYPES_DATA}
+                data={roles}
                 placeHolder={'All user types'}
               />
             </Grid>
