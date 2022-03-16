@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Checkbox } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useStyles } from '../../../styles/makeStyles'
@@ -63,9 +63,11 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
           <tr>
             <th>
               <Checkbox
-                checked={usersDeleted.length === users.length}
+                checked={
+                  usersDeleted.length
+                  === users.length
+                }
                 onChange={(e) => {
-                  console.log(e.target.checked);
                   if (e.target.checked) {
                     for (let i = 0; i < users.length; i++) {
                       handleAddDeleteUser(users[i].profile_id, true)

@@ -3,7 +3,9 @@ import { Box, Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { ILoginParams } from '../../../models/auth';
 import { useStyles } from '../../../styles/makeStyles';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
+import ControlNormalInput from '../../common/components/ControlNormalInput';
+import { emailRegex } from '../../users/utils';
 
 interface Props {
   onLogin(values: ILoginParams): void;
@@ -12,7 +14,9 @@ interface Props {
 
 const LoginForm = (props: Props) => {
   const classes = useStyles();
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const methods = useForm({
+    mode: 'all',
+    reValidateMode: 'onChange',
     defaultValues: {
       email: "",
       password: ""
@@ -28,69 +32,67 @@ const LoginForm = (props: Props) => {
   }, [onLogin])
 
   return (
-    <Box
-      component="form"
-      sx={{
-        width: 500,
-        maxWidth: '100%',
-      }}
-      style={{ display: 'flex', flexDirection: 'column' }}
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      {errorMessage && (
-        <div style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>
-          <p>{errorMessage}</p>
-        </div>
-      )}
-      <div className={classes.inputField}>
-        <TextField
-          error={errors.email?.message ? true : false}
-          fullWidth
+    <FormProvider {...methods}>
+      <Box
+        component="form"
+        sx={{
+          width: 500,
+          maxWidth: '100%',
+        }}
+        style={{ display: 'flex', flexDirection: 'column' }}
+        onSubmit={methods.handleSubmit(onSubmit)}
+      >
+        {errorMessage && (
+          <div style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>
+            <p>{errorMessage}</p>
+          </div>
+        )}
+        <ControlNormalInput
+          name="email"
           label="Email"
-          id="fullWidth"
-          {...register('email', {
-            required: "This is required",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Invalid email address"
-            }
-          })}
-          helperText={errors.email?.message ? errors.email?.message : ''}
+          inputSize={9}
+          labelSize={2}
+          required={{
+            value: true,
+            message: 'This field is required!'
+          }}
+          pattern={{
+            value: emailRegex,
+            message: 'Email is invalid'
+          }}
+          placeHolder="Type your email"
         />
-        <p>
-          { }
-        </p>
-      </div>
-      <div className={classes.inputField}>
-        <TextField
-          error={errors.password?.message ? true : false}
-          fullWidth
+        <ControlNormalInput
+          name="password"
+          type="password"
           label="Password"
-          id="fullWidth"
-          {...register('password', {
-            required: "This is required",
-            minLength: {
-              value: 6,
-              message: 'Min length is 6'
-            }
-          })}
-          helperText={errors.password?.message ? errors.password?.message : ''}
+          inputSize={9}
+          labelSize={2}
+          required={{
+            value: true,
+            message: 'This field is required!'
+          }}
+          minLength={{
+            value: 6,
+            message: 'Password needs at least 6 characters'
+          }}
+          placeHolder="Type your password"
         />
-      </div>
-      <div
-        className={classes.mainButton}
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginTop: '15px'
-        }}>
-        <Button
-          type="submit"
-          className={classes.mainButton}  >
-          Sign In
-        </Button>
-      </div>
-    </Box>
+        <div
+          className={classes.mainButton}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '15px'
+          }}>
+          <Button
+            type="submit"
+            className={classes.mainButton}  >
+            Sign In
+          </Button>
+        </div>
+      </Box>
+    </FormProvider >
   );
 };
 

@@ -1,7 +1,6 @@
 import React, {
   memo,
   useState,
-  useRef,
   useEffect
 } from 'react'
 import { useStyles } from '../../../styles/makeStyles'
@@ -22,6 +21,7 @@ import { WHITE_COLOR } from '../../../configs/colors';
 
 interface Props {
   product: ProductsProps,
+  isDeleting: boolean,
   handleAddProductEdited(changed: boolean, id: string, price: string, stock: string): void,
   handleAddDeleteProduct(id: string, isDeleting: boolean): void,
   openDialog(params: EditProps[]): void
@@ -32,24 +32,25 @@ const MainTableRow = (props: Props) => {
     product,
     handleAddProductEdited,
     handleAddDeleteProduct,
-    openDialog
+    openDialog,
+    isDeleting
   } = props;
   const classes = useStyles();
 
   const [stockState, setStockState] = useState({
     isEditing: false,
-    value: product.amount
+    value: ''
   })
 
   const [priceState, setPriceState] = useState({
     isEditing: false,
-    value: product.price
+    value: ''
   })
 
-  const [isDeleting, setIsDeleting] = useState(false)
-
   useEffect(() => {
-    if (+priceState.value === +product.price
+    // check neu product da edited inline hay chua neu chua thi disable button con neu co thi enable button
+    if (
+      +priceState.value === +product.price
       && +stockState.value === +product.amount
     ) {
       handleAddProductEdited(
@@ -71,8 +72,16 @@ const MainTableRow = (props: Props) => {
   }, [priceState.value, stockState.value])
 
   useEffect(() => {
-    handleAddDeleteProduct(product.id, isDeleting)
-  }, [isDeleting])
+    setStockState({
+      isEditing: false,
+      value: product.amount
+    });
+
+    setPriceState({
+      isEditing: false,
+      value: product.price
+    })
+  }, [product.amount, product.price])
 
   return (
     <tr style={{
@@ -81,7 +90,13 @@ const MainTableRow = (props: Props) => {
       <td>
         <div className="cell">
           <div className="action">
-            <Checkbox sx={{ color: '#fff' }} />
+            <Checkbox
+              sx={{ color: '#fff' }}
+              checked={isDeleting}
+              onChange={() => {
+                handleAddDeleteProduct(product.id, !isDeleting)
+              }}
+            />
           </div>
           <div className="action action-next">
             <PowerSettingsNewIcon
@@ -110,9 +125,11 @@ const MainTableRow = (props: Props) => {
       <td>
         <div className="cell big-cell">
           <div>
-            <Link to={`${ROUTES.productDetail}/${product.id}`}>
-              {product.name}
-            </Link>
+            {product.name !== null && (
+              <Link to={`${ROUTES.productDetail}/${product.id}`}>
+                {product.name}
+              </Link>
+            )}
           </div>
         </div>
       </td>
@@ -171,12 +188,12 @@ const MainTableRow = (props: Props) => {
                 value={
                   priceState.value
                 }
-                onValueChange={(e) =>
+                onValueChange={(e) => {
                   setPriceState((prev) => {
                     if (e.formattedValue === '') {
                       return {
                         ...prev,
-                        value: '0'
+                        value: ''
                       }
                     }
                     return {
@@ -184,6 +201,8 @@ const MainTableRow = (props: Props) => {
                       value: e.value
                     }
                   })
+                }
+
                 }
               />
             </div>
@@ -267,7 +286,7 @@ const MainTableRow = (props: Props) => {
           <div className={classes.mainButton}>
             <Button
               onClick={() => {
-                setIsDeleting((prev) => !prev);
+                handleAddDeleteProduct(product.id, !isDeleting)
               }}>
               <DeleteIcon />
             </Button>

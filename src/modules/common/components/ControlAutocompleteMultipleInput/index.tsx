@@ -109,9 +109,12 @@ const ControlAutocompleteMultipleInput = (props: Props) => {
                 (params) =>
                   <TextField
                     {...params}
-                    placeholder={props.placeHolder ? props.placeHolder : ''}
+                    placeholder={
+                      props.placeHolder
+                        ? props.placeHolder
+                        : ''
+                    }
                     variant='outlined'
-                    disabled
                   />
               }
               onChange={(_, data) => {

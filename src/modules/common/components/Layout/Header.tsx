@@ -1,5 +1,5 @@
-import React, { useState, memo } from 'react'
-import { AppBar, IconButton, Toolbar, Typography, Button, Menu, MenuItem, Popover } from '@mui/material';
+import React, { memo } from 'react'
+import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import { IUser } from '../../../../models/user'
 import MenuIcon from '@mui/icons-material/Menu';
 import { useStyles } from '../../../../styles/makeStyles'
@@ -14,8 +14,6 @@ interface Props {
 
 const Header = (props: Props) => {
   const classes = useStyles();
-
-  console.log('header render');
 
   return (
     <AppBar className={classes.appBar} position="fixed">

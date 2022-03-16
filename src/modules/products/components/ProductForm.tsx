@@ -40,7 +40,6 @@ import { detailsProductProps, FormValuesProps } from '../../../models/products';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../redux/reducer'
 import NumberFormat from 'react-number-format';
-import moment from 'moment';
 import ControlNormalInput from '../../common/components/ControlNormalInput';
 import ControlSelectInput from '../../common/components/ControlSelectInput';
 import ControlFileInput from '../../common/components/ControlFileInput';
@@ -325,7 +324,7 @@ const ProductForm = (props: Props) => {
 
       methods.setValue('imagesOrder', productDetails.images.map(item => item.file))
 
-      if (productDetails.shipping.length > 1) {
+      if (productDetails.shipping.length >= 1) {
         replace(productDetails.shipping.map(item => ({
           id: item.id,
           zone_id: item.id,
@@ -446,6 +445,7 @@ const ProductForm = (props: Props) => {
             label='Category'
             name='categories'
             data={categories.categories}
+            placeHolder="Choose category"
           />
 
           {/* texteditor input */}
@@ -511,7 +511,7 @@ const ProductForm = (props: Props) => {
                 control={methods.control}
                 name="tax_exempt"
                 render={({
-                  field: { onChange, onBlur, value, name, ref }
+                  field: { onChange, onBlur, value, ref }
                 }) => (
                   <FormControlLabel
                     control={

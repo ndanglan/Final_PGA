@@ -28,6 +28,8 @@ const ACCOUNT_ROLES = [
 
 const UserForm = (props: Props) => {
   const methods = useForm<UserFormValues>({
+    mode: 'all',
+    reValidateMode: 'onChange',
     defaultValues: {
       access_level: "",
       confirm_password: "",

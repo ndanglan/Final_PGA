@@ -1,5 +1,4 @@
 import { createCustomAction, ActionType, getType } from 'typesafe-actions';
-import { CommonSelectProps } from '../../../models/products';
 
 export interface CountriesDataProps {
   active_currency: string | null

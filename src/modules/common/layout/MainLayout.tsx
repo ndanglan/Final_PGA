@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import Header from '../components/Layout/Header'
 import SideBar from '../components/Layout/SideBar';
@@ -36,7 +36,7 @@ const MainLayout = (props: Props) => {
     }
 
     // handle error
-  }, []);
+  }, [dispatch]);
 
   const fetchAllData = useCallback(async () => {
 

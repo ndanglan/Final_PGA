@@ -17,9 +17,7 @@ import { useParams } from 'react-router';
 import SnackBarCustom from '../../common/components/SnackBarCustom';
 import { SnackBarProps } from '../../../models/snackbar';
 
-interface Props { }
-
-const UserFormPage = (props: Props) => {
+const UserFormPage = () => {
   const classes = useStyles();
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const params = useParams<{ id: string }>();

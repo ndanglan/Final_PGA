@@ -34,7 +34,6 @@ const ScrollBar = (props: Props) => {
     }
 
     const handleScroll = () => {
-      console.log('create');
       if (tableRef.current && scrollbar) {
         const thumbBar = scrollbar.querySelector('div')
         if (thumbBar) {

@@ -102,7 +102,7 @@ const ControlFileInput = (props: IFileInputProps) => {
               flexWrap: 'wrap'
             }}>
               {!!images?.length && images.map((image, index) => {
-                // console.log(image);
+
                 return (
                   <span
                     style={{

@@ -23,7 +23,6 @@ const UsersPage = () => {
   const classes = useStyles();
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
 
-
   const [usersState, setUsersState] = useState<{
     usersState: UserDataProps[],
     numberUsers: number
@@ -85,7 +84,7 @@ const UsersPage = () => {
         : [],
       status: filters.status && filters.status !== '0' ? [filters.status] : []
     }
-    // console.log(newFormatFilter)
+
     dispatch(setLoading(true));
 
     const json = await dispatch(fetchThunk(API_PATHS.getUsersList, 'post', newFormatFilter));
@@ -109,8 +108,6 @@ const UsersPage = () => {
 
   // // add filter values to filter state
   const handleChangeFilter = useCallback((filters: FilterUsersProps) => {
-    console.log(filters);
-
     setFilters(filters);
   }, []);
 
@@ -133,32 +130,13 @@ const UsersPage = () => {
       params: params
     }))
 
-    setUsersDeleted([])
-
     if (json?.success) {
-      setFilters({
-        address: "",
-        count: 25,
-        country: "",
-        date_range: {
-          selection: {
-            startDate: new Date(),
-            endDate: new Date(),
-            key: ''
-          }
-        },
-        date_type: "R",
-        memberships: [],
-        order_by: "DESC",
+      setUsersDeleted([])
+
+      setFilters((prev) => ({
+        ...prev,
         page: 1,
-        phone: "",
-        search: "",
-        sort: "last_login",
-        state: "",
-        status: '',
-        types: [],
-        tz: 7
-      })
+      }))
     }
   }, [dispatch])
 

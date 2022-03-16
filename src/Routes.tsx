@@ -11,9 +11,7 @@ const ProductsFormPage = lazy(() => import('./modules/products/pages/ProductsFor
 const UsersPage = lazy(() => import('./modules/users/pages/UsersPage'));
 const UserFormPage = lazy(() => import('./modules/users/pages/UserFormPage'))
 
-interface Props { }
-
-export const Routes = (props: Props) => {
+export const Routes = () => {
   const location = useLocation();
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Button, Checkbox } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { UserDataProps } from '../../../models/userlist'
@@ -29,7 +29,7 @@ const MainTableRow = (props: Props) => {
             <Checkbox
               checked={isDeleting}
               sx={{ color: '#fff' }}
-              onChange={(e) => {
+              onChange={() => {
                 handleAddDeleteUser(user.profile_id, !isDeleting)
               }}
             />
@@ -55,9 +55,11 @@ const MainTableRow = (props: Props) => {
       <td>
         <div className="cell">
           <div>
-            <Link to={`${ROUTES.productDetail}/${user.profile_id}`}>
-              {`${user.fistName} ${user.lastName}`}
-            </Link>
+            {user.fistName && user.lastName ? (
+              <Link to={`${ROUTES.productDetail}/${user.profile_id}`}>
+                {`${user.fistName} ${user.lastName}`}
+              </Link>
+            ) : null}
           </div>
         </div>
       </td>

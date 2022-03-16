@@ -1,6 +1,5 @@
 import React from 'react'
-import { Alert, IconButton, Snackbar } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close';
+import { Alert, Snackbar } from '@mui/material'
 
 interface Props {
   message: string,

@@ -77,10 +77,6 @@ const FilterUserForm = (props: Props) => {
     status: string,
     types: FilterUsersProps['types'],
   }) => {
-    // console.log({
-    //   ...props.filters,
-    //   ...data
-    // })
     props.onChangeFilter({
       ...props.filters,
       ...data

@@ -15,7 +15,7 @@ export function fetchThunk(
   body?: object,
   contentType?: string,
 ): ThunkAction<Promise<any>, AppState, null, Action<string>> {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     const res = await fetch(url, {
       credentials: 'include',
       method,
@@ -45,7 +45,7 @@ export function fetchThunkFormData(
   method: 'get' | 'post' | 'delete' | 'put' = 'get',
   body: FormData,
 ): ThunkAction<Promise<any>, AppState, null, Action<string>> {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     const res = await fetch(url, {
       credentials: 'include',
       method,

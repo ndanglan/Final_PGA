@@ -1,5 +1,5 @@
 import React, { useState, memo, useCallback } from 'react'
-import { FormControl, MenuItem, Select, Typography, FormGroup, FormControlLabel, Checkbox, Button, CircularProgress, Grid } from '@mui/material';
+import { FormControl, Typography, FormGroup, FormControlLabel, Checkbox, Button, CircularProgress, Grid } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { FilterProps, FetchVendorsProps } from '../../../models/products';
@@ -67,7 +67,7 @@ const FilterForm = (props: Props) => {
       vendor: data.vendor.id
     }
 
-    props.onChangeFilter(formatedData)
+    onChangeFilter(formatedData)
   }
 
   const [vendorLoading, setVendorLoading] = useState(false);
@@ -105,7 +105,6 @@ const FilterForm = (props: Props) => {
     const json = await dispatch(fetchThunk(API_PATHS.getVendors, 'post', searchValue));
 
     setVendorLoading(false);
-    // console.log(json);
 
     if (json?.success) {
       setDropdownVendorList(json.data)
@@ -114,7 +113,6 @@ const FilterForm = (props: Props) => {
 
   const debounceFetch = useCallback(
     debounce((nextValue: { search: string }) => {
-      // console.log('test');
 
       fetchVendorsBySearch(nextValue)
     }, 500)

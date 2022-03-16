@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
-import { MenuItem, Pagination, Select, Stack } from '@mui/material'
+import React from 'react'
+import { Pagination, Stack } from '@mui/material'
 import { useStyles } from '../../../../styles/makeStyles'
-import { FilterUsersProps } from '../../../../models/userlist'
 
 interface Props {
   totalLengthProducts: number,

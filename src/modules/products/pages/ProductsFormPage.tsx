@@ -18,9 +18,7 @@ import { dateTypeToStringType } from '../../common/utils';
 import SnackBarCustom from '../../common/components/SnackBarCustom';
 import { SnackBarProps } from '../../../models/snackbar';
 
-interface Props { }
-
-const ProductsFormPage = (props: Props) => {
+const ProductsFormPage = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();

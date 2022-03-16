@@ -3,7 +3,6 @@ import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { ROUTES } from '../../../../configs/routes';
 import Cookies from 'js-cookie';
 import { ACCESS_TOKEN_KEY } from '../../../../utils/constants';
-import MainLayout from '../../layout/MainLayout';
 
 interface Props extends RouteProps { }
 

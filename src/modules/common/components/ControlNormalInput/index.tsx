@@ -16,6 +16,10 @@ interface Props {
   pattern?: {
     value: RegExp,
     message: string
+  },
+  minLength?: {
+    value: number,
+    message: string
   }
 }
 
@@ -43,7 +47,8 @@ const ControlNormalInput = (props: Props) => {
             props.validate ?
               props.validate
               : undefined,
-          pattern: props.pattern ? props.pattern : undefined
+          pattern: props.pattern ? props.pattern : undefined,
+          minLength: props.minLength ? props.minLength : undefined
 
         })}
       />

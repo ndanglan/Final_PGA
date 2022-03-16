@@ -3,10 +3,11 @@ import { Button, Checkbox } from '@mui/material';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useStyles } from '../../../styles/makeStyles'
-import { EditProps, FilterProps, ProductsProps } from '../../../models/products';
+import { EditProps, FilterProps, ProductsProps, DeleteProps } from '../../../models/products';
 import MainTableRow from './MainTableRow';
 interface Props {
   products: ProductsProps[],
+  productsDeleted: DeleteProps[],
   filters: FilterProps,
   onChangeFilter(filters: FilterProps): void,
   handleAddProductEdited(changed: boolean, id: string, price: string, stock: string): void,
@@ -16,12 +17,15 @@ interface Props {
 
 const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) => {
   const classes = useStyles();
-  const { products,
-    onChangeFilter,
+  const {
+    products,
+    productsDeleted,
     filters,
+    onChangeFilter,
     handleAddProductEdited,
     handleAddDeleteProduct,
-    openDialog } = props;
+    openDialog
+  } = props;
 
   const onSorting = (type: string) => {
     if (filters.order_by === 'ASC') {
@@ -62,9 +66,26 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
         <thead>
           <tr>
             <th>
-              <Button>
-                <Checkbox sx={{ color: '#fff' }} />
-              </Button>
+              <Checkbox
+                sx={{ color: '#fff' }}
+                checked={
+                  productsDeleted.length
+                  === products.length
+                }
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    // nếu check thì check hêt các row
+                    for (let i = 0; i < products.length; i++) {
+                      handleAddDeleteProduct(products[i].id, true)
+                    }
+                    return;
+                  }
+                  // nếu không check thì uncheck hêt các row
+                  for (let i = 0; i < products.length; i++) {
+                    handleAddDeleteProduct(products[i].id, false)
+                  }
+                }}
+              />
             </th>
             <th
               style={{
@@ -153,6 +174,11 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
             <MainTableRow
               key={product.id}
               product={product}
+              isDeleting={
+                productsDeleted.find(item => item.id === product.id)
+                  ? true
+                  : false
+              }
               handleAddProductEdited={handleAddProductEdited}
               handleAddDeleteProduct={handleAddDeleteProduct}
               openDialog={openDialog}

@@ -119,6 +119,11 @@ const ProductsPage = () => {
 
 
     if (json?.success) {
+
+      setProductsEdited([]);
+
+      setProductsDeleted([]);
+
       setSnackbarOptions({
         open: true,
         message: 'Your change is success!',
@@ -126,18 +131,7 @@ const ProductsPage = () => {
       });
 
       setTimeout(() => {
-        setFilters({
-          category: "0",
-          count: 25,
-          order_by: "ASC",
-          page: 1,
-          search: "",
-          search_type: "",
-          sort: "name",
-          stock_status: "all",
-          vendor: "",
-          availability: 'all'
-        });
+        setFilters((prev) => ({ ...prev, page: 1 }));
       }, 500)
 
       return;
@@ -264,23 +258,23 @@ const ProductsPage = () => {
     setProductsDeleted(prev => prev.filter(item => item.id !== id))
   }
 
-  // fetch API để dowload file CSV
-  const fetchDataToExportCSV = useCallback(async () => {
-    setDialogOptions({
-      open: false,
-      title: '',
-      content: ''
-    })
-    dispatch(setLoading(true));
-    const json = await dispatch(fetchThunk(API_PATHS.fetchFileCSV, 'post', {}))
-    dispatch(setLoading(false));
+  // // fetch API để dowload file CSV
+  // const fetchDataToExportCSV = useCallback(async () => {
+  //   setDialogOptions({
+  //     open: false,
+  //     title: '',
+  //     content: ''
+  //   })
+  //   dispatch(setLoading(true));
+  //   const json = await dispatch(fetchThunk(API_PATHS.fetchFileCSV, 'post', {}))
+  //   dispatch(setLoading(false));
 
-    // const data = await json.data.file.blob();
+  //   // const data = await json.data.file.blob();
 
+  //   console.log(json)
+  //   // chưa dowload
 
-    // chưa dowload
-
-  }, [dispatch])
+  // }, [dispatch])
 
   return (
     <>
@@ -326,6 +320,7 @@ const ProductsPage = () => {
                   onChangeFilter={handleChangeFilter}
                   openDialog={openConfirmEnable}
                   products={productsState.productsState}
+                  productsDeleted={productsDeleted}
                   filters={filters}
                   ref={tableRef}
                 />
@@ -353,25 +348,6 @@ const ProductsPage = () => {
               onClick={handleOpenDialog}
             >
               {productsDeleted && productsDeleted.length > 0 ? 'Delete selected item' : 'Save changes'}
-            </Button>
-          </div>
-          <div >
-            <Button
-              sx={{
-                backgroundColor: "#f0ad4e",
-                color: '#fff'
-              }}
-              onClick={() => {
-                setDialogOptions({
-                  open: true,
-                  title: 'Confirm Export',
-                  content: 'Do you want to export all products ?',
-                  onClose: () => handleCloseDialog(),
-                  onConfirm: () => fetchDataToExportCSV()
-                })
-              }}
-            >
-              Export all: CSV
             </Button>
           </div>
         </UtilComponent >

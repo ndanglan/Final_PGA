@@ -23,7 +23,6 @@ const SideBar = (props: Props) => {
   const handleSwitchPage = (values: string) => {
     dispatch(push(values))
   }
-  console.log('sidebar render');
 
   return (
     <Drawer

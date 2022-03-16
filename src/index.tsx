@@ -1,6 +1,5 @@
-import { ThemeProvider } from '@mui/styles';
-import { ConnectedRouter } from 'connected-react-router';
 import React from 'react';
+import { ConnectedRouter } from 'connected-react-router';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
