@@ -29,6 +29,7 @@ const InputCheckBox = (props: Props) => {
         render={({ field: { onChange, ...others } }) => (
           <Checkbox
             {...others}
+            checked={others.value === props.dataTrue}
             onChange={e => {
               if (e.target.checked) {
                 onChange(props.dataTrue)

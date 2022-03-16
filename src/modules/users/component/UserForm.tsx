@@ -31,7 +31,7 @@ const UserForm = (props: Props) => {
     mode: 'all',
     reValidateMode: 'onChange',
     defaultValues: {
-      access_level: "",
+      access_level: "10",
       confirm_password: "",
       email: "",
       firstName: "",
@@ -156,28 +156,32 @@ const UserForm = (props: Props) => {
           <ControlNormalInput
             label="Password"
             type="password"
-            required={{
-              value: vendorDetails ? false : true,
-              message: 'This field is required'
-            }}
             placeHolder=""
             name="password"
             inputSize={3}
             labelSize={3}
+            required={{
+              value: vendorDetails ? false : true,
+              message: 'This field is required'
+            }}
+            minLength={{
+              value: 6,
+              message: 'Password needs at least 6 characters'
+            }}
           />
 
           {/* name input */}
           <ControlNormalInput
             label="Confirm Password"
             type="password"
-            required={{
-              value: vendorDetails ? false : true,
-              message: 'This field is required'
-            }}
             placeHolder=""
             name="confirm_password"
             inputSize={3}
             labelSize={3}
+            required={{
+              value: vendorDetails ? false : true,
+              message: 'This field is required'
+            }}
             validate={
               (value: string) => value === methods.watch('password') || 'Password not match'
             }
@@ -246,6 +250,7 @@ const UserForm = (props: Props) => {
             inputSize={3}
             labelSize={3}
             name="access_level"
+            defaultValue={'10'}
             data={[
               { value: '100', name: 'Admin' },
               { value: '10', name: 'Vendor' }

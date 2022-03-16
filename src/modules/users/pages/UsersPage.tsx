@@ -35,7 +35,7 @@ const UsersPage = () => {
   const [filters, setFilters] = useState<FilterUsersProps>({
     address: "",
     count: 25,
-    country: "",
+    country: "0",
     date_range: {
       selection: {
         startDate: undefined,
@@ -100,7 +100,9 @@ const UsersPage = () => {
       memberships: filters.memberships.length > 0
         ? filters.memberships.map(membership => membership.value)
         : [],
-      status: filters.status && filters.status !== '0' ? [filters.status] : []
+      status: filters.status && filters.status !== '0' ? [filters.status] : [],
+      country: filters.country === '0' ? '' : filters.country,
+      page: 1,
     }
 
     dispatch(setLoading(true));

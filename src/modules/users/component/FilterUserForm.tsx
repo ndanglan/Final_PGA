@@ -194,7 +194,10 @@ const FilterUserForm = (props: Props) => {
                   value: false,
                   message: ''
                 }}
-                data={countries ? countries : []}
+                defaultValue={'0'}
+                data={countries
+                  ? [{ value: '0', name: 'Select country' }, ...countries]
+                  : []}
                 inputSize={7}
               />
               {states.length > 0 ? (
