@@ -1,11 +1,10 @@
 import React, { useCallback } from 'react';
 import { Box, Button } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import { ILoginParams } from '../../../models/auth';
 import { useStyles } from '../../../styles/makeStyles';
 import { FormProvider, useForm } from 'react-hook-form';
 import ControlNormalInput from '../../common/components/ControlNormalInput';
-import { emailRegex } from '../../users/utils';
+import { emailRegex } from '../../../utils';
 
 interface Props {
   onLogin(values: ILoginParams): void;

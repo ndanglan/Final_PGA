@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Checkbox } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useStyles } from '../../../styles/makeStyles'

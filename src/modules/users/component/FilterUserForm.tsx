@@ -12,7 +12,7 @@ import ControlSelectMultiGroupInput from '../../common/components/ControlSelectM
 import { fetchThunk } from '../../common/redux/thunk';
 import { API_PATHS } from '../../../configs/api';
 import DateRangePickerInput from './DateRangePickerInput';
-import { MEMBERSHIP_DATA, STATUS_DATA, TYPES_DATA } from '../utils';
+import { MEMBERSHIP_DATA, STATUS_DATA } from '../utils';
 import { FormProvider, useForm } from 'react-hook-form';
 import ControlNormalInput from '../../common/components/ControlNormalInput';
 import ControlSelectInput from '../../common/components/ControlSelectInput';

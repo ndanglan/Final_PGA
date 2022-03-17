@@ -8,7 +8,7 @@ import ControlSelectInput from '../../common/components/ControlSelectInput';
 import InputCheckBox from '../../common/components/InputCheckBox'
 import ControlAutocompleteMultipleInput from '../../common/components/ControlAutocompleteMultipleInput';
 import { UserFormValues, VendorDataProps } from '../../../models/userlist';
-import { emailRegex } from '../utils';
+import { emailRegex } from '../../../utils';
 import TextAreaAutoSizeInput from '../../common/components/TextAreaAutoSizeInput';
 
 interface Props {
