@@ -3,8 +3,11 @@ import React, {
   useState,
   useEffect
 } from 'react'
-import { useStyles } from '../../../styles/makeStyles'
 import { Button, Checkbox } from '@mui/material'
+import moment from 'moment';
+import NumberFormat from "react-number-format";
+import { Link } from 'react-router-dom';
+import { useStyles } from '../../../styles/makeStyles'
 import {
   DeleteIcon,
   PowerSettingsNewIcon
@@ -13,9 +16,6 @@ import {
   EditProps,
   ProductsProps
 } from '../../../models/products';
-import moment from 'moment';
-import { Link } from 'react-router-dom';
-import NumberFormat from "react-number-format";
 import { ROUTES } from '../../../configs/routes';
 import { WHITE_COLOR } from '../../../configs/colors';
 

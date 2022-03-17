@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react'
 import { Button, Grid, Typography } from '@mui/material';
 import { FormProvider, useForm } from 'react-hook-form'
-import FormSeperateSpace from '../../common/components/Layout/FormSeperateSpace';
-import UtilComponent from '../../common/components/Layout/UtilComponent';
+import FormSeperateSpace from '../../common/components/FormSeperateSpace';
+import UtilComponent from '../../common/components/UtilComponent';
 import ControlNormalInput from '../../common/components/ControlNormalInput';
 import ControlSelectInput from '../../common/components/ControlSelectInput';
-import InputCheckBox from '../../common/components/InputCheckBox'
+import ControlCheckBoxInput from '../../common/components/ControlCheckBoxInput'
 import ControlAutocompleteMultipleInput from '../../common/components/ControlAutocompleteMultipleInput';
 import { UserFormValues, VendorDataProps } from '../../../models/userlist';
 import { emailRegex } from '../../../utils';
-import TextAreaAutoSizeInput from '../../common/components/TextAreaAutoSizeInput';
+import ControlTextAreaAutoSizeInput from '../../common/components/ControlTextAreaAutoSizeInput';
+import InputGroup from '../../common/components/InputGroup';
 
 interface Props {
   title: string,
@@ -94,6 +95,8 @@ const UserForm = (props: Props) => {
       methods.setValue('status', vendorDetails.info.status)
 
       methods.setValue('id', vendorDetails.info.profile_id)
+
+      methods.setValue('statusComment', vendorDetails.info.statusComment);
     }
   }, [vendorDetails, methods])
 
@@ -287,7 +290,7 @@ const UserForm = (props: Props) => {
             />
           )}
           {vendorDetails && (
-            <TextAreaAutoSizeInput
+            <ControlTextAreaAutoSizeInput
               label="Status comment (reason)"
               name="statusComment"
               required={false}
@@ -309,7 +312,19 @@ const UserForm = (props: Props) => {
               { value: '4', name: 'General' }
             ]}
           />
-          <InputCheckBox
+          {vendorDetails && (
+            <InputGroup
+              label={'Pending membership'}
+              inputSize={3}
+              labelSize={3}
+              required={false}
+            >
+              <Typography variant="subtitle1">
+                {vendorDetails.info.pending_membership_id ? vendorDetails.info.pending_membership_id : 'none'}
+              </Typography>
+            </InputGroup>
+          )}
+          <ControlCheckBoxInput
             label="Require to change password on next log in"
             name='forceChangePassword'
             required={false}
@@ -325,7 +340,7 @@ const UserForm = (props: Props) => {
           }}>
             Tax information
           </Typography>
-          <InputCheckBox
+          <ControlCheckBoxInput
             label="Tax exempt"
             name='taxExempt'
             required={false}
@@ -342,6 +357,11 @@ const UserForm = (props: Props) => {
                 backgroundColor: "#f0ad4e",
                 color: '#fff'
               }}
+              disabled={
+                methods.formState.isDirty
+                  ? false
+                  : true
+              }
             >
               {vendorDetails ? 'Update account' : 'Create account'}
             </Button>

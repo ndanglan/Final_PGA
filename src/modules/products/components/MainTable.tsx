@@ -1,10 +1,14 @@
 import React from 'react'
 import { Checkbox } from '@mui/material';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useStyles } from '../../../styles/makeStyles'
-import { EditProps, FilterProps, ProductsProps, DeleteProps } from '../../../models/products';
+import {
+  EditProps,
+  FilterProps,
+  ProductsProps,
+  DeleteProps
+} from '../../../models/products';
 import MainTableRow from './MainTableRow';
+import { ArrowDownwardIcon, ArrowUpwardIcon } from '../../common/components/Icons';
 interface Props {
   products: ProductsProps[],
   productsDeleted: DeleteProps[],

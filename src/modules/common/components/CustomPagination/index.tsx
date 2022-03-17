@@ -17,7 +17,7 @@ const optionsLengthPerPage = [
   '100'
 ]
 
-const TablePagination = (props: Props) => {
+const CustomPagination = (props: Props) => {
   const classes = useStyles();
 
   return (
@@ -103,4 +103,4 @@ const TablePagination = (props: Props) => {
   )
 }
 
-export default TablePagination
+export default CustomPagination

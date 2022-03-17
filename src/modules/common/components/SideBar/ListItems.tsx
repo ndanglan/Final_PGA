@@ -1,10 +1,19 @@
 import React from 'react'
-import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
-import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
-import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import {
+  Collapse,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText
+} from '@mui/material'
+
 import { ROUTES } from '../../../../configs/routes';
+import {
+  ChevronLeftOutlinedIcon,
+  ExpandMore,
+  SellOutlinedIcon,
+  GroupOutlinedIcon
+} from '../Icons';
 
 interface Props {
   currentLocation: string,

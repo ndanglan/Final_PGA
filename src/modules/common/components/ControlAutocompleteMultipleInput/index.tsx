@@ -3,7 +3,7 @@ import {
   Controller,
   useFormContext
 } from 'react-hook-form'
-import InputGroup from '../Layout/InputGroup';
+import InputGroup from '../InputGroup';
 import { makeStyles } from '@mui/styles';
 import { Autocomplete, TextField } from '@mui/material';
 import { CommonSelectProps } from '../../../../models/products'

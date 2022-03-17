@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form';
 import { RequiredRuleProps } from '../../../../models/input';
-import InputGroup from '../Layout/InputGroup'
+import InputGroup from '../InputGroup'
 
 interface Props {
   label: string,

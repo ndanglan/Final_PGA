@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { Checkbox, MenuItem, Select } from '@mui/material'
 import { Controller, useFormContext } from 'react-hook-form'
-import InputGroup from '../Layout/InputGroup'
+import InputGroup from '../InputGroup'
 import { DARK_BLUE, DARK_PURPLE, WHITE_COLOR } from '../../../../configs/colors'
 import { RequiredRuleProps } from '../../../../models/input'
 import { makeStyles } from '@mui/styles'

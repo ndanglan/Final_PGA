@@ -3,21 +3,21 @@ import { Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'typesafe-actions';
+import moment from 'moment';
+import { push } from 'connected-react-router';
 import { API_PATHS } from '../../../configs/api';
 import { AppState } from '../../../redux/reducer';
 import { useStyles } from '../../../styles/makeStyles'
-import TablePagination from '../../common/components/Layout/TablePagination';
+import CustomPagination from '../../common/components/CustomPagination';
 import { setLoading } from '../../common/redux/loadingReducer';
 import { fetchThunk } from '../../common/redux/thunk';
 import FilterUserForm from '../component/FilterUserForm';
-import UtilComponent from '../../common/components/Layout/UtilComponent';
+import UtilComponent from '../../common/components/UtilComponent';
 import MainTable from '../component/MainTable';
 import ConfirmDialog, { DialogProps } from '../../common/components/ConfirmDialog';
-import { push } from 'connected-react-router';
 import { ROUTES } from '../../../configs/routes';
 import ScrollBar from '../../common/components/ScrollBar';
 import { FilterUsersProps, UserDataProps, DeleteUsersProps } from '../../../models/userlist';
-import moment from 'moment';
 import { GroupInputProps } from '../../../models/input';
 
 const UsersPage = () => {
@@ -260,7 +260,7 @@ const UsersPage = () => {
                   ref={tableRef}
                 />
               </div>
-              <TablePagination
+              <CustomPagination
                 filters={filters}
                 onChangeFilter={handleChangeFilter}
                 totalLengthProducts={+usersState.numberUsers}

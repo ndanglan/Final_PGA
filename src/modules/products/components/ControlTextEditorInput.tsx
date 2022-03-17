@@ -2,7 +2,7 @@ import React from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { API_TYNY_KEY, contentCSS, plugins } from '../../../configs/textEditor';
-import InputGroup from '../../common/components/Layout/InputGroup'
+import InputGroup from '../../common/components/InputGroup'
 import { DARK_BLUE } from '../../../configs/colors';
 import { RequiredRuleProps } from '../../../models/input';
 

@@ -3,18 +3,18 @@ import { Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'typesafe-actions';
+import { push } from 'connected-react-router';
 import { API_PATHS } from '../../../configs/api';
 import { ProductsProps, FilterProps, EditProps, DeleteProps } from '../../../models/products';
 import { AppState } from '../../../redux/reducer';
 import { useStyles } from '../../../styles/makeStyles'
-import TablePagination from '../../common/components/Layout/TablePagination';
+import CustomPagination from '../../common/components/CustomPagination';
 import { setLoading } from '../../common/redux/loadingReducer';
 import { fetchThunk } from '../../common/redux/thunk';
 import FilterForm from '../components/FilterForm';
-import UtilComponent from '../../common/components/Layout/UtilComponent';
+import UtilComponent from '../../common/components/UtilComponent';
 import MainTable from '../components/MainTable';
 import ConfirmDialog, { DialogProps } from '../../common/components/ConfirmDialog';
-import { push } from 'connected-react-router';
 import { ROUTES } from '../../../configs/routes';
 import ScrollBar from '../../common/components/ScrollBar';
 import SnackBarCustom from '../../common/components/SnackBarCustom';
@@ -325,7 +325,7 @@ const ProductsPage = () => {
                   ref={tableRef}
                 />
               </div>
-              <TablePagination
+              <CustomPagination
                 filters={filters}
                 onChangeFilter={handleChangeFilter}
                 totalLengthProducts={+productsState.numberProducts}

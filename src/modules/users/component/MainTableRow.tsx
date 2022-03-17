@@ -1,11 +1,11 @@
 import React from 'react'
 import { Button, Checkbox } from '@mui/material';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import { UserDataProps } from '../../../models/userlist'
 import { useStyles } from '../../../styles/makeStyles';
 import { DeleteIcon } from '../../common/components/Icons';
 import { ROUTES } from '../../../configs/routes';
-import moment from 'moment';
 
 interface Props {
   user: UserDataProps,

@@ -1,10 +1,15 @@
 import React, { memo, useState } from 'react'
 import { DateRange } from 'react-date-range';
-import InputGroup from '../../common/components/Layout/InputGroup';
-import moment from 'moment';
 import { makeStyles } from '@mui/styles';
-import { DARK_PURPLE, WHITE_COLOR, DATE_TEXT_COLOR, MEDIUM_PURPLE } from '../../../configs/colors';
+import moment from 'moment';
 import { Controller, useFormContext } from 'react-hook-form';
+import InputGroup from '../../common/components/InputGroup';
+import {
+  DARK_PURPLE,
+  WHITE_COLOR,
+  DATE_TEXT_COLOR,
+  MEDIUM_PURPLE
+} from '../../../configs/colors';
 
 interface Props {
   label?: string,

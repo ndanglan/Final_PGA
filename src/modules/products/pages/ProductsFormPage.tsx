@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useStyles } from '../../../styles/makeStyles'
-import { DARK_BLUE, WHITE_COLOR } from '../../../configs/colors';
-import ProductForm from '../components/ProductForm';
-import { push } from 'connected-react-router';
-import { ROUTES } from '../../../configs/routes';
-import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { AppState } from '../../../redux/reducer';
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
 import { Action } from 'typesafe-actions';
-import { fetchThunk, fetchThunkFormData } from '../../common/redux/thunk';
-import { API_PATHS } from '../../../configs/api';
-import { FormValuesProps, detailsProductProps } from '../../../models/products';
 import { useParams } from 'react-router';
+import { ROUTES } from '../../../configs/routes';
+import { DARK_BLUE, WHITE_COLOR } from '../../../configs/colors';
+import { API_PATHS } from '../../../configs/api';
+import { useStyles } from '../../../styles/makeStyles'
+import ProductForm from '../components/ProductForm';
+import { AppState } from '../../../redux/reducer';
+import { fetchThunk, fetchThunkFormData } from '../../common/redux/thunk';
+import { FormValuesProps, detailsProductProps } from '../../../models/products';
 import { setLoading } from '../../common/redux/loadingReducer';
 import { ArrowBackIcon } from '../../common/components/Icons';
 import { dateTypeToStringType } from '../../common/utils';

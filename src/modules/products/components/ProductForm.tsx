@@ -5,6 +5,14 @@ React, {
   useEffect
 } from 'react'
 import {
+  useForm,
+  Controller,
+  useFieldArray,
+  FormProvider
+} from 'react-hook-form'
+import { useSelector } from 'react-redux';
+import { AppState } from '../../../redux/reducer'
+import {
   Checkbox,
   FormControlLabel,
   Typography,
@@ -15,15 +23,11 @@ import {
   Button,
   FormHelperText,
 } from '@mui/material';
-import {
-  useForm,
-  Controller,
-  useFieldArray,
-  FormProvider
-} from 'react-hook-form'
-import InputGroup from '../../common/components/Layout/InputGroup'
-import { CalendarTodayIcon } from '../../common/components/Icons';
 import { makeStyles } from '@mui/styles';
+import { Calendar } from 'react-date-range';
+import NumberFormat from 'react-number-format';
+import InputGroup from '../../common/components/InputGroup'
+import { CalendarTodayIcon } from '../../common/components/Icons';
 import {
   BG_DISABLE,
   BLACK_COLOR,
@@ -32,14 +36,10 @@ import {
   MEDIUM_PURPLE,
   WHITE_COLOR
 } from '../../../configs/colors';
-import FormSeperateSpace from '../../common/components/Layout/FormSeperateSpace';
-import { Calendar } from 'react-date-range';
-import UtilComponent from '../../common/components/Layout/UtilComponent';
+import FormSeperateSpace from '../../common/components/FormSeperateSpace';
+import UtilComponent from '../../common/components/UtilComponent';
 import ControlAutocompleteInput from '../../common/components/ControlAutocompleteInput'
 import { detailsProductProps, FormValuesProps } from '../../../models/products';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../../redux/reducer'
-import NumberFormat from 'react-number-format';
 import ControlNormalInput from '../../common/components/ControlNormalInput';
 import ControlSelectInput from '../../common/components/ControlSelectInput';
 import ControlFileInput from '../../common/components/ControlFileInput';
@@ -271,8 +271,14 @@ const ProductForm = (props: Props) => {
       methods.setValue('enabled',
         parseInt(productDetails.enabled))
 
-      methods.setValue('memberships',
-        productDetails.memberships)
+      // format lại membership để hiển thị
+      if (productDetails.memberships && productDetails.memberships.length > 0) {
+        methods.setValue('memberships',
+          productDetails.memberships.map((item: any) => +item.membership_id))
+      } else {
+        methods.setValue('memberships',
+          [])
+      }
 
       methods.setValue('tax_exempt',
         parseInt(productDetails.tax_exempt))
@@ -341,7 +347,7 @@ const ProductForm = (props: Props) => {
       }
     }
   }, [productDetails, methods, replace, append])
-
+  console.log(methods.watch('memberships'))
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>

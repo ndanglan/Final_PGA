@@ -5,7 +5,7 @@ import {
   TextField,
 } from '@mui/material'
 import { WHITE_COLOR, MEDIUM_PURPLE, DARK_BLUE, DARK_PURPLE, DATE_TEXT_COLOR } from '../../../../configs/colors'
-import InputGroup from '../Layout/InputGroup';
+import InputGroup from '../InputGroup';
 import { makeStyles } from "@mui/styles";
 import { Controller, useFormContext } from 'react-hook-form';
 

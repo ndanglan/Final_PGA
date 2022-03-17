@@ -1,21 +1,29 @@
 import React, { useState, memo, useCallback } from 'react'
-import { FormControl, Typography, FormGroup, FormControlLabel, Checkbox, Button, CircularProgress, Grid } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { FilterProps, FetchVendorsProps } from '../../../models/products';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { AppState } from '../../../redux/reducer';
+import { useSelector } from 'react-redux';
 import { Action } from 'typesafe-actions';
+import { debounce } from 'lodash';
+import { FormProvider, useForm } from 'react-hook-form';
+import {
+  FormControl,
+  Typography,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Button,
+  CircularProgress,
+  Grid
+} from '@mui/material';
+import { FilterProps, FetchVendorsProps } from '../../../models/products';
+import { AppState } from '../../../redux/reducer';
 import { fetchThunk } from '../../common/redux/thunk';
 import { API_PATHS } from '../../../configs/api';
-import { debounce } from 'lodash';
 import { WHITE_COLOR } from '../../../configs/colors';
 import { useStyles } from '../../../styles/makeStyles';
-import { useSelector } from 'react-redux';
-import { FormProvider, useForm } from 'react-hook-form';
 import ControlNormalInput from '../../common/components/ControlNormalInput';
 import ControlSelectInput from '../../common/components/ControlSelectInput';
+import { KeyboardArrowDownIcon, KeyboardArrowUpIcon } from '../../common/components/Icons';
 
 interface Props {
   filters: FilterProps,
@@ -200,7 +208,9 @@ const FilterForm = (props: Props) => {
 
           {/* toggle button */}
           <div className="toggle-btn" onClick={toggleFilter}>
-            {openMoreFilter ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            {openMoreFilter
+              ? <KeyboardArrowUpIcon />
+              : <KeyboardArrowDownIcon />}
           </div>
 
           {/* Second row hidden*/}

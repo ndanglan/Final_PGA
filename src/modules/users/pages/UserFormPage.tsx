@@ -3,6 +3,7 @@ import { push } from 'connected-react-router';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'typesafe-actions';
+import { useParams } from 'react-router';
 import { DARK_BLUE, WHITE_COLOR } from '../../../configs/colors';
 import { ROUTES } from '../../../configs/routes';
 import { AppState } from '../../../redux/reducer';
@@ -13,7 +14,6 @@ import { UserFormValues, VendorDataProps } from '../../../models/userlist';
 import { setLoading } from '../../common/redux/loadingReducer';
 import { API_PATHS } from '../../../configs/api';
 import { fetchThunk } from '../../common/redux/thunk';
-import { useParams } from 'react-router';
 import SnackBarCustom from '../../common/components/SnackBarCustom';
 import { SnackBarProps } from '../../../models/snackbar';
 
@@ -33,8 +33,25 @@ const UserFormPage = () => {
     setSnackbarOptions({
       message: '',
       open: false,
+      type: snackbarOptions.type,
+      duration: snackbarOptions.duration
     })
   }
+
+  const fetchVendorDetails = useCallback(async (id: string) => {
+    dispatch(setLoading(true));
+
+    const json = await dispatch(fetchThunk(API_PATHS.getVendorDetail, 'post', { id: id }));
+
+    dispatch(setLoading(false));
+
+    if (json.success) {
+      setVendorDetails({
+        account_status: json.data.account_status,
+        info: json.data.info
+      })
+    }
+  }, [dispatch])
 
   const onSubmit = useCallback(async (values: UserFormValues) => {
     const { status, id, statusComment, ...others } = values;
@@ -63,9 +80,12 @@ const UserFormPage = () => {
           duration: 1000
         });
 
-        setTimeout(() => {
-          dispatch(push(ROUTES.userList))
-        }, 1000)
+        // sau khi update thành công sẽ fetch lại detail
+        if (id) {
+          setTimeout(() => {
+            fetchVendorDetails(id)
+          }, 1000)
+        }
 
         return;
       }
@@ -89,11 +109,11 @@ const UserFormPage = () => {
       if (json.success) {
         setSnackbarOptions({
           open: true,
-          message: 'Your change is success!',
+          message: 'Your account is activated!',
           type: 'success',
           duration: 1000
         });
-
+        // sau khi tạo thành công chuyển về trang userlist
         setTimeout(() => {
           dispatch(push(ROUTES.userList))
         }, 1000)
@@ -103,28 +123,13 @@ const UserFormPage = () => {
 
       setSnackbarOptions({
         open: true,
-        message: json.data.errors,
+        message: json.errors,
         type: 'error',
         duration: 1000,
       })
     }
 
-  }, [dispatch]);
-
-  const fetchVendorDetails = useCallback(async (id: string) => {
-    dispatch(setLoading(true));
-
-    const json = await dispatch(fetchThunk(API_PATHS.getVendorDetail, 'post', { id: id }));
-
-    dispatch(setLoading(false));
-
-    if (json.success) {
-      setVendorDetails({
-        account_status: json.data.account_status,
-        info: json.data.info
-      })
-    }
-  }, [dispatch])
+  }, [dispatch, fetchVendorDetails]);
 
   useEffect(() => {
     if (params?.id) {
@@ -183,6 +188,8 @@ const UserFormPage = () => {
       <SnackBarCustom
         open={snackbarOptions.open}
         message={snackbarOptions.message}
+        type={snackbarOptions?.type}
+        duration={snackbarOptions?.duration}
         onClose={onCloseSnackBar}
       />
     </>

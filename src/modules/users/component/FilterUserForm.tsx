@@ -1,11 +1,10 @@
 import React, { useState, memo, useCallback, useEffect } from 'react'
 import { Button, Grid, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { AppState } from '../../../redux/reducer';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Action } from 'typesafe-actions';
+import { AppState } from '../../../redux/reducer';
 import { useStyles } from '../../../styles/makeStyles';
 import { FilterUsersProps } from '../../../models/userlist';
 import ControlSelectMultiGroupInput from '../../common/components/ControlSelectMultiGroupInput';
@@ -13,10 +12,10 @@ import { fetchThunk } from '../../common/redux/thunk';
 import { API_PATHS } from '../../../configs/api';
 import DateRangePickerInput from './DateRangePickerInput';
 import { MEMBERSHIP_DATA, STATUS_DATA } from '../utils';
-import { FormProvider, useForm } from 'react-hook-form';
 import ControlNormalInput from '../../common/components/ControlNormalInput';
 import ControlSelectInput from '../../common/components/ControlSelectInput';
 import { GroupInputProps } from '../../../models/input';
+import { KeyboardArrowDownIcon, KeyboardArrowUpIcon } from '../../common/components/Icons';
 
 interface Props {
   filters: FilterUsersProps,
@@ -174,7 +173,9 @@ const FilterUserForm = (props: Props) => {
 
           {/* toggle button */}
           <div className="toggle-btn" onClick={toggleFilter}>
-            {openMoreFilter ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            {openMoreFilter
+              ? <KeyboardArrowUpIcon />
+              : <KeyboardArrowDownIcon />}
           </div>
 
           {/* Second row hidden*/}

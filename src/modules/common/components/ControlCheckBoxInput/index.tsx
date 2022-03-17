@@ -1,8 +1,7 @@
-import { TextareaAutosize } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form';
-import { MEDIUM_BLUE, WHITE_COLOR } from '../../../../configs/colors';
-import InputGroup from '../Layout/InputGroup';
+import InputGroup from '../InputGroup';
 
 interface Props {
   label: string,
@@ -10,9 +9,11 @@ interface Props {
   name: string,
   inputSize?: number,
   labelSize?: number,
+  dataTrue: number | string,
+  dateFalse: number | string
 }
 
-const TextAreaAutoSizeInput = (props: Props) => {
+const ControlCheckBoxInput = (props: Props) => {
   const { control, formState: { errors } } = useFormContext();
   return (
     <InputGroup
@@ -25,19 +26,17 @@ const TextAreaAutoSizeInput = (props: Props) => {
       <Controller
         control={control}
         name={props.name}
-        render={({ field }) => (
-          <TextareaAutosize
-            {...field}
-            minRows={4}
-            placeholder="Type status"
-            style={{
-              borderRadius: '3px',
-              padding: '10px',
-              color: WHITE_COLOR,
-              outline: 'none',
-              backgroundColor: MEDIUM_BLUE,
-              width: '100%',
-              border: `1px solid ${MEDIUM_BLUE}`,
+        render={({ field: { onChange, ...others } }) => (
+          <Checkbox
+            {...others}
+            checked={others.value === props.dataTrue}
+            onChange={e => {
+              if (e.target.checked) {
+                onChange(props.dataTrue)
+                return;
+              }
+
+              onChange(props.dateFalse)
             }}
           />
         )}
@@ -47,4 +46,4 @@ const TextAreaAutoSizeInput = (props: Props) => {
   )
 }
 
-export default TextAreaAutoSizeInput
+export default ControlCheckBoxInput

@@ -1,9 +1,16 @@
 import React, { memo } from 'react'
-import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import {
+  AppBar,
+  IconButton,
+  Toolbar,
+  Typography
+} from '@mui/material';
 import { IUser } from '../../../../models/user'
-import MenuIcon from '@mui/icons-material/Menu';
 import { useStyles } from '../../../../styles/makeStyles'
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import {
+  MenuIcon,
+  PersonOutlineOutlinedIcon
+} from '../Icons';
 
 
 interface Props {

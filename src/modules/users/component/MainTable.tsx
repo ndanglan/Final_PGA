@@ -1,10 +1,10 @@
 import React from 'react'
 import { Checkbox } from '@mui/material';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useStyles } from '../../../styles/makeStyles'
 import { UserDataProps, FilterUsersProps, DeleteUsersProps } from '../../../models/userlist';
 import MainTableRow from './MainTableRow';
+import { ArrowDownwardIcon, ArrowUpwardIcon } from '../../common/components/Icons';
+
 interface Props {
   users: UserDataProps[],
   usersDeleted: DeleteUsersProps[],
@@ -14,7 +14,6 @@ interface Props {
 }
 
 const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) => {
-  const classes = useStyles();
   const {
     users,
     usersDeleted,
@@ -22,6 +21,8 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
     filters,
     handleAddDeleteUser,
   } = props;
+
+  const classes = useStyles();
 
   const onSorting = (type: string) => {
     if (filters.order_by === 'ASC') {
@@ -42,18 +43,20 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
 
   const renderArrowIndication = () => {
     if (filters.order_by === 'DESC') {
-      return <ArrowDownwardIcon sx={{
+      return <ArrowDownwardIcon
+        sx={{
+          width: '0.6em',
+          height: '0.6em',
+          marginLeft: '5px'
+        }} />
+    }
+
+    return <ArrowUpwardIcon
+      sx={{
         width: '0.6em',
         height: '0.6em',
         marginLeft: '5px'
       }} />
-    }
-
-    return <ArrowUpwardIcon sx={{
-      width: '0.6em',
-      height: '0.6em',
-      marginLeft: '5px'
-    }} />
   }
 
   return (

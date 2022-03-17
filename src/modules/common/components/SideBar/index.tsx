@@ -1,14 +1,14 @@
 import React, { memo } from 'react'
 import { Divider, Drawer, IconButton } from '@mui/material'
-import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined';
 import { useStyles } from '../../../../styles/makeStyles'
-import ListItems from '../Layout/ListItems';
+import ListItems from './ListItems';
 import { useLocation } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../../../redux/reducer';
 import { Action } from 'typesafe-actions';
+import { ChevronLeftOutlinedIcon } from '../Icons';
 
 interface Props {
   open: boolean,
@@ -46,7 +46,9 @@ const SideBar = (props: Props) => {
         }}
       >
         <IconButton onClick={props.handleSideBarAction}>
-          <ChevronLeftOutlinedIcon style={{ color: '#fff' }} />
+          <ChevronLeftOutlinedIcon
+            style={{ color: '#fff' }}
+          />
         </IconButton>
       </div>
       <Divider />
