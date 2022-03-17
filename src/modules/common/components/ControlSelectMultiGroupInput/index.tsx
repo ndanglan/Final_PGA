@@ -64,7 +64,8 @@ const useStyles = makeStyles(({
       backgroundColor: DARK_PURPLE,
       color: DATE_TEXT_COLOR,
       fontSize: '16px',
-      fontWeight: '700'
+      fontWeight: '700',
+      textTransform: 'capitalize'
     },
 
     '& .MuiSvgIcon-root': {

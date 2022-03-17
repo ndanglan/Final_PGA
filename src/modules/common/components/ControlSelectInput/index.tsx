@@ -30,6 +30,10 @@ const useStyles = makeStyles(({
 
       '& .MuiSelect-select': {
         border: `1px solid ${DARK_BLUE}`,
+
+        '& .MuiCheckbox-root': {
+          display: 'none'
+        }
       },
     }
   }
@@ -85,7 +89,7 @@ const ControlSelectInput = (props: Props) => {
                   >
                     {props.multiple && (
                       <Checkbox
-                        checked={field.value && field.value?.indexOf(4) > -1}
+                        checked={field.value && field.value?.indexOf(item.value) > -1}
                       />
                     )}
                     {item.name}

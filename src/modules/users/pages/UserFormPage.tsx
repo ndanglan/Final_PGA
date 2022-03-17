@@ -171,7 +171,7 @@ const UserFormPage = () => {
           <div>
             <UserForm
               title={vendorDetails
-                ? `${vendorDetails.info.email}(${vendorDetails.info.companyName})`
+                ? `${vendorDetails.info.email}${vendorDetails.info.companyName ? `(${vendorDetails.info.companyName})` : ''}`
                 : 'Create account'
               }
               onSubmit={(values: UserFormValues) => onSubmit(values)}

@@ -28,7 +28,6 @@ export const Routes = () => {
           <ProtectedRoute path={ROUTES.addUser} component={UserFormPage} />
           <ProtectedRoute path={`${ROUTES.userDetail}/:id`} component={UserFormPage} />
         </MainLayout>
-
       </Switch>
     </Suspense>
   );
