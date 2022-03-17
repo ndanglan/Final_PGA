@@ -46,7 +46,8 @@ import ControlFileInput from '../../common/components/ControlFileInput';
 import ControlAutocompleteMultipleInput from '../../common/components/ControlAutocompleteMultipleInput';
 import ControlTextEditorInput from './ControlTextEditorInput';
 import ControlSwitchInput from '../../common/components/ControlSwitchInput';
-import { timeToDateType, dateTypeToStringType } from '../../common/utils';
+import { timeToDateType } from '../../common/utils';
+import ControlCalendarInput from './ControlCalendarInput'
 
 interface Props {
   productDetails?: detailsProductProps,
@@ -115,39 +116,6 @@ const useStyles = makeStyles(({
           width: '0',
         }
       }
-    }
-  },
-
-  dateRange: {
-    position: 'absolute',
-    zIndex: '1000',
-    right: '-30%',
-    top: '-100px',
-    background: DARK_PURPLE,
-    borderRadius: "0.25rem",
-    border: `1px solid ${BLACK_COLOR}`,
-
-    '& .rdrMonthPicker, & .rdrYearPicker': {
-      '& select': {
-        fontSize: '16px',
-        fontWeight: "600",
-        color: '#ababd2'
-      }
-    },
-
-    '& .rdrDayNumber span': {
-      color: WHITE_COLOR,
-      fontSize: '14px',
-      fontWeight: '500'
-    },
-
-    '& .rdrDayPassive .rdrDayNumber span, .rdrWeekDay': {
-      color: '#ababd2'
-    },
-
-    '& .rdrWeekDay': {
-      fontWeight: '600',
-      fontSize: '16px'
     }
   },
 
@@ -236,8 +204,6 @@ const ProductForm = (props: Props) => {
     name: '',
     price: ''
   })
-
-  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const onSubmit = (data: FormValuesProps) => {
     onPostProduct(data)
@@ -720,51 +686,12 @@ const ProductForm = (props: Props) => {
           </InputGroup>
 
           {/* Date picker input */}
-          <InputGroup
+          <ControlCalendarInput
             label="Arrival date"
+            name="arrival_date"
             required={false}
             inputSize={6}
-          >
-            <Grid container
-              sx={{
-                position: 'relative'
-              }}>
-              <Grid item md={1} className={classes.disableLabel}>
-                <p>
-                  <CalendarTodayIcon />
-                </p>
-              </Grid>
-              <Grid item md={6}>
-                <input
-                  value={dateTypeToStringType(methods.watch('arrival_date'))}
-                  type="text"
-                  className={classes.priceInput}
-                  onClick={() => setShowDatePicker((prev) => !prev)}
-                />
-              </Grid>
-              {showDatePicker && (
-                <Controller
-                  control={methods.control}
-                  name="arrival_date"
-                  render={({
-                    field: { onChange, ...others }
-                  }) => (
-                    <Calendar
-                      {...others}
-                      color={MEDIUM_PURPLE}
-                      date={others.value}
-                      className={classes.dateRange}
-                      onChange={(e) => {
-                        if (e) {
-                          onChange(e);
-                        }
-                      }}
-                    />
-                  )}
-                />
-              )}
-            </Grid>
-          </InputGroup>
+          />
 
           <ControlNormalInput
             label="Quantity in stock"

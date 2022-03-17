@@ -10,6 +10,7 @@ import {
   DATE_TEXT_COLOR,
   MEDIUM_PURPLE
 } from '../../../configs/colors';
+import { Popover } from '@mui/material';
 
 interface Props {
   label?: string,
@@ -82,10 +83,18 @@ const useStyles = makeStyles(({
 const DateRangePickerInput = (props: Props) => {
   const { label, placeHolder, inputSize, required, name } = props;
   const { control } = useFormContext()
-
   const classes = useStyles();
 
-  const [showDateRangePicker, setShowDateRangePicker] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLInputElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
 
   const [dateRange, setDateRange] = useState([
     {
@@ -109,9 +118,17 @@ const DateRangePickerInput = (props: Props) => {
           + moment(dateRange[0].endDate).format('MMM DD,YYYY')
         }
         placeholder={placeHolder}
-        onClick={() => setShowDateRangePicker(prev => !prev)}
+        onClick={(e) => handleClick(e)}
       />
-      {showDateRangePicker && (
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
         <Controller
           control={control}
           name={name}
@@ -140,7 +157,7 @@ const DateRangePickerInput = (props: Props) => {
             />
           )}
         />
-      )}
+      </Popover>
     </InputGroup>
   )
 }
