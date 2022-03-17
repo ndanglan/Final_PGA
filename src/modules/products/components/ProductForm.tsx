@@ -24,17 +24,13 @@ import {
   FormHelperText,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Calendar } from 'react-date-range';
 import NumberFormat from 'react-number-format';
 import InputGroup from '../../common/components/InputGroup'
-import { CalendarTodayIcon } from '../../common/components/Icons';
 import {
   BG_DISABLE,
-  BLACK_COLOR,
   DARK_PURPLE,
   MEDIUM_BLUE,
   MEDIUM_PURPLE,
-  WHITE_COLOR
 } from '../../../configs/colors';
 import FormSeperateSpace from '../../common/components/FormSeperateSpace';
 import UtilComponent from '../../common/components/UtilComponent';

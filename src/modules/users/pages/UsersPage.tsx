@@ -265,6 +265,13 @@ const UsersPage = () => {
                 onChangeFilter={handleChangeFilter}
                 totalLengthProducts={+usersState.numberUsers}
                 numberProductsPerPage={+filters.count}
+                optionsLengthPerPage={[
+                  '10',
+                  '25',
+                  '50',
+                  '75',
+                  '100'
+                ]}
               />
             </>
           )}

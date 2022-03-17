@@ -6,16 +6,9 @@ interface Props {
   totalLengthProducts: number,
   numberProductsPerPage: number,
   onChangeFilter(filters: any): void,
-  filters: any
+  filters: any,
+  optionsLengthPerPage: string[]
 }
-
-const optionsLengthPerPage = [
-  '10',
-  '25',
-  '50',
-  '75',
-  '100'
-]
 
 const CustomPagination = (props: Props) => {
   const classes = useStyles();
@@ -85,7 +78,7 @@ const CustomPagination = (props: Props) => {
             name="count"
             id="count"
           >
-            {optionsLengthPerPage.map((options) => (
+            {props.optionsLengthPerPage.map((options) => (
               <option
                 selected={props.numberProductsPerPage === +options}
                 key={options}
