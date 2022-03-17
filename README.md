@@ -1,46 +1,75 @@
-# Getting Started with Create React App
+# 1.Login by Email:
+- Requirement:
++ Form validate (Require inputs) **(DONE)**
++ Email verify type input  **(DONE)**
++ Password verify with min length is 6 characters  **(DONE)**
++ Redirect to Product list page after logged successfully **(DONE)**
+# 2.	User Management
+## a) User List
++ Get User List with filters: **(DONE)**
++ Pagination (Default is 25 items/page), show total items, allow custom limit on page (25, 50, 75, 100) **(DONE)**
++ Filters: User Types (Get types from API: /apiAdmin/commons/role), Status (include: ‘Any status’– value: ‘null’, ‘Enable’ – value ‘E’ , ‘Disable’ – value ‘D’ , ‘Unapproved vendor’ – value ‘U’) => All filter value must be is an array
++ Searching by Keyword **(DONE)**
++ Loading screen when searching/filtering **(DONE)**
++ Sort by Email, Name (ASC, DESC) **(DONE)**
++ Click to row => Redirect to User detail page **(DONE)**
++ Option to select all row to Remove selected)  **(DONE)**
++ Click to Trash icon => selected row to delete) **(DONE)**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## b) Create/Update User
++ Function to create new User or update User **(DONE)**
++ Form validate: Require for all (*) field **(DONE)**
++ Email validate **(DONE)**
++ Password min-length is 6 characters **(DONE)**
++ Password & Confirm password must be the same **(DONE)**
++ Page Create & Update user have the same UI, just need add data to Update page **(DONE)**
++ Field notes:
+	* Type: Individual, Business **(DONE)**
+	* Access level: Vendor – value 10, Admin – value 100. Default is ‘Vendor’ **(DONE)**
+	* Membership: Ignore Membership – value null, General – value 4 **(DONE)**
+## c) Delete User
++ Allow delete batch of Users => Function need working on User list page
 
-## Available Scripts
 
-In the project directory, you can run:
+# 3.	Product Management
+## a) Product List
++ Get User List with some filters: Keywords, User Type, Status **(DONE)**
++ Pagination (Default is 25 items/page), show total items, allow custom limit on page (25, 50, 75, 100) **(DONE)**
++ Filters: Category (Get list from API: / api/categories/list), Stock Status (include: ‘Any status’– value: ‘all, ‘In Stock’ – value ‘in’ , ‘Low stock’ – value ‘low’ , ‘SOLD’ – value ‘out’)  **(DONE)**
++ Searching by Keyword **(DONE)**
++ Loading screen when searching/filtering **(DONE)**
++ Sort by SKU, Name (ASC, DESC) **(DONE)**
++ Click to row => Redirect to Product detail page ) **(DONE)**
++ Option to select all row to Remove selected **(DONE)**
++ Click to Trash icon => selected row to delete) **(DONE)**
+## b)Create/Update Product
++ Function allow to create/update a Product **(DONE)**
++ Form validate: Require for all (*) field **(DONE)**
++ Page Create & Update user have the same UI, just need add data to Update page (DONE)	+ Add button only available when the form is Valid **(DONE)**
++ Allow select multiple Category  **(DONE)**
++ Allow upload multiple image **(DONE)**
++ Allow Drag & Drop image priority **(DONE)**
++ When setup the Price for product & selected “Sale” checkbox => Show the child-box with select Sale Price based on Percent(%) or Fix Price ($)
++ Date field can select date on the popup (Date picker)
++ Field notes:
+	* Vendors get from API: /apiAdmin/vendors/list. => Allow to search vendor on input **(DONE)**
+	
+  * Brands get from API: /apiAdmin/brands/list **(DONE)**
 
-### `yarn start`
+  * Conditions get from API: /apiAdmin/conditions/list **(DONE)**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  * Categories get from API: /api/categories/list **(DONE)**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+  * Shipping Location get from API: /apiAdmin/shipping/list **(DONE)**
 
-### `yarn test`
+  * Open Graph meta tags/Meta description can be custom or auto generate **(DONE)**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+	* Membership: Ignore Membership – value null, General – value 4 **(DONE)**
 
-### `yarn build`
+## c) Delete Product
+- Allow delete batch of Products => Function need working on Product list page **(DONE)**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
