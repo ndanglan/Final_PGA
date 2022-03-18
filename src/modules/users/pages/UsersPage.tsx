@@ -11,9 +11,9 @@ import { useStyles } from '../../../styles/makeStyles'
 import CustomPagination from '../../common/components/CustomPagination';
 import { setLoading } from '../../common/redux/loadingReducer';
 import { fetchThunk } from '../../common/redux/thunk';
-import FilterUserForm from '../component/FilterUserForm';
+import UserListFilterForm from '../component/UserListFilterForm';
 import UtilComponent from '../../common/components/UtilComponent';
-import MainTable from '../component/MainTable';
+import UserListTable from '../component/UserListTable';
 import ConfirmDialog, { DialogProps } from '../../common/components/ConfirmDialog';
 import { ROUTES } from '../../../configs/routes';
 import ScrollBar from '../../common/components/ScrollBar';
@@ -227,7 +227,7 @@ const UsersPage = () => {
               User List
             </Typography>
           </div>
-          <FilterUserForm
+          <UserListFilterForm
             roles={roles}
             filters={filters}
             onChangeFilter={handleChangeFilter}
@@ -251,7 +251,7 @@ const UsersPage = () => {
                 </div>
 
                 {/* Table */}
-                <MainTable
+                <UserListTable
                   handleAddDeleteUser={handleAddDeleteUser}
                   onChangeFilter={handleChangeFilter}
                   users={usersState.usersState}

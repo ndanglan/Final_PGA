@@ -1,10 +1,10 @@
+import { combineReducers } from 'redux';
+import { connectRouter, RouterState } from 'connected-react-router';
+import { History } from 'history';
 import countriesReducers, { CountriesProps } from './../modules/common/redux/countriesReducers';
 import categoriesReducer, { CategoriesProps } from './../modules/common/redux/categoriesReducers';
 import productsReducer, { ProductsState } from './../modules/products/redux/productsReducers';
 import loadingReducer, { LoadingProps } from './../modules/common/redux/loadingReducer';
-import { connectRouter, RouterState } from 'connected-react-router';
-import { History } from 'history';
-import { combineReducers } from 'redux';
 import authReducer, { AuthState } from '../modules/auth/redux/authReducer';
 import intlReducer, { IntlState } from '../modules/intl/redux/intlReducer';
 import vendorsReducer, { VendorsProps } from '../modules/common/redux/vendorsReducers';

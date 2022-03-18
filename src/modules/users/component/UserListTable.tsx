@@ -2,7 +2,7 @@ import React from 'react'
 import { Checkbox } from '@mui/material';
 import { useStyles } from '../../../styles/makeStyles'
 import { UserDataProps, FilterUsersProps, DeleteUsersProps } from '../../../models/userlist';
-import MainTableRow from './MainTableRow';
+import UserListTableRow from './UserListTableRow';
 import { ArrowDownwardIcon, ArrowUpwardIcon } from '../../common/components/Icons';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   handleAddDeleteUser(id: string, isDeleting: boolean): void,
 }
 
-const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) => {
+const UserListTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) => {
   const {
     users,
     usersDeleted,
@@ -161,7 +161,7 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
         </thead>
         <tbody>
           {users.map(user => (
-            <MainTableRow
+            <UserListTableRow
               key={user.profile_id}
               user={user}
               handleAddDeleteUser={handleAddDeleteUser}
@@ -174,6 +174,6 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
   )
 })
 
-MainTable.displayName = 'MainTable';
+UserListTable.displayName = 'UserListTable';
 
-export default MainTable
+export default UserListTable

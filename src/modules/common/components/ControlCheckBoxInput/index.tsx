@@ -1,5 +1,5 @@
-import { Checkbox } from '@mui/material';
 import React from 'react'
+import { Checkbox } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
 import InputGroup from '../InputGroup';
 

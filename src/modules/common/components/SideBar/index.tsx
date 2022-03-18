@@ -1,19 +1,51 @@
 import React, { memo } from 'react'
-import { Divider, Drawer, IconButton } from '@mui/material'
-import { useStyles } from '../../../../styles/makeStyles'
-import ListItems from './ListItems';
 import { useLocation } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import { ThunkDispatch } from 'redux-thunk';
-import { AppState } from '../../../../redux/reducer';
 import { Action } from 'typesafe-actions';
+import { makeStyles } from '@mui/styles';
+import { Divider, Drawer, IconButton } from '@mui/material'
+import ListItems from './ListItems';
+import { AppState } from '../../../../redux/reducer';
 import { ChevronLeftOutlinedIcon } from '../Icons';
+import { BLACK_COLOR, DARK_PURPLE, WHITE_COLOR } from '../../../../configs/colors';
 
 interface Props {
   open: boolean,
   handleSideBarAction(): void
 }
+
+const useStyles = makeStyles(({
+  sideBar: {
+    '& .MuiPaper-root': {
+      top: '80px',
+      zIndex: '999',
+      backgroundColor: DARK_PURPLE,
+    },
+
+    '& .MuiListItemButton-root': {
+      borderBottom: `1px solid ${BLACK_COLOR}`,
+      color: WHITE_COLOR,
+
+      '& .MuiTypography-root': {
+        fontSize: "13px",
+      },
+
+      '& .MuiListItemIcon-root': {
+        color: WHITE_COLOR,
+      }
+    },
+
+    '& .collapse-item-active': {
+      color: '#9266e7',
+
+      '& .MuiListItemIcon-root': {
+        color: '#9266e7 !important',
+      }
+    }
+  },
+}))
 
 const SideBar = (props: Props) => {
   const classes = useStyles();

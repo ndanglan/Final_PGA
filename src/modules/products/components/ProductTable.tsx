@@ -7,7 +7,7 @@ import {
   ProductsProps,
   DeleteProps
 } from '../../../models/products';
-import MainTableRow from './MainTableRow';
+import ProductTableRow from './ProductTableRow';
 import { ArrowDownwardIcon, ArrowUpwardIcon } from '../../common/components/Icons';
 interface Props {
   products: ProductsProps[],
@@ -19,7 +19,7 @@ interface Props {
   openDialog(params: EditProps[]): void
 }
 
-const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) => {
+const ProductTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) => {
   const classes = useStyles();
   const {
     products,
@@ -175,7 +175,7 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
         </thead>
         <tbody>
           {products.map(product => (
-            <MainTableRow
+            <ProductTableRow
               key={product.id}
               product={product}
               isDeleting={
@@ -194,6 +194,6 @@ const MainTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) 
   )
 })
 
-MainTable.displayName = 'MainTable';
+ProductTable.displayName = 'ProductTable';
 
-export default MainTable
+export default ProductTable

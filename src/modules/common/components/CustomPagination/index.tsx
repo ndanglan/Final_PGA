@@ -1,6 +1,7 @@
 import React from 'react'
+import { makeStyles } from '@mui/styles'
 import { Pagination, Stack } from '@mui/material'
-import { useStyles } from '../../../../styles/makeStyles'
+import { WHITE_COLOR } from '../../../../configs/colors'
 
 interface Props {
   totalLengthProducts: number,
@@ -9,6 +10,20 @@ interface Props {
   filters: any,
   optionsLengthPerPage: string[]
 }
+
+const useStyles = makeStyles(({
+  pagination: {
+    '& li button': {
+      color: WHITE_COLOR,
+
+      '&.Mui-selected': {
+        backgroundColor: '#b18aff',
+        color: WHITE_COLOR,
+        borderColor: 'transparent'
+      }
+    }
+  },
+}))
 
 const CustomPagination = (props: Props) => {
   const classes = useStyles();

@@ -1,12 +1,12 @@
-import { ROUTES } from './../../../configs/routes';
 import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
+import { push } from 'connected-react-router';
+import Cookies from 'js-cookie';
+import { ROUTES } from './../../../configs/routes';
 import { AppState } from '../../../redux/reducer';
 import { RESPONSE_STATUS_UNAUTHORIZED } from '../../../utils/httpResponseCode';
 import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
-import Cookies from 'js-cookie';
 import { setLogoutAction } from '../../auth/redux/authReducer';
-import { push } from 'connected-react-router';
 
 
 export function fetchThunk(

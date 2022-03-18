@@ -23,12 +23,19 @@ interface Props {
   roles: GroupInputProps[]
 }
 
-const FilterUserForm = (props: Props) => {
-  const classes = useStyles();
+const UserListFilterForm = (props: Props) => {
   const { filters, roles, onChangeFilter } = props;
-  const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
+  const classes = useStyles();
   const countries = useSelector((state: AppState) => state.countries.countries)?.map(item => ({ value: item.code, name: item.country }))
+  const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const [openMoreFilter, setOpenMoreFilter] = useState(false);
+  const [states, setStates] = useState<{
+    code: string,
+    country_code: string,
+    region_code: string | null,
+    state: string,
+    state_id: string
+  }[]>([])
 
   const methods = useForm<{
     address: string,
@@ -57,14 +64,6 @@ const FilterUserForm = (props: Props) => {
   });
 
   const country = methods.watch('country');
-
-  const [states, setStates] = useState<{
-    code: string,
-    country_code: string,
-    region_code: string | null,
-    state: string,
-    state_id: string
-  }[]>([])
 
   const onSubmit = (data: {
     address: string,
@@ -302,4 +301,4 @@ const FilterUserForm = (props: Props) => {
   )
 }
 
-export default memo(FilterUserForm)
+export default memo(UserListFilterForm)

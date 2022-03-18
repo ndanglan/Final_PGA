@@ -11,9 +11,9 @@ import { useStyles } from '../../../styles/makeStyles'
 import CustomPagination from '../../common/components/CustomPagination';
 import { setLoading } from '../../common/redux/loadingReducer';
 import { fetchThunk } from '../../common/redux/thunk';
-import FilterForm from '../components/FilterForm';
+import ProductFilterForm from '../components/ProductFilterForm';
 import UtilComponent from '../../common/components/UtilComponent';
-import MainTable from '../components/MainTable';
+import ProductTable from '../components/ProductTable';
 import ConfirmDialog, { DialogProps } from '../../common/components/ConfirmDialog';
 import { ROUTES } from '../../../configs/routes';
 import ScrollBar from '../../common/components/ScrollBar';
@@ -258,24 +258,6 @@ const ProductsPage = () => {
     setProductsDeleted(prev => prev.filter(item => item.id !== id))
   }
 
-  // // fetch API để dowload file CSV
-  // const fetchDataToExportCSV = useCallback(async () => {
-  //   setDialogOptions({
-  //     open: false,
-  //     title: '',
-  //     content: ''
-  //   })
-  //   dispatch(setLoading(true));
-  //   const json = await dispatch(fetchThunk(API_PATHS.fetchFileCSV, 'post', {}))
-  //   dispatch(setLoading(false));
-
-  //   // const data = await json.data.file.blob();
-
-  //   console.log(json)
-  //   // chưa dowload
-
-  // }, [dispatch])
-
   return (
     <>
       <div className={classes.mainPage}>
@@ -291,7 +273,7 @@ const ProductsPage = () => {
               Products
             </Typography>
           </div>
-          <FilterForm
+          <ProductFilterForm
             filters={filters}
             onChangeFilter={handleChangeFilter}
           />
@@ -314,7 +296,7 @@ const ProductsPage = () => {
                 </div>
 
                 {/* Table */}
-                <MainTable
+                <ProductTable
                   handleAddProductEdited={handleAddProductEdited}
                   handleAddDeleteProduct={handleAddDeleteProduct}
                   onChangeFilter={handleChangeFilter}
@@ -364,6 +346,8 @@ const ProductsPage = () => {
       <SnackBarCustom
         open={snackbarOptions.open}
         message={snackbarOptions.message}
+        type={snackbarOptions.type}
+        duration={snackbarOptions.duration}
         onClose={onCloseSnackBar}
       />
     </>

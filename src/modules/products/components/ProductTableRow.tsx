@@ -27,7 +27,7 @@ interface Props {
   openDialog(params: EditProps[]): void
 }
 
-const MainTableRow = (props: Props) => {
+const ProductTableRow = (props: Props) => {
   const {
     product,
     handleAddProductEdited,
@@ -297,4 +297,4 @@ const MainTableRow = (props: Props) => {
   )
 }
 
-export default memo(MainTableRow)
+export default memo(ProductTableRow)

@@ -30,7 +30,7 @@ interface Props {
   onChangeFilter(filters: FilterProps): void
 }
 
-const FilterForm = (props: Props) => {
+const ProductFilterForm = (props: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const { filters, onChangeFilter } = props;
@@ -365,4 +365,4 @@ const FilterForm = (props: Props) => {
   )
 }
 
-export default memo(FilterForm)
+export default memo(ProductFilterForm)

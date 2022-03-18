@@ -1,10 +1,10 @@
 import React, { memo } from 'react'
 import { Checkbox, MenuItem, Select } from '@mui/material'
 import { Controller, useFormContext } from 'react-hook-form'
+import { makeStyles } from '@mui/styles'
 import InputGroup from '../InputGroup'
 import { DARK_BLUE, DARK_PURPLE, WHITE_COLOR } from '../../../../configs/colors'
 import { RequiredRuleProps } from '../../../../models/input'
-import { makeStyles } from '@mui/styles'
 
 interface Props {
   label: string,

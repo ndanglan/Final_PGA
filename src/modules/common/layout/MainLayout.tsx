@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
-import Header from '../components/Header'
-import SideBar from '../components/SideBar';
 import { Action } from 'redux';
+import { useSelector } from 'react-redux';
+import { fetchThunk } from '../redux/thunk';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
+import Cookies from 'js-cookie';
+import { push } from 'connected-react-router';
+import Header from '../components/Header'
+import SideBar from '../components/SideBar';
 import { AppState } from '../../../redux/reducer';
 import { setLogoutAction } from '../../auth/redux/authReducer';
-import Cookies from 'js-cookie';
 import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
-import { push } from 'connected-react-router';
 import { ROUTES } from '../../../configs/routes';
-import { fetchThunk } from '../redux/thunk';
 import { API_PATHS } from '../../../configs/api';
 import { setCategories } from '../redux/categoriesReducers';
 import { setVendors } from '../redux/vendorsReducers';
@@ -86,8 +86,10 @@ const MainLayout = (props: Props) => {
   // logout function
   const handleLogOut = useCallback(() => {
     dispatch(setLogoutAction());
+
     Cookies.remove(ACCESS_TOKEN_KEY);
-    dispatch(push(ROUTES.login))
+
+    dispatch(push(ROUTES.login));
   }, [dispatch])
 
   return (

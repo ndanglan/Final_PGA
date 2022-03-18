@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Button, Checkbox } from '@mui/material';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -13,7 +13,7 @@ interface Props {
   isDeleting: boolean
 }
 
-const MainTableRow = (props: Props) => {
+const UserListTableRow = (props: Props) => {
   const { user, handleAddDeleteUser, isDeleting } = props;
   const classes = useStyles();
 
@@ -133,4 +133,4 @@ const MainTableRow = (props: Props) => {
   )
 }
 
-export default MainTableRow
+export default memo(UserListTableRow)

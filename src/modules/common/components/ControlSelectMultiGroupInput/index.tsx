@@ -4,10 +4,10 @@ import {
   Checkbox,
   TextField,
 } from '@mui/material'
+import { Controller, useFormContext } from 'react-hook-form';
+import { makeStyles } from "@mui/styles";
 import { WHITE_COLOR, MEDIUM_PURPLE, DARK_BLUE, DARK_PURPLE, DATE_TEXT_COLOR } from '../../../../configs/colors'
 import InputGroup from '../InputGroup';
-import { makeStyles } from "@mui/styles";
-import { Controller, useFormContext } from 'react-hook-form';
 
 interface Props {
   label?: string,

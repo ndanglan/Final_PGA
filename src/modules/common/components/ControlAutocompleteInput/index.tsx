@@ -3,9 +3,9 @@ import {
   Controller,
   useFormContext
 } from 'react-hook-form'
-import InputGroup from '../InputGroup';
 import { makeStyles } from '@mui/styles';
 import { Autocomplete, TextField } from '@mui/material';
+import InputGroup from '../InputGroup';
 import { CommonSelectProps } from '../../../../models/products'
 import {
   DARK_PURPLE,

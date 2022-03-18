@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
+import { Action } from 'redux';
+import { useDispatch } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import Cookies from 'js-cookie';
+import { replace } from 'connected-react-router';
 import LoginForm from '../components/LoginForm';
 import logo from '../../../logo-420-x-108.png';
 import { ILoginParams } from '../../../models/auth';
-import { useDispatch } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../../redux/reducer';
-import { Action } from 'redux';
 import { fetchThunk } from '../../common/redux/thunk';
 import { API_PATHS } from '../../../configs/api';
 import { setUserInfo } from '../redux/authReducer';
-import Cookies from 'js-cookie';
 import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
 import { ROUTES } from '../../../configs/routes';
-import { replace } from 'connected-react-router';
 import { getErrorMessageResponse } from '../../../utils';
 import { setLoading } from '../../common/redux/loadingReducer';
 
@@ -26,7 +26,11 @@ const LoginPage = () => {
       dispatch(setLoading(true))
 
       const json = await dispatch(
-        fetchThunk(API_PATHS.signIn, 'post', { email: values.email, password: values.password }),
+        fetchThunk(
+          API_PATHS.signIn,
+          'post',
+          { email: values.email, password: values.password }
+        ),
       );
 
       dispatch(setLoading(false))
@@ -35,6 +39,7 @@ const LoginPage = () => {
         dispatch(setUserInfo(json.user));
         Cookies.set(ACCESS_TOKEN_KEY, json.user_cookie);
         dispatch(replace(ROUTES.productList));
+
         return;
       }
 

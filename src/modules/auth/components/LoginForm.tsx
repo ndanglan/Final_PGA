@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Box, Button } from '@mui/material';
 import { ILoginParams } from '../../../models/auth';
 import { useStyles } from '../../../styles/makeStyles';
-import { FormProvider, useForm } from 'react-hook-form';
 import ControlNormalInput from '../../common/components/ControlNormalInput';
 import { emailRegex } from '../../../utils';
 
@@ -12,7 +12,10 @@ interface Props {
 }
 
 const LoginForm = (props: Props) => {
+  const { onLogin, errorMessage } = props;
+
   const classes = useStyles();
+
   const methods = useForm({
     mode: 'all',
     reValidateMode: 'onChange',
@@ -21,8 +24,6 @@ const LoginForm = (props: Props) => {
       password: ""
     }
   });
-
-  const { onLogin, errorMessage } = props;
 
   const onSubmit = useCallback((data: { email: string, password: string | number }) => {
     if (data) {
@@ -42,7 +43,13 @@ const LoginForm = (props: Props) => {
         onSubmit={methods.handleSubmit(onSubmit)}
       >
         {errorMessage && (
-          <div style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              color: 'red'
+            }}
+          >
             <p>{errorMessage}</p>
           </div>
         )}

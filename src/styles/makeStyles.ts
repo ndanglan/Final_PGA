@@ -5,109 +5,10 @@ import {
   BORDER_COLOR,
   DARK_PURPLE,
   WHITE_COLOR,
-  BLACK_COLOR,
   MEDIUM_BLUE
 } from "../configs/colors";
 
 export const useStyles = makeStyles({
-  appBar: {
-
-    '&.MuiAppBar-root': {
-      backgroundColor: DARK_PURPLE
-    },
-
-    '& .MuiToolbar-root': {
-      padding: '1rem',
-      zIndex: '1000',
-      boxShadow: "0 0.5rem 1rem 0 #1a1f33",
-    },
-
-    '& .MuiTypography-h5': {
-      fontSize: '28px'
-    },
-  },
-
-  accountButtonAppBar: {
-    position: 'relative',
-    opacity: 0.5,
-    transition: '0.3s all ease-in-out',
-
-    '& .popover-account': {
-      display: 'none',
-      position: 'absolute',
-      minWidth: "200px",
-      padding: '0.5rem 1rem',
-      backgroundColor: WHITE_COLOR,
-      right: 0,
-      borderRadius: '5px',
-
-      '& .MuiTypography-subtitle1': {
-        color: BLACK_COLOR,
-        fontSize: '14px'
-      },
-
-      '& a': {
-        display: 'block',
-        marginTop: '10px',
-        color: BLACK_COLOR,
-        fontSize: '15px',
-        cursor: 'pointer',
-
-        '&:hover': {
-          color: '#5ca1e7'
-        }
-      },
-
-      '&:after': {
-        content: '""',
-        height: '10px',
-        width: '150px',
-        backgroundColor: 'transparent',
-        display: 'block',
-        position: 'absolute',
-        top: '-8px',
-        right: '2px'
-      }
-    },
-
-    '&:hover': {
-      opacity: 1,
-
-      '& .popover-account': {
-        display: 'block'
-      }
-    }
-  },
-
-  sideBar: {
-    '& .MuiPaper-root': {
-      top: '80px',
-      zIndex: '999',
-      backgroundColor: DARK_PURPLE,
-    },
-
-    '& .MuiListItemButton-root': {
-      borderBottom: `1px solid ${BLACK_COLOR}`,
-      color: WHITE_COLOR,
-
-      '& .MuiTypography-root': {
-        fontSize: "13px",
-      },
-
-      '& .MuiListItemIcon-root': {
-        color: WHITE_COLOR,
-      }
-    },
-
-    '& .collapse-item-active': {
-      color: '#9266e7',
-
-      '& .MuiListItemIcon-root': {
-        color: '#9266e7 !important',
-      }
-    }
-  },
-
   mainButton: {
     display: 'flex',
     justifyContent: 'center',
@@ -147,7 +48,6 @@ export const useStyles = makeStyles({
   },
 
   mainPage: {
-
     '& .title': {
       fontSize: '2rem',
       color: WHITE_COLOR,
@@ -386,36 +286,5 @@ export const useStyles = makeStyles({
         }
       }
     },
-  },
-
-  pagination: {
-    '& li button': {
-      color: WHITE_COLOR,
-
-      '&.Mui-selected': {
-        backgroundColor: '#b18aff',
-        color: WHITE_COLOR,
-        borderColor: 'transparent'
-      }
-    }
-  },
-
-  utilsContainer: {
-    position: 'sticky',
-    postion: '-webkit-sticky',
-    bottom: '0',
-    width: '100%',
-    padding: '18px 36px',
-    backgroundColor: '#323259',
-    boxShadow: "0px 0px 5px 1px rgba(0,0,0,0.8)",
-    marginTop: '40px',
-    zIndex: '1000',
-    overflowX: 'hidden',
-
-    '& .MuiButton-root:hover': {
-      backgroundColor: '#f0ad4e',
-      borderColor: 'transparent',
-      color: '#191836'
-    }
   },
 })

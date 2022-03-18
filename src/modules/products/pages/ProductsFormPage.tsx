@@ -235,6 +235,8 @@ const ProductsFormPage = () => {
       <SnackBarCustom
         open={snackbarOptions.open}
         message={snackbarOptions.message}
+        type={snackbarOptions.type}
+        duration={snackbarOptions.duration}
         onClose={onCloseSnackBar}
       />
     </>

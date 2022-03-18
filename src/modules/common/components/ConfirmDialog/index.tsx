@@ -1,7 +1,7 @@
 import React from 'react'
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
-import { BG_HOVER, DARK_PURPLE, MEDIUM_PURPLE, RED_COLOR, WHITE_COLOR } from '../../../../configs/colors';
 import { makeStyles } from '@mui/styles';
+import { BG_HOVER, DARK_PURPLE, MEDIUM_PURPLE, RED_COLOR, WHITE_COLOR } from '../../../../configs/colors';
 
 export interface DialogProps {
   open: boolean,
