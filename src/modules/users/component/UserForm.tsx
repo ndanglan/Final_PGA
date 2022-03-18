@@ -381,7 +381,7 @@ const UserForm = (props: Props) => {
                 color: '#fff'
               }}
               disabled={
-                methods.formState.isDirty
+                methods.formState.isDirty && methods.formState.isValid
                   ? false
                   : true
               }
