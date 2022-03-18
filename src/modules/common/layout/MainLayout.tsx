@@ -13,12 +13,14 @@ import { setLogoutAction } from '../../auth/redux/authReducer';
 import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
 import { ROUTES } from '../../../configs/routes';
 import { API_PATHS } from '../../../configs/api';
-import { setCategories } from '../redux/categoriesReducers';
-import { setVendors } from '../redux/vendorsReducers';
-import { setShipping } from '../redux/shippingReducers';
-import { setConditions } from '../redux/conditionsReducers';
-import { setBrands } from '../redux/brandsReducers';
-import { setCountries } from '../redux/countriesReducers';
+import {
+  setCategories,
+  setVendors,
+  setShipping,
+  setConditions,
+  setBrands,
+  setCountries
+} from '../redux/commonReducers';
 interface Props {
   children: any,
 }

@@ -142,7 +142,7 @@ const ProductForm = (props: Props) => {
     brands,
     categories,
     shipping,
-    vendors } = useSelector((state: AppState) => state);
+    vendors } = useSelector((state: AppState) => state.common);
 
   const methods = useForm<FormValuesProps>({
     mode: 'all',
@@ -324,7 +324,7 @@ const ProductForm = (props: Props) => {
           <ControlAutocompleteInput
             label='vendor'
             name="vendor_id"
-            data={vendors.vendors}
+            data={vendors}
             required={{
               value: true,
               message: 'This field is required'
@@ -346,7 +346,7 @@ const ProductForm = (props: Props) => {
           <ControlAutocompleteInput
             label='Brand'
             name="brand_id"
-            data={brands.brands}
+            data={brands}
             required={{
               value: true,
               message: 'This field is required'
@@ -393,15 +393,10 @@ const ProductForm = (props: Props) => {
               value: true,
               message: 'This field is required'
             }}
-            images={
-              productDetails
-                && productDetails.images
-                ? productDetails?.images.map(image => ({
-                  id: image.id,
-                  file: image.thumbs[0]
-                }))
-                : undefined
-            }
+            images={productDetails?.images?.map(image => ({
+              id: image.id,
+              file: image.thumbs[0]
+            }))}
           />
 
           {/* categories autocomplete */}
@@ -412,7 +407,7 @@ const ProductForm = (props: Props) => {
             }}
             label='Category'
             name='categories'
-            data={categories.categories}
+            data={categories}
             placeHolder="Choose category"
           />
 
@@ -834,23 +829,21 @@ const ProductForm = (props: Props) => {
                   }}
                   value={shippingLocation.name}
                 >
-                  {shipping.shipping && (
-                    shipping.shipping.map(item => (
-                      <MenuItem
-                        key={item.id}
-                        value={item.name}
-                        onClick={() => {
-                          setShippingLocation({
-                            id: item.id,
-                            name: item.name,
-                            price: ''
-                          })
-                        }}
-                      >
-                        {item.name}
-                      </MenuItem>
-                    ))
-                  )}
+                  {shipping?.map(item => (
+                    <MenuItem
+                      key={item.id}
+                      value={item.name}
+                      onClick={() => {
+                        setShippingLocation({
+                          id: item.id,
+                          name: item.name,
+                          price: ''
+                        })
+                      }}
+                    >
+                      {item.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </Grid>
               <Grid

@@ -79,22 +79,19 @@ const ControlSelectInput = (props: Props) => {
                 }
               }}
             >
-              {
-                props.data
-                && props.data.length > 0
-                && props.data.map(item => (
-                  <MenuItem
-                    key={item.value}
-                    value={item.value}
-                  >
-                    {props.multiple && (
-                      <Checkbox
-                        checked={field.value && field.value?.indexOf(item.value) > -1}
-                      />
-                    )}
-                    {item.name}
-                  </MenuItem>
-                ))
+              {props?.data?.map(item => (
+                <MenuItem
+                  key={item.value}
+                  value={item.value}
+                >
+                  {props.multiple && (
+                    <Checkbox
+                      checked={field.value && field.value?.indexOf(item.value) > -1}
+                    />
+                  )}
+                  {item.name}
+                </MenuItem>
+              ))
               }
             </Select>
           )

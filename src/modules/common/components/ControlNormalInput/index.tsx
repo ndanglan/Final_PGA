@@ -1,3 +1,4 @@
+import { InputBaseProps } from '@mui/material';
 import React from 'react'
 import { useFormContext } from 'react-hook-form';
 import { RequiredRuleProps } from '../../../../models/input';

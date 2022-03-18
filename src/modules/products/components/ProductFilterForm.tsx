@@ -34,7 +34,7 @@ const ProductFilterForm = (props: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const { filters, onChangeFilter } = props;
-  const categoriesState = useSelector((state: AppState) => state.categories.categories)
+  const categoriesState = useSelector((state: AppState) => state.common.categories)
   const [openMoreFilter, setOpenMoreFilter] = useState(false);
 
   const methods = useForm({

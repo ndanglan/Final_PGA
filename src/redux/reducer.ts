@@ -1,16 +1,11 @@
 import { combineReducers } from 'redux';
 import { connectRouter, RouterState } from 'connected-react-router';
 import { History } from 'history';
-import countriesReducers, { CountriesProps } from './../modules/common/redux/countriesReducers';
-import categoriesReducer, { CategoriesProps } from './../modules/common/redux/categoriesReducers';
 import productsReducer, { ProductsState } from './../modules/products/redux/productsReducers';
 import loadingReducer, { LoadingProps } from './../modules/common/redux/loadingReducer';
 import authReducer, { AuthState } from '../modules/auth/redux/authReducer';
 import intlReducer, { IntlState } from '../modules/intl/redux/intlReducer';
-import vendorsReducer, { VendorsProps } from '../modules/common/redux/vendorsReducers';
-import brandsReducers, { BrandsProps } from '../modules/common/redux/brandsReducers';
-import shippingReducers, { ShippingProps } from '../modules/common/redux/shippingReducers';
-import conditionsReducers, { ConditionsProps } from './../modules/common/redux/conditionsReducers';
+import commonReducer, { CommonProps } from './../modules/common/redux/commonReducers';
 
 export interface AppState {
   router: RouterState;
@@ -18,12 +13,7 @@ export interface AppState {
   profile: AuthState;
   loading: LoadingProps;
   products: ProductsState;
-  categories: CategoriesProps;
-  vendors: VendorsProps;
-  brands: BrandsProps;
-  shipping: ShippingProps;
-  conditions: ConditionsProps;
-  countries: CountriesProps
+  common: CommonProps
 }
 
 export default function createRootReducer(history: History) {
@@ -33,11 +23,6 @@ export default function createRootReducer(history: History) {
     profile: authReducer,
     loading: loadingReducer,
     products: productsReducer,
-    categories: categoriesReducer,
-    vendors: vendorsReducer,
-    brands: brandsReducers,
-    shipping: shippingReducers,
-    conditions: conditionsReducers,
-    countries: countriesReducers
+    common: commonReducer
   });
 }

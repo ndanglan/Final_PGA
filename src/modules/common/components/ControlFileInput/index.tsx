@@ -22,7 +22,7 @@ const ControlFileInput = (props: IFileInputProps) => {
     formState: { errors }
   } = useFormContext();
 
-  const [images, setImages] = useState<string[]>([]);
+  const [imagesSelected, setImagesSelected] = useState<string[]>([]);
 
   const removeImage = (id: number) => {
     // lấy file array từ react hook form 
@@ -46,8 +46,8 @@ const ControlFileInput = (props: IFileInputProps) => {
       setValue('deleted_images', [...imagesDeletedArray, ...deletedImagesArray])
     }
 
-    const newArrayDisplayImages = images.filter((image, index) => index !== id);
-    setImages(newArrayDisplayImages)
+    const newArrayDisplayImages = imagesSelected.filter((image, index) => index !== id);
+    setImagesSelected(newArrayDisplayImages)
   }
 
   const addImages = (files: any) => {
@@ -57,7 +57,7 @@ const ControlFileInput = (props: IFileInputProps) => {
     // lọc name để thêm vào imagesOrder
     const nameArray = [...files].map(file => file.name);
 
-    setImages((prev) => ([...prev, ...urlArray]))
+    setImagesSelected((prev) => ([...prev, ...urlArray]))
 
     // lưu tên theo order
     setValue('imagesOrder', [...getValues('imagesOrder'), ...nameArray])
@@ -68,7 +68,7 @@ const ControlFileInput = (props: IFileInputProps) => {
 
   useEffect(() => {
     if (props.images && props.images.length > 0) {
-      setImages(props.images.map(image => image.file))
+      setImagesSelected(props.images.map(image => image.file))
     }
   }, [props.images])
 
@@ -101,7 +101,7 @@ const ControlFileInput = (props: IFileInputProps) => {
               alignItems: 'flex-start',
               flexWrap: 'wrap'
             }}>
-              {!!images?.length && images.map((image, index) => {
+              {!!imagesSelected?.length && imagesSelected.map((image, index) => {
 
                 return (
                   <span
