@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, memo } from 'react'
 import { Button, Grid, Typography } from '@mui/material';
 import { FormProvider, useForm } from 'react-hook-form'
 import FormSeperateSpace from '../../common/components/FormSeperateSpace';
@@ -395,4 +395,4 @@ const UserForm = (props: Props) => {
   )
 }
 
-export default UserForm
+export default memo(UserForm)

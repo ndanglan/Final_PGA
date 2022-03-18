@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Checkbox } from '@mui/material';
 import { useStyles } from '../../../styles/makeStyles'
 import { UserDataProps, FilterUsersProps, DeleteUsersProps } from '../../../models/userlist';
@@ -176,4 +176,4 @@ const UserListTable = React.forwardRef<HTMLTableElement, Props>((props: Props, r
 
 UserListTable.displayName = 'UserListTable';
 
-export default UserListTable
+export default memo(UserListTable)

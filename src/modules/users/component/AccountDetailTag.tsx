@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { VendorDataProps } from '../../../models/userlist'
 import LabelGroup from '../../common/components/LabelGroup'
 import moment from 'moment'
@@ -56,4 +56,4 @@ const AccountDetailTag = (props: Props) => {
   )
 }
 
-export default AccountDetailTag
+export default memo(AccountDetailTag)
