@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { API_TYNY_KEY, contentCSS, plugins } from '../../../configs/textEditor';
@@ -57,4 +57,4 @@ const ControlTextEditorInput = (props: Props) => {
   )
 }
 
-export default ControlTextEditorInput
+export default memo(ControlTextEditorInput)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Checkbox } from '@mui/material';
 import { useStyles } from '../../../styles/makeStyles'
 import {
@@ -196,4 +196,4 @@ const ProductTable = React.forwardRef<HTMLTableElement, Props>((props: Props, re
 
 ProductTable.displayName = 'ProductTable';
 
-export default ProductTable
+export default memo(ProductTable)

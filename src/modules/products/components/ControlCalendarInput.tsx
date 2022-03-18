@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { Grid, Popover } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Calendar } from 'react-date-range';
@@ -149,4 +149,4 @@ const ControlCalendarInput = (props: Props) => {
   )
 }
 
-export default ControlCalendarInput
+export default memo(ControlCalendarInput)
