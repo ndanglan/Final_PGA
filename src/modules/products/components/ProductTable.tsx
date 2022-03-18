@@ -74,7 +74,7 @@ const ProductTable = React.forwardRef<HTMLTableElement, Props>((props: Props, re
                 sx={{ color: '#fff' }}
                 checked={
                   productsDeleted.length
-                  === products.length
+                  === products.length && productsDeleted.length !== 0
                 }
                 onChange={(e) => {
                   if (e.target.checked) {

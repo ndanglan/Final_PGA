@@ -92,7 +92,7 @@ const UserFormPage = () => {
 
       setSnackbarOptions({
         open: true,
-        message: json.data.errors,
+        message: json.errors,
         type: 'error',
         duration: 1000,
       })
@@ -121,9 +121,18 @@ const UserFormPage = () => {
         return;
       }
 
+      // handle errors when create user
+      let errorMessage;
+      if (typeof json.errors === 'object') {
+        const key = Object.keys(json.errors)[0];
+        errorMessage = `${key}: ${json.errors[key]}`;
+      } else {
+        errorMessage = json.errors
+      }
+
       setSnackbarOptions({
         open: true,
-        message: json.errors,
+        message: errorMessage,
         type: 'error',
         duration: 1000,
       })

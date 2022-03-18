@@ -68,7 +68,7 @@ const UserListTable = React.forwardRef<HTMLTableElement, Props>((props: Props, r
               <Checkbox
                 checked={
                   usersDeleted.length
-                  === users.length
+                  === users.length && usersDeleted.length !== 0
                 }
                 onChange={(e) => {
                   if (e.target.checked) {

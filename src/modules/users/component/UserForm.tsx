@@ -10,7 +10,8 @@ import ControlAutocompleteMultipleInput from '../../common/components/ControlAut
 import { UserFormValues, VendorDataProps } from '../../../models/userlist';
 import { emailRegex } from '../../../utils';
 import ControlTextAreaAutoSizeInput from '../../common/components/ControlTextAreaAutoSizeInput';
-import InputGroup from '../../common/components/InputGroup';
+import LabelGroup from '../../common/components/LabelGroup';
+import AccountDetailTag from './AccountDetailTag';
 
 interface Props {
   title: string,
@@ -105,11 +106,26 @@ const UserForm = (props: Props) => {
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
       >
-        <div className="part1">
+        <div>
           <Typography variant="h4" sx={{
             marginBottom: '30px'
           }}>
             {title}
+          </Typography>
+          {vendorDetails && (
+            <AccountDetailTag
+              info={vendorDetails.info}
+            />
+          )}
+        </div>
+        {vendorDetails && (
+          <FormSeperateSpace />
+        )}
+        <div className="part1">
+          <Typography variant="h4" sx={{
+            marginBottom: '30px'
+          }}>
+            Email & password
           </Typography>
 
           {/* name input */}
@@ -194,8 +210,8 @@ const UserForm = (props: Props) => {
           <ControlSelectInput
             label="Type"
             required={{
-              value: false,
-              message: ''
+              value: true,
+              message: 'This field is required'
             }}
             inputSize={3}
             labelSize={3}
@@ -244,21 +260,31 @@ const UserForm = (props: Props) => {
           }}>
             Access information
           </Typography>
-          <ControlSelectInput
-            label="Access level "
-            required={{
-              value: true,
-              message: 'This field is required'
-            }}
-            inputSize={3}
-            labelSize={3}
-            name="access_level"
-            defaultValue={'10'}
-            data={[
-              { value: '100', name: 'Admin' },
-              { value: '10', name: 'Vendor' }
-            ]}
-          />
+          {vendorDetails ? (
+            <LabelGroup
+              label={'Access level'}
+              inputSize={3}
+              labelSize={3}
+              required={false}
+              value={vendorDetails.info.access_level === '10' ? 'Vendor' : 'Admin'}
+            />
+          ) : (
+            <ControlSelectInput
+              label="Access level "
+              required={{
+                value: true,
+                message: 'This field is required'
+              }}
+              inputSize={3}
+              labelSize={3}
+              name="access_level"
+              defaultValue={'10'}
+              data={[
+                { value: '100', name: 'Admin' },
+                { value: '10', name: 'Vendor' }
+              ]}
+            />
+          )}
           {methods.watch('access_level') === '100' && (
             <ControlAutocompleteMultipleInput
               label="Roles"
@@ -313,16 +339,13 @@ const UserForm = (props: Props) => {
             ]}
           />
           {vendorDetails && (
-            <InputGroup
+            <LabelGroup
               label={'Pending membership'}
               inputSize={3}
               labelSize={3}
               required={false}
-            >
-              <Typography variant="subtitle1">
-                {vendorDetails.info.pending_membership_id ? vendorDetails.info.pending_membership_id : 'none'}
-              </Typography>
-            </InputGroup>
+              value={vendorDetails.info.pending_membership_id ? vendorDetails.info.pending_membership_id.toString() : 'none'}
+            />
           )}
           <ControlCheckBoxInput
             label="Require to change password on next log in"

@@ -65,7 +65,7 @@ const CustomPagination = (props: Props) => {
             marginRight: '2px',
             fontWeight: "700"
           }}>{props.totalLengthProducts}</span>
-          <span>items</span>
+          <span>{props.totalLengthProducts > 1 ? 'items' : 'item'}</span>
         </div>
         <div>
           <select

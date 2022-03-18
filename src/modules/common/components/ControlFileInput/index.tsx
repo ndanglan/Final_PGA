@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { CloseIcon, CameraAltIcon } from '../Icons';
-import InputGroup from '../InputGroup';
+import FormControlGroup from '../FormControlGroup';
 import defaultImg from '../../../../no-image-icon.png';
 import { DARK_PURPLE } from '../../../../configs/colors'
 import { RequiredRuleProps } from '../../../../models/input';
@@ -73,7 +73,7 @@ const ControlFileInput = (props: IFileInputProps) => {
   }, [props.images])
 
   return (
-    <InputGroup
+    <FormControlGroup
       label={props.label}
       required={props.required.value}
       inputSize={8}
@@ -167,7 +167,7 @@ const ControlFileInput = (props: IFileInputProps) => {
           </>
         )}
       </Dropzone>
-    </InputGroup>
+    </FormControlGroup>
   )
 }
 

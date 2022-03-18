@@ -89,7 +89,7 @@ const useStyles = makeStyles(({
   }
 }))
 
-const InputGroup = (props: Props) => {
+const FormControlGroup = (props: Props) => {
   const classes = useStyles();
 
   return (
@@ -148,4 +148,4 @@ const InputGroup = (props: Props) => {
   )
 }
 
-export default memo(InputGroup)
+export default memo(FormControlGroup)

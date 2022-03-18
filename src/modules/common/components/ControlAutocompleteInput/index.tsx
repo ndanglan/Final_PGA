@@ -5,7 +5,7 @@ import {
 } from 'react-hook-form'
 import { makeStyles } from '@mui/styles';
 import { Autocomplete, TextField } from '@mui/material';
-import InputGroup from '../InputGroup';
+import FormControlGroup from '../FormControlGroup';
 import { CommonSelectProps } from '../../../../models/products'
 import {
   DARK_PURPLE,
@@ -73,7 +73,7 @@ const ControlAutocompleteInput = (props: Props) => {
   const classes = useStyles();
 
   return (
-    <InputGroup
+    <FormControlGroup
       label={props.label}
       required={props.required.value}
       errrorMessage={errors[`${props.name}`]?.message}
@@ -120,7 +120,7 @@ const ControlAutocompleteInput = (props: Props) => {
           required: props.required
         }}
       />
-    </InputGroup>
+    </FormControlGroup>
   )
 }
 

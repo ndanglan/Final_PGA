@@ -2,7 +2,7 @@ import React from 'react'
 import { TextareaAutosize } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
 import { MEDIUM_BLUE, WHITE_COLOR } from '../../../../configs/colors';
-import InputGroup from '../InputGroup';
+import FormControlGroup from '../FormControlGroup';
 
 interface Props {
   label: string,
@@ -15,7 +15,7 @@ interface Props {
 const ControlTextAreaAutoSizeInput = (props: Props) => {
   const { control, formState: { errors } } = useFormContext();
   return (
-    <InputGroup
+    <FormControlGroup
       label={props.label}
       required={props.required}
       inputSize={props.inputSize ? props.inputSize : 6}
@@ -43,7 +43,7 @@ const ControlTextAreaAutoSizeInput = (props: Props) => {
         )}
         rules={{ required: props.required }}
       />
-    </InputGroup>
+    </FormControlGroup>
   )
 }
 

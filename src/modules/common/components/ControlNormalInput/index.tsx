@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form';
 import { RequiredRuleProps } from '../../../../models/input';
-import InputGroup from '../InputGroup'
+import FormControlGroup from '../FormControlGroup'
 
 interface Props {
   label: string,
@@ -30,7 +30,7 @@ const ControlNormalInput = (props: Props) => {
   } = useFormContext();
 
   return (
-    <InputGroup
+    <FormControlGroup
       label={props.label}
       required={props.required.value}
       inputSize={props.inputSize ? props.inputSize : undefined}
@@ -52,7 +52,7 @@ const ControlNormalInput = (props: Props) => {
 
         })}
       />
-    </InputGroup>
+    </FormControlGroup>
   )
 }
 

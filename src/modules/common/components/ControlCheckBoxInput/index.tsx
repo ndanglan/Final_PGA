@@ -1,7 +1,7 @@
 import React from 'react'
 import { Checkbox } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
-import InputGroup from '../InputGroup';
+import FormControlGroup from '../FormControlGroup';
 
 interface Props {
   label: string,
@@ -16,7 +16,7 @@ interface Props {
 const ControlCheckBoxInput = (props: Props) => {
   const { control, formState: { errors } } = useFormContext();
   return (
-    <InputGroup
+    <FormControlGroup
       label={props.label}
       required={props.required}
       inputSize={props.inputSize ? props.inputSize : 6}
@@ -42,7 +42,7 @@ const ControlCheckBoxInput = (props: Props) => {
         )}
         rules={{ required: props.required }}
       />
-    </InputGroup>
+    </FormControlGroup>
   )
 }
 

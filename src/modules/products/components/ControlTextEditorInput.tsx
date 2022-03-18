@@ -2,7 +2,7 @@ import React from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { API_TYNY_KEY, contentCSS, plugins } from '../../../configs/textEditor';
-import InputGroup from '../../common/components/InputGroup'
+import FormControlGroup from '../../common/components/FormControlGroup'
 import { DARK_BLUE } from '../../../configs/colors';
 import { RequiredRuleProps } from '../../../models/input';
 
@@ -16,7 +16,7 @@ const ControlTextEditorInput = (props: Props) => {
   const { control, formState: { errors } } = useFormContext();
 
   return (
-    <InputGroup
+    <FormControlGroup
       label={props.label}
       required={props.required.value}
       inputSize={6}
@@ -53,7 +53,7 @@ const ControlTextEditorInput = (props: Props) => {
         )}
         rules={{ required: props.required }}
       />
-    </InputGroup>
+    </FormControlGroup>
   )
 }
 

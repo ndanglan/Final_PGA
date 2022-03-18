@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { Checkbox, MenuItem, Select } from '@mui/material'
 import { Controller, useFormContext } from 'react-hook-form'
 import { makeStyles } from '@mui/styles'
-import InputGroup from '../InputGroup'
+import FormControlGroup from '../FormControlGroup'
 import { DARK_BLUE, DARK_PURPLE, WHITE_COLOR } from '../../../../configs/colors'
 import { RequiredRuleProps } from '../../../../models/input'
 
@@ -43,7 +43,7 @@ const ControlSelectInput = (props: Props) => {
   const { control, formState: { errors } } = useFormContext();
   const classes = useStyles()
   return (
-    <InputGroup
+    <FormControlGroup
       label={props.label}
       required={props.required.value}
       errrorMessage={errors[`${props.name}`]?.message}
@@ -100,7 +100,7 @@ const ControlSelectInput = (props: Props) => {
           )
         }}
       />
-    </InputGroup>
+    </FormControlGroup>
   )
 }
 

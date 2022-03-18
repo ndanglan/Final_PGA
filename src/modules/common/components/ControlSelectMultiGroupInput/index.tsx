@@ -7,7 +7,7 @@ import {
 import { Controller, useFormContext } from 'react-hook-form';
 import { makeStyles } from "@mui/styles";
 import { WHITE_COLOR, MEDIUM_PURPLE, DARK_BLUE, DARK_PURPLE, DATE_TEXT_COLOR } from '../../../../configs/colors'
-import InputGroup from '../InputGroup';
+import FormControlGroup from '../FormControlGroup';
 
 interface Props {
   label?: string,
@@ -96,7 +96,7 @@ const ControlSelectMultiGroupInput = (props: Props) => {
   const classes = useStyles();
 
   return (
-    <InputGroup
+    <FormControlGroup
       label={label}
       required={required}
       inputSize={inputSize ? inputSize : undefined}
@@ -146,7 +146,7 @@ const ControlSelectMultiGroupInput = (props: Props) => {
           )
         }}
       />
-    </InputGroup>
+    </FormControlGroup>
   )
 }
 

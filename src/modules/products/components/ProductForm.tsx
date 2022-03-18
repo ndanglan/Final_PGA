@@ -25,7 +25,7 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import NumberFormat from 'react-number-format';
-import InputGroup from '../../common/components/InputGroup'
+import FormControlGroup from '../../common/components/FormControlGroup'
 import {
   BG_DISABLE,
   DARK_PURPLE,
@@ -309,7 +309,7 @@ const ProductForm = (props: Props) => {
       }
     }
   }, [productDetails, methods, replace, append])
-  console.log(methods.watch('memberships'))
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -460,7 +460,7 @@ const ProductForm = (props: Props) => {
           />
 
           {/* tax exempt input */}
-          <InputGroup
+          <FormControlGroup
             label="Tax class"
             required={false}
           >
@@ -508,10 +508,10 @@ const ProductForm = (props: Props) => {
                 )}
               />
             </div>
-          </InputGroup>
+          </FormControlGroup>
 
           {/* Price and sale input */}
-          <InputGroup
+          <FormControlGroup
             label="Price"
             required={true}
             inputSize={6}
@@ -524,13 +524,16 @@ const ProductForm = (props: Props) => {
                 </Grid>
                 <Grid item md={9} >
                   <Controller
-                    render={({ field }) => (
+                    render={({ field: { onChange, ...others } }) => (
                       <NumberFormat
                         className={classes.priceInput}
                         placeholder="0.00"
                         decimalScale={2}
                         thousandSeparator
-                        {...field}
+                        onValueChange={(e) => {
+                          onChange(e.floatValue)
+                        }}
+                        {...others}
                       />
                     )}
                     name="price"
@@ -626,25 +629,28 @@ const ProductForm = (props: Props) => {
                     <Controller
                       control={methods.control}
                       name="sale_price"
-                      render={({ field }) => (
+                      render={({ field: { onChange, ...others } }) => (
                         <NumberFormat
                           className={classes.priceInput}
                           placeholder="0.00"
                           decimalScale={2}
                           thousandSeparator
-                          {...field}
+                          onValueChange={(e) => {
+                            onChange(e.floatValue)
+                          }}
+                          {...others}
                         />
                       )}
                       rules={{
                         validate: {
                           percent: value => {
                             if (methods.watch('sale_price_type') === '%') {
-                              return parseInt(value) < 100
+                              return +value < 100
                             }
                           },
                           pureValue: value => {
                             if (methods.watch('sale_price_type') === '$') {
-                              return parseInt(value) < parseInt(methods.getValues('price'))
+                              return +value < +methods.watch('price')
                             }
                           }
                         }
@@ -679,7 +685,7 @@ const ProductForm = (props: Props) => {
 
               )
             }
-          </InputGroup>
+          </FormControlGroup>
 
           {/* Date picker input */}
           <ControlCalendarInput
@@ -710,7 +716,7 @@ const ProductForm = (props: Props) => {
           {fields.map((field, index) => {
             if (index === 0) {
               return (
-                <InputGroup
+                <FormControlGroup
                   key={field.id}
                   label={field.zone_name}
                   required={true}
@@ -749,11 +755,11 @@ const ProductForm = (props: Props) => {
                       />
                     </Grid>
                   </Grid>
-                </InputGroup>
+                </FormControlGroup>
               )
             }
             return (
-              <InputGroup
+              <FormControlGroup
                 key={index}
                 label={field.zone_name}
                 required={false}
@@ -798,11 +804,11 @@ const ProductForm = (props: Props) => {
                     </span>
                   </div>
                 </Grid>
-              </InputGroup>
+              </FormControlGroup>
             )
           })}
 
-          <InputGroup
+          <FormControlGroup
             label=""
             required={false}
             inputSize={5}
@@ -878,7 +884,7 @@ const ProductForm = (props: Props) => {
                 </span>
               </Grid>
             </Grid>
-          </InputGroup>
+          </FormControlGroup>
         </div>
         <FormSeperateSpace />
         <div className="part4">

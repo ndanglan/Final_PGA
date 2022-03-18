@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles } from '@mui/styles';
 import { Switch } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
-import InputGroup from '../InputGroup';
+import FormControlGroup from '../FormControlGroup';
 import { MEDIUM_PURPLE, WHITE_COLOR } from '../../../../configs/colors';
 import { RequiredRuleProps } from '../../../../models/input';
 
@@ -54,7 +54,7 @@ const ControlSwitchInput = (props: Props) => {
   const classes = useStyles();
 
   return (
-    <InputGroup
+    <FormControlGroup
       label={props.label}
       required={props.required.value}
       inputSize={6}
@@ -79,7 +79,7 @@ const ControlSwitchInput = (props: Props) => {
         )}
         rules={{ required: props.required }}
       />
-    </InputGroup>
+    </FormControlGroup>
   )
 }
 

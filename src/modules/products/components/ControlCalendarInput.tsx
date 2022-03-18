@@ -5,7 +5,7 @@ import { Calendar } from 'react-date-range';
 import { Controller, useFormContext } from 'react-hook-form';
 import { BG_DISABLE, BLACK_COLOR, DARK_PURPLE, MEDIUM_PURPLE, WHITE_COLOR } from '../../../configs/colors';
 import { CalendarTodayIcon } from '../../common/components/Icons';
-import InputGroup from '../../common/components/InputGroup';
+import FormControlGroup from '../../common/components/FormControlGroup';
 import { dateTypeToStringType } from '../../common/utils';
 
 interface Props {
@@ -89,7 +89,7 @@ const ControlCalendarInput = (props: Props) => {
     setAnchorEl(null);
   };
   return (
-    <InputGroup
+    <FormControlGroup
       label={label}
       required={required}
       inputSize={inputSize ? inputSize : 6}
@@ -145,7 +145,7 @@ const ControlCalendarInput = (props: Props) => {
           </Popover>
         </Grid>
       </Grid>
-    </InputGroup>
+    </FormControlGroup>
   )
 }
 

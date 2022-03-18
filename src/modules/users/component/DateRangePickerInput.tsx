@@ -3,7 +3,7 @@ import { DateRange } from 'react-date-range';
 import { makeStyles } from '@mui/styles';
 import moment from 'moment';
 import { Controller, useFormContext } from 'react-hook-form';
-import InputGroup from '../../common/components/InputGroup';
+import FormControlGroup from '../../common/components/FormControlGroup';
 import {
   DARK_PURPLE,
   WHITE_COLOR,
@@ -105,7 +105,7 @@ const DateRangePickerInput = (props: Props) => {
   ])
 
   return (
-    <InputGroup
+    <FormControlGroup
       label={label}
       required={required}
       inputSize={inputSize ? inputSize : undefined}
@@ -158,7 +158,7 @@ const DateRangePickerInput = (props: Props) => {
           )}
         />
       </Popover>
-    </InputGroup>
+    </FormControlGroup>
   )
 }
 
