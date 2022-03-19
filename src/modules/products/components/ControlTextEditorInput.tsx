@@ -34,7 +34,9 @@ const ControlTextEditorInput = (props: Props) => {
               onChange(e)
             }}
             apiKey={API_TYNY_KEY}
-            initialValue="<p>Enter text here...</p>"
+            initialValue={others.value
+              ? others.value
+              : 'Enter some text'}
             init={{
               height: 250,
               width: '100%',

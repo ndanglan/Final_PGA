@@ -52,6 +52,12 @@ const UserForm = (props: Props) => {
 
   const { title, onSubmit, vendorDetails } = props;
 
+  const onSubmitFormValues = (data: UserFormValues) => {
+    methods.setValue('password', '');
+    methods.setValue('confirm_password', '')
+    onSubmit(data);
+  }
+
   useEffect(() => {
     if (vendorDetails) {
       methods.setValue('access_level', vendorDetails.info.access_level);
@@ -104,7 +110,7 @@ const UserForm = (props: Props) => {
   return (
     <FormProvider {...methods}>
       <form
-        onSubmit={methods.handleSubmit(onSubmit)}
+        onSubmit={methods.handleSubmit(onSubmitFormValues)}
       >
         <div>
           <Typography variant="h4" sx={{

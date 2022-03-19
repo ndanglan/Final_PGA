@@ -114,6 +114,9 @@ const ControlSelectMultiGroupInput = (props: Props) => {
               options={data}
               disableCloseOnSelect
               disableClearable
+              isOptionEqualToValue={(option, value) => {
+                return option.value === value.value
+              }}
               ListboxProps={{
                 className: classes.list
               }}

@@ -87,7 +87,6 @@ const ControlAutocompleteMultipleInput = (props: Props) => {
         render={({
           field: { onChange, onBlur, value, ...others }
         }) => {
-
           return (
             <Autocomplete
               {...others}
@@ -97,8 +96,14 @@ const ControlAutocompleteMultipleInput = (props: Props) => {
               disableCloseOnSelect
               className={classes.autocomplete}
               disablePortal
+              isOptionEqualToValue={(option, value) => {
+                return option.id === value.id
+              }}
+              filterSelectedOptions={true}
               options={props.data ? props.data : []}
-              getOptionLabel={(option) => option?.name ? option.name : ''}
+              getOptionLabel={(option) => option?.name
+                ? option.name
+                : ''}
               ListboxProps={{
                 style: {
                   backgroundColor: DARK_PURPLE,

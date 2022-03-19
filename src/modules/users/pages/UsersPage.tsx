@@ -38,8 +38,9 @@ const UsersPage = () => {
   });
 
   const [filters, setFilters] = useState<FilterUsersProps>(() => {
-    const queryObject: any = qs.parse(location.search);
+    const queryObject: any = qs.parse(location.search, { arrayFormat: 'bracket' });
     const { types, memberships, ...others } = queryObject;
+
     // initialize value of filter from query
     return ({
       address: others.address ? others.address : "",
@@ -164,9 +165,9 @@ const UsersPage = () => {
 
     // format để stringify array of object
     const arrayTypesQuery = types.map(item => qs.stringify(item));
-    const typesQueryString = qs.stringify({ types: arrayTypesQuery });
+    const typesQueryString = qs.stringify({ types: arrayTypesQuery }, { arrayFormat: 'bracket' });
     const arrayMembershipQuery = memberships.map(item => qs.stringify(item));
-    const membershipQueryString = qs.stringify({ memberships: arrayMembershipQuery });
+    const membershipQueryString = qs.stringify({ memberships: arrayMembershipQuery }, { arrayFormat: 'bracket' });
 
     // stringify date_range.selection luuwa vào query
     const userFilterQueryString =

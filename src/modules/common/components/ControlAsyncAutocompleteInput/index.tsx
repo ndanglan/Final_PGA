@@ -115,7 +115,13 @@ const ControlAsyncAutocompleteInput = (props: Props) => {
                 }
               }}
               className={classes.input}
-              getOptionLabel={(option) => option.value}
+              getOptionLabel={(option) => {
+                if (option.value) {
+                  return option.value
+                }
+
+                return ''
+              }}
               options={options}
               loading={loading}
               onChange={(e, data) => {

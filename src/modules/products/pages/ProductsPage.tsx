@@ -39,8 +39,6 @@ const ProductsPage = () => {
     const queryObject: any = qs.parse(location.search);
     const { vendor, ...others } = queryObject;
     const vendorQueryObject = qs.parse(vendor);
-
-    console.log(others)
     // khởi tạo giá trị cho state filters
     return ({
       category: others.category

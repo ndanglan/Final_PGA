@@ -101,7 +101,8 @@ const DateRangePickerInput = (props: Props) => {
   };
 
   const [dateRange, setDateRange] = useState(() => {
-    if (watch(name)) {
+    if (watch(name).selection.key) {
+      console.log('test')
       return [
         watch(name).selection
       ]
@@ -172,9 +173,9 @@ const DateRangePickerInput = (props: Props) => {
               showDateDisplay={false}
               onChange={item => {
                 if (
-                  item?.selection.key
-                  && item?.selection.startDate
-                  && item?.selection.endDate
+                  item?.selection?.key
+                  && item?.selection?.startDate
+                  && item?.selection?.endDate
                 ) {
                   setDateRange([{
                     startDate: item.selection.startDate,

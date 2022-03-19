@@ -35,7 +35,7 @@ export const setBrands = createCustomAction('brands/setBrands', (data: CommonSel
 }))
 
 export const setCategories = createCustomAction('categories/setCategories', (data: FetchCategoryProps[]) => ({
-  data
+  data: data.map(item => ({ id: item.id, name: item.name }))
 }))
 
 export const setConditions = createCustomAction('conditions/setConditions', (data: CommonSelectProps[]) => ({
@@ -43,7 +43,7 @@ export const setConditions = createCustomAction('conditions/setConditions', (dat
 }))
 
 export const setCountries = createCustomAction('countries/setCountries', (data: CountriesDataProps[]) => ({
-  data
+  data: data.map(item => ({ id: item.id, name: item.country }))
 }))
 
 export const setShipping = createCustomAction('shipping/setShipping', (data: CommonSelectProps[]) => ({
@@ -51,7 +51,7 @@ export const setShipping = createCustomAction('shipping/setShipping', (data: Com
 }))
 
 export const setVendors = createCustomAction('vendors/setVendors', (data: FetchVendorsProps[]) => ({
-  data
+  data: data.map(item => ({ id: item.id, name: item.name }))
 }))
 
 const actions = {

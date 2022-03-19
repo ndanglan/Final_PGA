@@ -63,7 +63,7 @@ const UserListFilterForm = (props: Props) => {
       types: filters.types,
     }
   });
-  console.log(filters.date_range)
+
   const country = methods.watch('country');
 
   const onSubmit = (data: {
@@ -275,7 +275,9 @@ const UserListFilterForm = (props: Props) => {
                         display: 'inline'
                       }}
                       value="R"
-                      control={<Radio />}
+                      control={<Radio
+                        checked={methods.watch('date_type') === 'R'}
+                      />}
                       label="Register"
                     />
                     <FormControlLabel
@@ -283,7 +285,9 @@ const UserListFilterForm = (props: Props) => {
                         display: 'inline'
                       }}
                       value="L"
-                      control={<Radio />}
+                      control={<Radio
+                        checked={methods.watch('date_type') === 'L'}
+                      />}
                       label="Last logged in"
                     />
                   </RadioGroup>
