@@ -20,7 +20,7 @@ export interface FilterProps {
   category: string,
   count: number,
   order_by: string,
-  page: number,
+  page: number | string,
   search: string,
   search_type: string,
   sort: string,

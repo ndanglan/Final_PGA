@@ -1,4 +1,4 @@
-import React, { useState, memo, useCallback } from 'react'
+import React, { useState, memo, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { useSelector } from 'react-redux';
@@ -36,7 +36,7 @@ const ProductFilterForm = (props: Props) => {
   const { filters, onChangeFilter } = props;
   const categoriesState = useSelector((state: AppState) => state.common.categories)
   const [openMoreFilter, setOpenMoreFilter] = useState(false);
-
+  // console.log(filters)
   const methods = useForm({
     defaultValues: {
       category: filters.category,
@@ -67,7 +67,7 @@ const ProductFilterForm = (props: Props) => {
     availability: string;
     count: number;
     order_by: string;
-    page: number;
+    page: number | string;
     sort: string;
   }) => {
     const formatedData = {

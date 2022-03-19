@@ -40,7 +40,7 @@ const CustomPagination = (props: Props) => {
       columnGap: '30px'
     }}>
       <Pagination
-        page={props.filters.page}
+        page={+props.filters.page}
         onChange={(e, value) =>
           props.onChangeFilter({
             ...props.filters,
@@ -50,7 +50,7 @@ const CustomPagination = (props: Props) => {
         className={classes.pagination}
         variant="outlined"
         shape="rounded"
-        count={Math.ceil(props.totalLengthProducts / props.numberProductsPerPage)}
+        count={Math.ceil(+props.totalLengthProducts / +props.numberProductsPerPage)}
         sx={{
           color: '#fff'
         }} />
@@ -64,13 +64,13 @@ const CustomPagination = (props: Props) => {
           <span style={{
             marginRight: '2px',
             fontWeight: "700"
-          }}>{props.totalLengthProducts}</span>
-          <span>{props.totalLengthProducts > 1 ? 'items' : 'item'}</span>
+          }}>{+props.totalLengthProducts}</span>
+          <span>{+props.totalLengthProducts > 1 ? 'items' : 'item'}</span>
         </div>
         <div>
           <select
             onChange={(e) => {
-              if (+e.target.value !== props.filters.count) {
+              if (+e.target.value !== +props.filters.count) {
                 props.onChangeFilter({
                   ...props.filters,
                   count: +e.target.value,

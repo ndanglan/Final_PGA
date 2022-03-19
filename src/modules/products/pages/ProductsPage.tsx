@@ -3,7 +3,9 @@ import { Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'typesafe-actions';
-import { push } from 'connected-react-router';
+import { push, replace } from 'connected-react-router';
+import { useHistory } from 'react-router';
+import qs from 'query-string'
 import { API_PATHS } from '../../../configs/api';
 import { ProductsProps, FilterProps, EditProps, DeleteProps } from '../../../models/products';
 import { AppState } from '../../../redux/reducer';
@@ -22,6 +24,7 @@ import { SnackBarProps } from '../../../models/snackbar';
 
 const ProductsPage = () => {
   const classes = useStyles();
+  const { location } = useHistory()
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
 
   const [productsState, setProductsState] = useState<{
@@ -32,17 +35,21 @@ const ProductsPage = () => {
     numberProducts: 0
   });
 
-  const [filters, setFilters] = React.useState<FilterProps>({
-    category: "0",
-    count: 25,
-    order_by: "ASC",
-    page: 1,
-    search: "",
-    search_type: "",
-    sort: "name",
-    stock_status: "all",
-    vendor: '',
-    availability: 'all'
+  const [filters, setFilters] = useState<FilterProps>(() => {
+    const queryObject: any = qs.parse(location.search);
+    // khởi tạo giá trị cho state filters
+    return ({
+      category: queryObject.category ? queryObject.category : "0",
+      count: queryObject.count ? queryObject.count : 25,
+      order_by: queryObject.order_by ? queryObject.order_by : "ASC",
+      page: queryObject.page ? queryObject.page : 1,
+      search: queryObject.search ? queryObject.search : "",
+      search_type: queryObject.search_type ? queryObject.search_type : "",
+      sort: queryObject.sort ? queryObject.sort : "name",
+      stock_status: queryObject.stock_status ? queryObject.stock_status : "all",
+      vendor: queryObject.vendor ? queryObject.vendor : '',
+      availability: queryObject.availability ? queryObject.availability : 'all'
+    })
   });
 
   const [productsEdited, setProductsEdited] = useState<EditProps[] | []>([]);
@@ -95,12 +102,14 @@ const ProductsPage = () => {
 
   // add filter values to filter state
   const handleChangeFilter = useCallback((filters: FilterProps) => {
-    setFilters(filters);
-  }, []);
+    const filterQueryString = qs.stringify(filters)
+    dispatch(replace(`${ROUTES.productList}?${filterQueryString}`));
+    setFilters(filters)
+  }, [dispatch]);
 
   useEffect(() => {
     fetchProduct(filters)
-  }, [filters, fetchProduct])
+  }, [fetchProduct, filters])
 
   // call api edit product
   const editProduct = useCallback(async (
@@ -117,22 +126,20 @@ const ProductsPage = () => {
       params: params
     }))
 
-
     if (json?.success) {
-
-      setProductsEdited([]);
-
-      setProductsDeleted([]);
-
       setSnackbarOptions({
         open: true,
         message: 'Your change is success!',
         type: 'success'
       });
 
+      setProductsEdited([]);
+
+      setProductsDeleted([]);
+
       setTimeout(() => {
-        setFilters((prev) => ({ ...prev, page: 1 }));
-      }, 500)
+        setFilters((prev) => ({ ...prev }))
+      }, 1500)
 
       return;
     }

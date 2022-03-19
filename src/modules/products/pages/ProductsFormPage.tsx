@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { ThunkDispatch } from 'redux-thunk';
 import { useDispatch } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push, goBack } from 'connected-react-router';
 import { Action } from 'typesafe-actions';
 import { useParams } from 'react-router';
 import { ROUTES } from '../../../configs/routes';
@@ -203,7 +203,7 @@ const ProductsFormPage = () => {
                   justifyContent: "center"
                 }}
                 onClick={() => {
-                  dispatch(push(ROUTES.productList))
+                  dispatch(goBack())
                 }}
               >
                 <ArrowBackIcon sx={{

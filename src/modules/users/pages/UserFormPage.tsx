@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { push } from 'connected-react-router';
+import { push, goBack } from 'connected-react-router';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'typesafe-actions';
@@ -172,7 +172,7 @@ const UserFormPage = () => {
                   justifyContent: "center"
                 }}
                 onClick={() => {
-                  dispatch(push(ROUTES.userList))
+                  dispatch(goBack())
                 }}
               >
                 <ArrowBackIcon sx={{

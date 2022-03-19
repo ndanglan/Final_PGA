@@ -30,32 +30,6 @@ export interface CommonProps {
   vendors?: CommonSelectProps[]
 }
 
-// export interface BrandsProps {
-//   brands?: CommonSelectProps[]
-// }
-
-// export interface CategoriesProps {
-//   categories?: CategoryProps[]
-// }
-
-// export interface ConditionsProps {
-//   conditions?: CommonSelectProps[]
-// }
-
-
-
-// export interface CountriesProps {
-//   countries?: CountriesDataProps[]
-// }
-
-// export interface ShippingProps {
-//   shipping?: CommonSelectProps[]
-// }
-
-// export interface VendorsProps {
-//   vendors?: CommonSelectProps[]
-// }
-
 export const setBrands = createCustomAction('brands/setBrands', (data: CommonSelectProps[]) => ({
   data
 }))

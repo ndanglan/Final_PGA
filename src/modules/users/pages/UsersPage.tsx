@@ -4,7 +4,9 @@ import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'typesafe-actions';
 import moment from 'moment';
-import { push } from 'connected-react-router';
+import { push, replace } from 'connected-react-router';
+import qs from 'query-string'
+import { useHistory } from 'react-router';
 import { API_PATHS } from '../../../configs/api';
 import { AppState } from '../../../redux/reducer';
 import { useStyles } from '../../../styles/makeStyles'
@@ -19,9 +21,12 @@ import { ROUTES } from '../../../configs/routes';
 import ScrollBar from '../../common/components/ScrollBar';
 import { FilterUsersProps, UserDataProps, DeleteUsersProps } from '../../../models/userlist';
 import { GroupInputProps } from '../../../models/input';
+import SnackBarCustom from '../../common/components/SnackBarCustom';
+import { SnackBarProps } from '../../../models/snackbar';
 
 const UsersPage = () => {
   const classes = useStyles();
+  const { location } = useHistory()
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
 
   const [usersState, setUsersState] = useState<{
@@ -32,28 +37,33 @@ const UsersPage = () => {
     numberUsers: 0
   });
 
-  const [filters, setFilters] = useState<FilterUsersProps>({
-    address: "",
-    count: 25,
-    country: "0",
-    date_range: {
-      selection: {
-        startDate: undefined,
-        endDate: undefined,
-        key: ''
-      }
-    },
-    date_type: "R",
-    memberships: [],
-    order_by: "DESC",
-    page: 1,
-    phone: "",
-    search: "",
-    sort: "last_login",
-    state: "",
-    status: '',
-    types: [],
-    tz: 7
+  const [filters, setFilters] = useState<FilterUsersProps>(() => {
+    const queryObject: any = qs.parse(location.search);
+    const { types, memberships, ...others } = queryObject;
+    // initialize value of filter from query
+    return ({
+      address: others.address ? others.address : "",
+      count: others.count ? others.count : 25,
+      country: others.country ? others.country : "0",
+      date_range: {
+        selection: {
+          startDate: others.startDate ? others.startDate : undefined,
+          endDate: others.endDate ? others.endDate : undefined,
+          key: others.key ? others.key : ''
+        }
+      },
+      date_type: others.date_type ? others.date_type : "R",
+      memberships: memberships ? memberships.map((item: any) => qs.parse(item)) : [],
+      order_by: others.order_by ? others.order_by : "DESC",
+      page: others.page ? others.page : 1,
+      phone: others.phone ? others.phone : "",
+      search: others.search ? others.search : "",
+      sort: others.sort ? others.sort : "last_login",
+      state: others.state ? others.state : "",
+      status: others.status ? others.status : '',
+      types: types ? types.map((item: any) => qs.parse(item)) : [],
+      tz: others.tz ? others.tz : 7
+    })
   });
 
   const [roles, setRoles] = useState<GroupInputProps[]>([])
@@ -66,7 +76,21 @@ const UsersPage = () => {
     content: '',
   });
 
+  const [snackbarOptions, setSnackbarOptions] = useState<SnackBarProps>({
+    message: '',
+    open: false,
+  })
+
   const tableRef = useRef<HTMLTableElement>(null);
+
+  // close snackbar
+  const onCloseSnackBar = () => {
+    setSnackbarOptions({
+      message: '',
+      open: false,
+    })
+  }
+
 
   const fetchRoles = useCallback(async () => {
     const json = await dispatch(fetchThunk(API_PATHS.getRoles, 'post', {}));
@@ -128,8 +152,36 @@ const UsersPage = () => {
 
   // // add filter values to filter state
   const handleChangeFilter = useCallback((filters: FilterUsersProps) => {
+    const {
+      date_range,
+      types,
+      memberships,
+      ...others
+    } = filters
+
+    // string of others except date_range
+    const othersQueryString = qs.stringify(others);
+
+    // format để stringify array of object
+    const arrayTypesQuery = types.map(item => qs.stringify(item));
+    const typesQueryString = qs.stringify({ types: arrayTypesQuery });
+    const arrayMembershipQuery = memberships.map(item => qs.stringify(item));
+    const membershipQueryString = qs.stringify({ memberships: arrayMembershipQuery });
+
+    // stringify date_range.selection luuwa vào query
+    const userFilterQueryString =
+      othersQueryString
+      + '&'
+      + qs.stringify(date_range.selection)
+      + '&'
+      + typesQueryString
+      + '&'
+      + membershipQueryString
+
+    dispatch(replace(`${ROUTES.userList}?${userFilterQueryString}`));
+
     setFilters(filters);
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     fetchUsers(filters)
@@ -155,13 +207,24 @@ const UsersPage = () => {
     }))
 
     if (json?.success) {
+      setSnackbarOptions({
+        open: true,
+        message: 'Your change is success!',
+        type: 'success'
+      })
+
       setUsersDeleted([])
 
-      setFilters((prev) => ({
-        ...prev,
-        page: 1,
-      }))
+      setTimeout(() => {
+        setFilters((prev) => ({ ...prev }))
+      }, 1500)
     }
+
+    setSnackbarOptions({
+      open: false,
+      message: 'Your change is failed!',
+      type: 'error'
+    });
   }, [dispatch])
 
   //  options dialog
@@ -295,6 +358,13 @@ const UsersPage = () => {
         <ScrollBar tableRef={tableRef} />
       </div>
       <ConfirmDialog {...dialogOptions} />
+      <SnackBarCustom
+        open={snackbarOptions.open}
+        message={snackbarOptions.message}
+        type={snackbarOptions.type}
+        duration={snackbarOptions.duration}
+        onClose={onCloseSnackBar}
+      />
     </>
   )
 }
