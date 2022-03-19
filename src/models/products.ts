@@ -25,7 +25,10 @@ export interface FilterProps {
   search_type: string,
   sort: string,
   stock_status: string,
-  vendor: string,
+  vendor: {
+    value: string,
+    id: string | number
+  },
   availability: string
 }
 

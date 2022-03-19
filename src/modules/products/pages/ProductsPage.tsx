@@ -37,18 +37,45 @@ const ProductsPage = () => {
 
   const [filters, setFilters] = useState<FilterProps>(() => {
     const queryObject: any = qs.parse(location.search);
+    const { vendor, ...others } = queryObject;
+    const vendorQueryObject = qs.parse(vendor);
+
+    console.log(others)
     // khởi tạo giá trị cho state filters
     return ({
-      category: queryObject.category ? queryObject.category : "0",
-      count: queryObject.count ? queryObject.count : 25,
-      order_by: queryObject.order_by ? queryObject.order_by : "ASC",
-      page: queryObject.page ? queryObject.page : 1,
-      search: queryObject.search ? queryObject.search : "",
-      search_type: queryObject.search_type ? queryObject.search_type : "",
-      sort: queryObject.sort ? queryObject.sort : "name",
-      stock_status: queryObject.stock_status ? queryObject.stock_status : "all",
-      vendor: queryObject.vendor ? queryObject.vendor : '',
-      availability: queryObject.availability ? queryObject.availability : 'all'
+      category: others.category
+        ? others.category
+        : "0",
+      count: others.count
+        ? others.count
+        : 25,
+      order_by: others.order_by
+        ? others.order_by
+        : "ASC",
+      page: others.page
+        ? others.page
+        : 1,
+      search: others.search
+        ? others.search
+        : "",
+      search_type: others.search_type
+        ? others.search_type
+        : "",
+      sort: others.sort
+        ? others.sort
+        : "name",
+      stock_status: others.stock_status
+        ? others.stock_status
+        : "all",
+      vendor: vendorQueryObject
+        ? vendorQueryObject as FilterProps['vendor']
+        : {
+          id: '',
+          value: ''
+        },
+      availability: others.availability
+        ? others.availability
+        : 'all'
     })
   });
 
@@ -79,9 +106,14 @@ const ProductsPage = () => {
 
   // call api products with filtering
   const fetchProduct = useCallback(async (filters: FilterProps) => {
+    const filtersToFetch = {
+      ...filters,
+      vendor: filters.vendor.id
+    }
+
     dispatch(setLoading(true));
 
-    const json = await dispatch(fetchThunk(API_PATHS.getProductFiltering, 'post', filters));
+    const json = await dispatch(fetchThunk(API_PATHS.getProductFiltering, 'post', filtersToFetch));
 
     dispatch(setLoading(false));
 
@@ -102,8 +134,17 @@ const ProductsPage = () => {
 
   // add filter values to filter state
   const handleChangeFilter = useCallback((filters: FilterProps) => {
-    const filterQueryString = qs.stringify(filters)
+    const { vendor, ...others } = filters
+    const othersQueryString = qs.stringify(others);
+
+    const vendorQueryString = qs.stringify({
+      vendor: qs.stringify(vendor)
+    });
+
+    const filterQueryString = othersQueryString + '&' + vendorQueryString
+
     dispatch(replace(`${ROUTES.productList}?${filterQueryString}`));
+
     setFilters(filters)
   }, [dispatch]);
 
