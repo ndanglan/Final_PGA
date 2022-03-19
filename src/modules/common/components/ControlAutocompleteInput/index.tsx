@@ -30,8 +30,8 @@ const useStyles = makeStyles(({
         padding: '0 !important',
 
         '& .MuiOutlinedInput-input': {
+          padding: '10px 15px',
           borderColor: 'transparent',
-          padding: '0  0 0 10px',
         },
 
         '& .MuiAutocomplete-endAdornment': {

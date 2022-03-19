@@ -31,7 +31,7 @@ const useStyles = makeStyles(({
         border: `1px solid ${DARK_BLUE}`,
 
         '& input': {
-          padding: '0 0 0 10px',
+          padding: '10px 15px',
           border: 'none',
 
           '& ::placeholder': {

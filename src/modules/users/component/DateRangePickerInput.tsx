@@ -10,7 +10,7 @@ import {
   DATE_TEXT_COLOR,
   MEDIUM_PURPLE
 } from '../../../configs/colors';
-import { Popover } from '@mui/material';
+import { InputBase, Popover } from '@mui/material';
 
 interface Props {
   label?: string,
@@ -81,8 +81,13 @@ const useStyles = makeStyles(({
 }))
 
 const DateRangePickerInput = (props: Props) => {
-  const { label, placeHolder, inputSize, required, name } = props;
-  const { control } = useFormContext()
+  const {
+    label,
+    placeHolder,
+    inputSize,
+    required,
+    name } = props;
+  const { control, watch } = useFormContext()
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState<HTMLInputElement | null>(null);
@@ -95,14 +100,21 @@ const DateRangePickerInput = (props: Props) => {
     setAnchorEl(null);
   };
 
-
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection'
+  const [dateRange, setDateRange] = useState(() => {
+    if (watch(name)) {
+      return [
+        watch(name).selection
+      ]
     }
-  ])
+
+    return [
+      {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection'
+      }
+    ]
+  })
 
   return (
     <FormControlGroup
@@ -110,15 +122,34 @@ const DateRangePickerInput = (props: Props) => {
       required={required}
       inputSize={inputSize ? inputSize : undefined}
     >
-      <input
+      <InputBase
         value={
           moment(dateRange[0].startDate).format('MMM DD,YYYY')
           +
-          '-'
+          ' - '
           + moment(dateRange[0].endDate).format('MMM DD,YYYY')
         }
         placeholder={placeHolder}
-        onClick={(e) => handleClick(e)}
+        componentsProps={
+          {
+            input: {
+              onClick: (e) => handleClick(e)
+            }
+          }
+        }
+        inputProps={{
+          style: {
+            color: '#fff',
+            border: '1px solid #13132b',
+            outline: 'none',
+            padding: '10px 15px',
+            fontSize: '15px',
+            textAlign: 'left',
+            fontWeight: '500',
+            borderRadius: '0.25rem',
+            backgroundColor: '#252547'
+          }
+        }}
       />
       <Popover
         open={Boolean(anchorEl)}

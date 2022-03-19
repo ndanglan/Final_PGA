@@ -29,6 +29,8 @@ import FormControlGroup from '../../common/components/FormControlGroup'
 import {
   BG_DISABLE,
   DARK_PURPLE,
+  DARK_BLUE,
+  WHITE_COLOR,
   MEDIUM_BLUE,
   MEDIUM_PURPLE,
 } from '../../../configs/colors';
@@ -71,13 +73,20 @@ const useStyles = makeStyles(({
   },
 
   priceInput: {
+    backgroundColor: DARK_BLUE,
+    color: WHITE_COLOR,
+    width: '100%',
     borderRadius: '0.25rem',
     fontSize: '0.9375rem',
     lineHeight: '1.5rem',
-    padding: '0.4rem 1rem',
+    padding: '10px 15px',
     margin: '0',
     height: '100% !important',
-    border: `1px solid ${MEDIUM_PURPLE} !important`
+    border: `1px solid ${MEDIUM_PURPLE} !important`,
+
+    '&:focus-visible': {
+      outline: 'none'
+    }
   },
 
   select: {
@@ -97,7 +106,7 @@ const useStyles = makeStyles(({
         textAlign: 'left',
         fontSize: '0.9375rem',
         lineHeight: '1.5rem',
-        padding: '0',
+        padding: '8px 15px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

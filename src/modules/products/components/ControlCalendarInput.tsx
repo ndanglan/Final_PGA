@@ -1,9 +1,16 @@
 import React, { useState, memo } from 'react'
-import { Grid, Popover } from '@mui/material';
+import { Grid, InputBase, Popover } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Calendar } from 'react-date-range';
 import { Controller, useFormContext } from 'react-hook-form';
-import { BG_DISABLE, BLACK_COLOR, DARK_PURPLE, MEDIUM_PURPLE, WHITE_COLOR } from '../../../configs/colors';
+import {
+  BG_DISABLE,
+  BLACK_COLOR,
+  DARK_PURPLE,
+  MEDIUM_PURPLE,
+  WHITE_COLOR,
+  DARK_BLUE
+} from '../../../configs/colors';
 import { CalendarTodayIcon } from '../../common/components/Icons';
 import FormControlGroup from '../../common/components/FormControlGroup';
 import { dateTypeToStringType } from '../../common/utils';
@@ -33,15 +40,6 @@ const useStyles = makeStyles(({
       alignItems: 'center',
       justifyContent: 'center'
     }
-  },
-  priceInput: {
-    borderRadius: '0.25rem',
-    fontSize: '0.9375rem',
-    lineHeight: '1.5rem',
-    padding: '0.4rem 1rem',
-    margin: '0',
-    height: '100% !important',
-    border: `1px solid ${MEDIUM_PURPLE} !important`
   },
   dateRange: {
     position: 'absolute',
@@ -101,11 +99,29 @@ const ControlCalendarInput = (props: Props) => {
           </p>
         </Grid>
         <Grid item md={6}>
-          <input
+          <InputBase
             value={dateTypeToStringType(watch(name))}
             type="text"
-            className={classes.priceInput}
-            onClick={(e) => handleClick(e)}
+            componentsProps={
+              {
+                input: {
+                  onClick: (e) => handleClick(e)
+                }
+              }
+            }
+            inputProps={{
+              style: {
+                backgroundColor: DARK_BLUE,
+                color: WHITE_COLOR,
+                borderRadius: '0.25rem',
+                fontSize: '0.9375rem',
+                lineHeight: '1.5rem',
+                padding: '10px 15px',
+                margin: '0',
+                height: '100% !important',
+                border: `1px solid ${MEDIUM_PURPLE}`
+              }
+            }}
           />
           <Popover
             open={Boolean(anchorEl)}

@@ -35,29 +35,13 @@ const useStyles = makeStyles(({
       }
     },
 
-    '& input': {
-      borderRadius: '0.25rem',
-      fontSize: '15px',
-      fontWeight: '500',
-      padding: '10px 15px',
-      height: '40px',
-      backgroundColor: MEDIUM_BLUE,
-      color: '#fff',
-      border: `1px solid ${BORDER_COLOR}`,
-      outline: 'none',
-      width: '100%',
-      textAlign: 'left'
-    },
-
     '& .MuiOutlinedInput-root': {
       width: '100%',
       color: WHITE_COLOR,
       backgroundColor: MEDIUM_BLUE,
 
       '& .MuiSelect-select': {
-        padding: '0',
-        height: '40px',
-
+        padding: '10px 15px',
       },
 
       '& .MuiSvgIcon-root': {

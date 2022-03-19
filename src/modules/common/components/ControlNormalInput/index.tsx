@@ -1,4 +1,5 @@
-import { InputBaseProps } from '@mui/material';
+import { InputBase, InputBaseProps } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react'
 import { useFormContext } from 'react-hook-form';
 import { RequiredRuleProps } from '../../../../models/input';
@@ -24,11 +25,31 @@ interface Props {
   }
 }
 
+const useStyles = makeStyles(({
+  input: {
+    height: '40px',
+    width: '100%',
+
+    '& input': {
+      color: '#fff',
+      border: '1px solid #13132b',
+      outline: 'none',
+      padding: '10px 15px',
+      fontSize: '15px',
+      textAlign: 'left',
+      fontWeight: '500',
+      borderRadius: '0.25rem',
+      backgroundColor: '#252547'
+    }
+  }
+}))
+
 const ControlNormalInput = (props: Props) => {
   const {
     register,
     formState: { errors }
   } = useFormContext();
+  const classes = useStyles()
 
   return (
     <FormControlGroup
@@ -39,7 +60,8 @@ const ControlNormalInput = (props: Props) => {
       helper={props.helperText ? props.helperText : undefined}
       errrorMessage={errors[`${props.name}`]?.message}
     >
-      <input
+      <InputBase
+        className={classes.input}
         type={props.type ? props.type : 'text'}
         placeholder={props.placeHolder}
         {...register(props.name, {

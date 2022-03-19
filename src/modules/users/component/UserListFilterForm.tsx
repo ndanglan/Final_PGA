@@ -63,7 +63,7 @@ const UserListFilterForm = (props: Props) => {
       types: filters.types,
     }
   });
-
+  console.log(filters.date_range)
   const country = methods.watch('country');
 
   const onSubmit = (data: {
