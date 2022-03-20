@@ -10,7 +10,7 @@ interface Props {
   label: string,
   name: string,
   required: RequiredRuleProps,
-  data?: { value: string | number, name: string }[]
+  data?: { value: string | number | null, name: string }[]
   multiple?: boolean,
   inputSize?: number,
   labelSize?: number,
@@ -79,10 +79,10 @@ const ControlSelectInput = (props: Props) => {
                 }
               }}
             >
-              {props?.data?.map(item => (
+              {props?.data?.map((item, index) => (
                 <MenuItem
-                  key={item.value}
-                  value={item.value}
+                  key={index}
+                  value={item.value ? item.value : 'none'}
                 >
                   {props.multiple && (
                     <Checkbox

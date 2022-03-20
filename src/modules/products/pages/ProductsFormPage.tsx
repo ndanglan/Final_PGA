@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { ThunkDispatch } from 'redux-thunk';
 import { useDispatch } from 'react-redux';
-import { push, goBack } from 'connected-react-router';
+import { push, goBack, replace } from 'connected-react-router';
 import { Action } from 'typesafe-actions';
 import { useParams } from 'react-router';
 import { ROUTES } from '../../../configs/routes';
@@ -136,7 +136,7 @@ const ProductsFormPage = () => {
         if (!id) {
           // nếu không có id là đang ở trang create chuyển sang trang detail
           setTimeout(() => {
-            dispatch(push(`${ROUTES.productDetail}/${json.data}`))
+            dispatch(replace(`${ROUTES.productDetail}/${json.data}`))
           }, 1000)
 
           return;
@@ -157,7 +157,9 @@ const ProductsFormPage = () => {
       })
 
       // nếu có id thì fetch lại detail sau khi update
-      fetchProductDetails(id)
+      setTimeout(() => {
+        fetchProductDetails(id)
+      }, 1000)
       return;
     }
 

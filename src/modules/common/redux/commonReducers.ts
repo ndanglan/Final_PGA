@@ -23,9 +23,9 @@ export interface CountriesDataProps {
 
 export interface CommonProps {
   brands?: CommonSelectProps[],
-  categories?: CategoryProps[],
+  categories?: CommonSelectProps[],
   conditions?: CommonSelectProps[],
-  countries?: CountriesDataProps[],
+  countries?: CommonSelectProps[],
   shipping?: CommonSelectProps[]
   vendors?: CommonSelectProps[]
 }
@@ -43,7 +43,7 @@ export const setConditions = createCustomAction('conditions/setConditions', (dat
 }))
 
 export const setCountries = createCustomAction('countries/setCountries', (data: CountriesDataProps[]) => ({
-  data: data.map(item => ({ id: item.id, name: item.country }))
+  data: data.map(item => ({ id: item.code, name: item.country }))
 }))
 
 export const setShipping = createCustomAction('shipping/setShipping', (data: CommonSelectProps[]) => ({

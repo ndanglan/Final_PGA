@@ -26,7 +26,7 @@ interface Props {
 const UserListFilterForm = (props: Props) => {
   const { filters, roles, onChangeFilter } = props;
   const classes = useStyles();
-  const countries = useSelector((state: AppState) => state.common.countries)?.map(item => ({ value: item.code, name: item.country }))
+  const countries = useSelector((state: AppState) => state.common.countries)?.map(item => ({ value: item.id, name: item.name }))
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
 
   const [openMoreFilter, setOpenMoreFilter] = useState(false);
