@@ -6,7 +6,7 @@ import {
 import { makeStyles } from '@mui/styles';
 import { Autocomplete, TextField } from '@mui/material';
 import FormControlGroup from '../FormControlGroup';
-import { CommonSelectProps } from '../../../../models/products'
+import { CommonSelectProps } from '../../../../models/common'
 import {
   DARK_PURPLE,
   MEDIUM_PURPLE,
@@ -82,7 +82,12 @@ const ControlAutocompleteInput = (props: Props) => {
         control={control}
         name={props.name}
         render={({ field: { onChange, value, onBlur } }) => {
-          const defaultVal = props?.data?.filter(item => item.id === value);
+          const defaultVal = props?.data?.filter(item => {
+            if (item.id) {
+              return +item.id === +value
+            }
+            return item.id === value
+          });
 
           return (
             <Autocomplete

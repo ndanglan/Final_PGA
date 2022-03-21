@@ -5,7 +5,6 @@ import productsReducer, { ProductsState } from './../modules/products/redux/prod
 import loadingReducer, { LoadingProps } from './../modules/common/redux/loadingReducer';
 import authReducer, { AuthState } from '../modules/auth/redux/authReducer';
 import intlReducer, { IntlState } from '../modules/intl/redux/intlReducer';
-import commonReducer, { CommonProps } from './../modules/common/redux/commonReducers';
 
 export interface AppState {
   router: RouterState;
@@ -13,7 +12,6 @@ export interface AppState {
   profile: AuthState;
   loading: LoadingProps;
   products: ProductsState;
-  common: CommonProps
 }
 
 export default function createRootReducer(history: History) {
@@ -23,6 +21,5 @@ export default function createRootReducer(history: History) {
     profile: authReducer,
     loading: loadingReducer,
     products: productsReducer,
-    common: commonReducer
   });
 }

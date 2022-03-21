@@ -10,8 +10,6 @@ import {
   useFieldArray,
   FormProvider
 } from 'react-hook-form'
-import { useSelector } from 'react-redux';
-import { AppState } from '../../../redux/reducer'
 import {
   Checkbox,
   FormControlLabel,
@@ -37,7 +35,15 @@ import {
 import FormSeperateSpace from '../../common/components/FormSeperateSpace';
 import UtilComponent from '../../common/components/UtilComponent';
 import ControlAutocompleteInput from '../../common/components/ControlAutocompleteInput'
-import { detailsProductProps, FormValuesProps } from '../../../models/products';
+import {
+  detailsProductProps,
+  FormValuesProps
+} from '../../../models/products';
+import {
+  CommonSelectProps,
+  FetchCategoryProps,
+  FetchVendorsProps
+} from '../../../models/common'
 import ControlNormalInput from '../../common/components/ControlNormalInput';
 import ControlSelectInput from '../../common/components/ControlSelectInput';
 import ControlFileInput from '../../common/components/ControlFileInput';
@@ -46,6 +52,8 @@ import ControlTextEditorInput from './ControlTextEditorInput';
 import ControlSwitchInput from '../../common/components/ControlSwitchInput';
 import { timeToDateType } from '../../common/utils';
 import ControlCalendarInput from './ControlCalendarInput'
+import useFetchCommonData from '../../common/hooks/useFetchCommonData';
+import { API_PATHS } from '../../../configs/api';
 
 interface Props {
   productDetails?: detailsProductProps,
@@ -147,11 +155,11 @@ const ProductForm = (props: Props) => {
   const { title, productDetails, onPostProduct } = props;
 
   const classes = useStyles();
-  const {
-    brands,
-    categories,
-    shipping,
-    vendors } = useSelector((state: AppState) => state.common);
+
+  const { data: brands } = useFetchCommonData(API_PATHS.getBrands);
+  const { data: categories } = useFetchCommonData(API_PATHS.getCategory);
+  const { data: shipping } = useFetchCommonData(API_PATHS.getShipping);
+  const { data: vendors } = useFetchCommonData(API_PATHS.getVendors);
 
   const methods = useForm<FormValuesProps>({
     mode: 'all',
@@ -333,7 +341,10 @@ const ProductForm = (props: Props) => {
           <ControlAutocompleteInput
             label='vendor'
             name="vendor_id"
-            data={vendors}
+            data={vendors?.map(
+              (item: FetchVendorsProps) =>
+                ({ id: item.id, name: item.name }))
+            }
             required={{
               value: true,
               message: 'This field is required'
@@ -355,7 +366,9 @@ const ProductForm = (props: Props) => {
           <ControlAutocompleteInput
             label='Brand'
             name="brand_id"
-            data={brands}
+            data={brands
+              ? brands as CommonSelectProps[]
+              : undefined}
             required={{
               value: true,
               message: 'This field is required'
@@ -416,7 +429,9 @@ const ProductForm = (props: Props) => {
             }}
             label='Category'
             name='categories'
-            data={categories}
+            data={categories?.map(
+              (item: FetchCategoryProps) =>
+                ({ id: item.id, name: item.name }))}
             placeHolder="Choose category"
           />
 
@@ -838,7 +853,7 @@ const ProductForm = (props: Props) => {
                   }}
                   value={shippingLocation.name}
                 >
-                  {shipping?.map(item => (
+                  {shipping && shipping?.map((item: CommonSelectProps) => (
                     <MenuItem
                       key={item.id}
                       value={item.name}

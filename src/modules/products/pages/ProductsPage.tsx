@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
@@ -7,11 +7,10 @@ import { push, replace } from 'connected-react-router';
 import { useHistory } from 'react-router';
 import qs from 'query-string'
 import { API_PATHS } from '../../../configs/api';
-import { ProductsProps, FilterProps, EditProps, DeleteProps } from '../../../models/products';
+import { FilterProps, EditProps, DeleteProps } from '../../../models/products';
 import { AppState } from '../../../redux/reducer';
 import { useStyles } from '../../../styles/makeStyles'
 import CustomPagination from '../../common/components/CustomPagination';
-import { setLoading } from '../../common/redux/loadingReducer';
 import { fetchThunk } from '../../common/redux/thunk';
 import ProductFilterForm from '../components/ProductFilterForm';
 import UtilComponent from '../../common/components/UtilComponent';
@@ -21,19 +20,13 @@ import { ROUTES } from '../../../configs/routes';
 import ScrollBar from '../../common/components/ScrollBar';
 import SnackBarCustom from '../../common/components/SnackBarCustom';
 import { SnackBarProps } from '../../../models/snackbar';
+import useProducts from '../../common/hooks/useProducts';
+import SpinnerLoading from '../../common/components/Loading/SpinnerLoading';
 
 const ProductsPage = () => {
   const classes = useStyles();
   const { location } = useHistory()
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
-
-  const [productsState, setProductsState] = useState<{
-    productsState: ProductsProps[],
-    numberProducts: number
-  }>({
-    productsState: [],
-    numberProducts: 0
-  });
 
   const [filters, setFilters] = useState<FilterProps>(() => {
     const queryObject: any = qs.parse(location.search);
@@ -77,6 +70,12 @@ const ProductsPage = () => {
     })
   });
 
+  const {
+    total,
+    isLoading,
+    error
+  } = useProducts(API_PATHS.getProductFiltering, filters);
+
   const [productsEdited, setProductsEdited] = useState<EditProps[] | []>([]);
 
   const [productsDeleted, setProductsDeleted] = useState<DeleteProps[] | []>([]);
@@ -102,34 +101,6 @@ const ProductsPage = () => {
     })
   }
 
-  // call api products with filtering
-  const fetchProduct = useCallback(async (filters: FilterProps) => {
-    const filtersToFetch = {
-      ...filters,
-      vendor: filters.vendor.id
-    }
-
-    dispatch(setLoading(true));
-
-    const json = await dispatch(fetchThunk(API_PATHS.getProductFiltering, 'post', filtersToFetch));
-
-    dispatch(setLoading(false));
-
-    if (json.success && json.data) {
-      setProductsState({
-        productsState: json.data,
-        numberProducts: json.recordsTotal
-      });
-      return;
-    }
-
-    setProductsState({
-      productsState: [],
-      numberProducts: 0
-    });
-    return;
-  }, [dispatch]);
-
   // add filter values to filter state
   const handleChangeFilter = useCallback((filters: FilterProps) => {
     const { vendor, ...others } = filters
@@ -145,10 +116,6 @@ const ProductsPage = () => {
 
     setFilters(filters)
   }, [dispatch]);
-
-  useEffect(() => {
-    fetchProduct(filters)
-  }, [fetchProduct, filters])
 
   // call api edit product
   const editProduct = useCallback(async (
@@ -304,6 +271,10 @@ const ProductsPage = () => {
     setProductsDeleted(prev => prev.filter(item => item.id !== id))
   }
 
+  if (isLoading) {
+    return <SpinnerLoading />
+  }
+
   return (
     <>
       <div className={classes.mainPage}>
@@ -323,51 +294,46 @@ const ProductsPage = () => {
             filters={filters}
             onChangeFilter={handleChangeFilter}
           />
-          {productsState && (
-            <>
-              <div>
-                {/* Add product Button */}
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start'
-                }}>
-                  <div className={classes.mainButton}>
-                    <Button
-                      onClick={() => {
-                        dispatch(push(ROUTES.addProduct))
-                      }}>
-                      Add Products
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Table */}
-                <ProductTable
-                  handleAddProductEdited={handleAddProductEdited}
-                  handleAddDeleteProduct={handleAddDeleteProduct}
-                  onChangeFilter={handleChangeFilter}
-                  openDialog={openConfirmEnable}
-                  products={productsState.productsState}
-                  productsDeleted={productsDeleted}
-                  filters={filters}
-                  ref={tableRef}
-                />
+          <div>
+            {/* Add product Button */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'flex-start'
+            }}>
+              <div className={classes.mainButton}>
+                <Button
+                  onClick={() => {
+                    dispatch(push(ROUTES.addProduct))
+                  }}>
+                  Add Products
+                </Button>
               </div>
-              <CustomPagination
-                filters={filters}
-                onChangeFilter={handleChangeFilter}
-                totalLengthProducts={+productsState.numberProducts}
-                numberProductsPerPage={+filters.count}
-                optionsLengthPerPage={[
-                  '10',
-                  '25',
-                  '50',
-                  '75',
-                  '100'
-                ]}
-              />
-            </>
-          )}
+            </div>
+
+            {/* Table */}
+            <ProductTable
+              handleAddProductEdited={handleAddProductEdited}
+              handleAddDeleteProduct={handleAddDeleteProduct}
+              onChangeFilter={handleChangeFilter}
+              openDialog={openConfirmEnable}
+              productsDeleted={productsDeleted}
+              filters={filters}
+              ref={tableRef}
+            />
+          </div>
+          <CustomPagination
+            filters={filters}
+            onChangeFilter={handleChangeFilter}
+            totalLengthProducts={+total}
+            numberProductsPerPage={+filters.count}
+            optionsLengthPerPage={[
+              '10',
+              '25',
+              '50',
+              '75',
+              '100'
+            ]}
+          />
         </div>
         <UtilComponent>
           <div >
@@ -382,7 +348,10 @@ const ProductsPage = () => {
               }
               onClick={handleOpenDialog}
             >
-              {productsDeleted && productsDeleted.length > 0 ? 'Delete selected item' : 'Save changes'}
+              {productsDeleted
+                && productsDeleted.length > 0
+                ? 'Delete selected item'
+                : 'Save changes'}
             </Button>
           </div>
         </UtilComponent >

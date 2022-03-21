@@ -1,5 +1,4 @@
 import React, { useState, memo } from 'react'
-import { useSelector } from 'react-redux';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   Typography,
@@ -10,12 +9,14 @@ import {
   Grid
 } from '@mui/material';
 import { FilterProps } from '../../../models/products';
-import { AppState } from '../../../redux/reducer';
+import { FetchCategoryProps } from '../../../models/common'
 import { useStyles } from '../../../styles/makeStyles';
 import ControlNormalInput from '../../common/components/ControlNormalInput';
 import ControlSelectInput from '../../common/components/ControlSelectInput';
 import { KeyboardArrowDownIcon, KeyboardArrowUpIcon } from '../../common/components/Icons';
 import ControlAsyncAutocompleteInput from '../../common/components/ControlAsyncAutocompleteInput';
+import useFetchCommonData from '../../common/hooks/useFetchCommonData';
+import { API_PATHS } from '../../../configs/api';
 
 interface Props {
   filters: FilterProps,
@@ -25,7 +26,8 @@ interface Props {
 const ProductFilterForm = (props: Props) => {
   const classes = useStyles();
   const { filters, onChangeFilter } = props;
-  const categoriesState = useSelector((state: AppState) => state.common.categories)
+  const { data: categoriesState } = useFetchCommonData(API_PATHS.getCategory);
+
   const [openMoreFilter, setOpenMoreFilter] = useState(false);
 
   const methods = useForm({
@@ -107,7 +109,9 @@ const ProductFilterForm = (props: Props) => {
                 labelSize={0}
                 defaultValue={'0'}
                 data={categoriesState
-                  ? [{ value: '0', name: 'Any category' }, ...categoriesState.map(item => ({ value: item.id, name: item.name }))]
+                  ? [{ value: '0', name: 'Any category' }, ...categoriesState.map(
+                    (item: FetchCategoryProps) => ({ value: item.id, name: item.name })
+                  )]
                   : undefined}
               />
             </Grid>

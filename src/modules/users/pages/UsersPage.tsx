@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'typesafe-actions';
-import moment from 'moment';
 import { push, replace } from 'connected-react-router';
 import qs from 'query-string'
 import { useHistory } from 'react-router';
@@ -11,7 +10,6 @@ import { API_PATHS } from '../../../configs/api';
 import { AppState } from '../../../redux/reducer';
 import { useStyles } from '../../../styles/makeStyles'
 import CustomPagination from '../../common/components/CustomPagination';
-import { setLoading } from '../../common/redux/loadingReducer';
 import { fetchThunk } from '../../common/redux/thunk';
 import UserListFilterForm from '../component/UserListFilterForm';
 import UtilComponent from '../../common/components/UtilComponent';
@@ -19,23 +17,18 @@ import UserListTable from '../component/UserListTable';
 import ConfirmDialog, { DialogProps } from '../../common/components/ConfirmDialog';
 import { ROUTES } from '../../../configs/routes';
 import ScrollBar from '../../common/components/ScrollBar';
-import { FilterUsersProps, UserDataProps, DeleteUsersProps } from '../../../models/userlist';
+import { FilterUsersProps, DeleteUsersProps } from '../../../models/userlist';
 import { GroupInputProps } from '../../../models/input';
 import SnackBarCustom from '../../common/components/SnackBarCustom';
 import { SnackBarProps } from '../../../models/snackbar';
+import useFetchCommonData from '../../common/hooks/useFetchCommonData';
+import useUsers from '../../common/hooks/useUsers';
+import SpinnerLoading from '../../common/components/Loading/SpinnerLoading';
 
 const UsersPage = () => {
   const classes = useStyles();
   const { location } = useHistory()
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
-
-  const [usersState, setUsersState] = useState<{
-    usersState: UserDataProps[],
-    numberUsers: number
-  }>({
-    usersState: [],
-    numberUsers: 0
-  });
 
   const [filters, setFilters] = useState<FilterUsersProps>(() => {
     const queryObject: any = qs.parse(location.search, { arrayFormat: 'bracket' });
@@ -67,7 +60,14 @@ const UsersPage = () => {
     })
   });
 
-  const [roles, setRoles] = useState<GroupInputProps[]>([])
+  const { data: roles } = useFetchCommonData(API_PATHS.getRoles, {});
+
+  const {
+    data: usersState,
+    total: numberUsers,
+    error,
+    isLoading
+  } = useUsers(API_PATHS.getUsersList, filters)
 
   const [usersDeleted, setUsersDeleted] = useState<DeleteUsersProps[]>([]);
 
@@ -90,66 +90,18 @@ const UsersPage = () => {
       message: '',
       open: false,
     })
+  };
+
+  const flattenObject = (obj: {}) => {
+    let formatedObject: GroupInputProps[] = [];
+
+    for (const i in obj) {
+      const tempArray: [] = obj[i as keyof {}];
+      formatedObject = [...formatedObject, ...tempArray.map((item: any) => ({ value: item.id, name: item.name, group: i }))]
+    }
+
+    return formatedObject
   }
-
-
-  const fetchRoles = useCallback(async () => {
-    const json = await dispatch(fetchThunk(API_PATHS.getRoles, 'post', {}));
-
-    if (json.success) {
-      let formatedData: GroupInputProps[] = []
-      for (const i in json.data) {
-        formatedData = [...formatedData, ...json.data[i].map((item: any) => ({ value: item.id, name: item.name, group: i }))]
-      }
-
-      setRoles(formatedData);
-      return;
-    }
-
-  }, [dispatch])
-
-  // call api products with filtering
-  const fetchUsers = useCallback(async (filters: FilterUsersProps) => {
-    // format lại filter để gửi lên server
-    const newFormatFilter = {
-      ...filters,
-      date_range: filters.date_range.selection.key ? (
-        [
-          moment(filters.date_range.selection.startDate).format("YYYY-MM-DD"),
-          moment(filters.date_range.selection.endDate).format("YYYY-MM-DD")
-        ]
-      ) : [],
-      types: filters.types.length > 0
-        ? filters.types.map(type => type.value)
-        : [],
-      memberships: filters.memberships.length > 0
-        ? filters.memberships.map(membership => membership.value)
-        : [],
-      status: filters.status && filters.status !== '0' ? [filters.status] : [],
-      country: filters.country === '0' ? '' : filters.country,
-      page: 1,
-    }
-
-    dispatch(setLoading(true));
-
-    const json = await dispatch(fetchThunk(API_PATHS.getUsersList, 'post', newFormatFilter));
-
-    dispatch(setLoading(false));
-
-    if (json.success && json.data) {
-      setUsersState({
-        usersState: json.data,
-        numberUsers: json.recordsTotal
-      });
-      return;
-    }
-
-    setUsersState({
-      usersState: [],
-      numberUsers: 0
-    });
-    return;
-  }, [dispatch]);
 
   // // add filter values to filter state
   const handleChangeFilter = useCallback((filters: FilterUsersProps) => {
@@ -183,14 +135,6 @@ const UsersPage = () => {
 
     setFilters(filters);
   }, [dispatch]);
-
-  useEffect(() => {
-    fetchUsers(filters)
-  }, [fetchUsers, filters]);
-
-  useEffect(() => {
-    fetchRoles()
-  }, [fetchRoles])
 
   // // call api edit product
   const deleteUsers = useCallback(async (
@@ -276,6 +220,10 @@ const UsersPage = () => {
     setUsersDeleted(prev => prev.filter(item => item.id !== id))
   }
 
+  if (isLoading) {
+    return <SpinnerLoading />
+  }
+
   return (
     <>
       <div className={classes.mainPage}>
@@ -292,53 +240,49 @@ const UsersPage = () => {
             </Typography>
           </div>
           <UserListFilterForm
-            roles={roles}
+            roles={roles ? flattenObject(roles) : []}
             filters={filters}
             onChangeFilter={handleChangeFilter}
           />
-          {usersState && (
-            <>
-              <div>
-                {/* Add product Button */}
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start'
-                }}>
-                  <div className={classes.mainButton}>
-                    <Button
-                      onClick={() => {
-                        dispatch(push(ROUTES.addUser))
-                      }}>
-                      Add User
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Table */}
-                <UserListTable
-                  handleAddDeleteUser={handleAddDeleteUser}
-                  onChangeFilter={handleChangeFilter}
-                  users={usersState.usersState}
-                  usersDeleted={usersDeleted}
-                  filters={filters}
-                  ref={tableRef}
-                />
+          <div>
+            {/* Add product Button */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'flex-start'
+            }}>
+              <div className={classes.mainButton}>
+                <Button
+                  onClick={() => {
+                    dispatch(push(ROUTES.addUser))
+                  }}>
+                  Add User
+                </Button>
               </div>
-              <CustomPagination
-                filters={filters}
-                onChangeFilter={handleChangeFilter}
-                totalLengthProducts={+usersState.numberUsers}
-                numberProductsPerPage={+filters.count}
-                optionsLengthPerPage={[
-                  '10',
-                  '25',
-                  '50',
-                  '75',
-                  '100'
-                ]}
-              />
-            </>
-          )}
+            </div>
+
+            {/* Table */}
+            <UserListTable
+              handleAddDeleteUser={handleAddDeleteUser}
+              onChangeFilter={handleChangeFilter}
+              users={usersState}
+              usersDeleted={usersDeleted}
+              filters={filters}
+              ref={tableRef}
+            />
+          </div>
+          <CustomPagination
+            filters={filters}
+            onChangeFilter={handleChangeFilter}
+            totalLengthProducts={numberUsers}
+            numberProductsPerPage={+filters.count}
+            optionsLengthPerPage={[
+              '10',
+              '25',
+              '50',
+              '75',
+              '100'
+            ]}
+          />
         </div>
         <UtilComponent>
           <div >

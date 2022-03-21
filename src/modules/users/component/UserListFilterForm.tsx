@@ -1,6 +1,17 @@
-import React, { useState, memo, useCallback, useEffect } from 'react'
-import { Button, Grid, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {
+  useState,
+  memo,
+  useCallback,
+  useEffect
+} from 'react'
+import {
+  Button,
+  Grid,
+  RadioGroup,
+  FormControlLabel,
+  Radio
+} from '@mui/material';
+import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Action } from 'typesafe-actions';
@@ -16,6 +27,8 @@ import ControlNormalInput from '../../common/components/ControlNormalInput';
 import ControlSelectInput from '../../common/components/ControlSelectInput';
 import { GroupInputProps } from '../../../models/input';
 import { KeyboardArrowDownIcon, KeyboardArrowUpIcon } from '../../common/components/Icons';
+import useFetchCommonData from '../../common/hooks/useFetchCommonData';
+import { CountriesDataProps } from '../../../models/common';
 
 interface Props {
   filters: FilterUsersProps,
@@ -26,10 +39,12 @@ interface Props {
 const UserListFilterForm = (props: Props) => {
   const { filters, roles, onChangeFilter } = props;
   const classes = useStyles();
-  const countries = useSelector((state: AppState) => state.common.countries)?.map(item => ({ value: item.id, name: item.name }))
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
 
+  const { data: countries } = useFetchCommonData(API_PATHS.getCountry);
+
   const [openMoreFilter, setOpenMoreFilter] = useState(false);
+
   const [states, setStates] = useState<{
     code: string,
     country_code: string,
@@ -105,6 +120,10 @@ const UserListFilterForm = (props: Props) => {
       fetchState(country)
     }
   }, [country, fetchState])
+
+  if (!countries) {
+    return <div>Test</div>
+  }
 
   return (
     <FormProvider {...methods}>
@@ -197,7 +216,12 @@ const UserListFilterForm = (props: Props) => {
                 }}
                 defaultValue={'0'}
                 data={countries
-                  ? [{ value: '0', name: 'Select country' }, ...countries]
+                  ? [
+                    { value: '0', name: 'Select country' },
+                    ...countries.map(
+                      (item: CountriesDataProps) =>
+                        ({ value: item.code, name: item.country }))
+                  ]
                   : []}
                 inputSize={7}
               />

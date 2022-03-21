@@ -1,3 +1,5 @@
+import { CommonSelectProps } from "./common"
+
 export interface ProductsProps {
   id: string,
   sku: string,
@@ -42,29 +44,6 @@ export interface EditProps {
 export interface DeleteProps {
   id: string,
   delete: number
-}
-
-export interface FetchVendorsProps {
-  id: string,
-  companyName: string,
-  login: string,
-  name: string
-}
-
-export interface CommonSelectProps {
-  id: string | null | number,
-  name: string
-}
-export interface FetchCategoryProps {
-  id: string,
-  parentId: string,
-  name: string,
-  path: string,
-  pos: string
-}
-export interface CategoryProps {
-  id: string,
-  name: string
 }
 
 export interface FormValuesProps {

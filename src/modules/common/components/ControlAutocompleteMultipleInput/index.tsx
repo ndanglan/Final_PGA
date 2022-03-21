@@ -6,7 +6,7 @@ import {
 import { makeStyles } from '@mui/styles';
 import { Autocomplete, TextField } from '@mui/material';
 import FormControlGroup from '../FormControlGroup';
-import { CommonSelectProps } from '../../../../models/products'
+import { CommonSelectProps } from '../../../../models/common'
 import {
   DARK_PURPLE,
   MEDIUM_PURPLE,
