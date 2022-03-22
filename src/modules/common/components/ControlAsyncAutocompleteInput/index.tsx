@@ -32,7 +32,7 @@ const useStyles = makeStyles(({
   input: {
     '& .MuiFormControl-root .MuiOutlinedInput-root': {
       padding: 0,
-      border: '1px solid #000',
+      border: '1px solid #13132b',
 
       '& input': {
         padding: '10px 15px'
@@ -111,7 +111,7 @@ const ControlAsyncAutocompleteInput = (props: Props) => {
                 style: {
                   backgroundColor: DARK_PURPLE,
                   color: WHITE_COLOR,
-                  border: '1px solid #1a1f33'
+                  border: '1px solid #13132b'
                 }
               }}
               className={classes.input}

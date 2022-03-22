@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
 import { routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
-import storage from 'redux-persist/lib/storage/session';
+import storage from 'redux-persist/lib/storage';
 import createRootReducer from './reducer';
 
 export const history = createBrowserHistory();
