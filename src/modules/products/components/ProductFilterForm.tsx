@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   Typography,
@@ -49,7 +49,10 @@ const ProductFilterForm = (props: Props) => {
   });
 
   const onSubmit = (data: FilterProps) => {
-    onChangeFilter(data)
+    onChangeFilter({
+      ...data,
+      page: 1
+    })
   }
 
   const toggleFilter = () => {
@@ -76,7 +79,35 @@ const ProductFilterForm = (props: Props) => {
     }
 
     methods.setValue('search_type', newArr.join(','))
-  }
+  };
+
+  useEffect(() => {
+    if (filters) {
+      methods.setValue('category', filters.category)
+
+      methods.setValue('search', filters.search)
+
+      methods.setValue('search_type', filters.search_type)
+
+      methods.setValue('stock_status', filters.stock_status)
+
+      methods.setValue('vendor', {
+        value: filters.vendor.value,
+        id: filters.vendor.id
+      })
+
+      methods.setValue('availability', filters.availability)
+
+      methods.setValue('count', filters.count)
+
+      methods.setValue('order_by', filters.order_by)
+
+      methods.setValue('page', filters.page)
+
+      methods.setValue('sort', filters.sort)
+    }
+  }, [filters, methods])
+
 
   return (
     <FormProvider {...methods}>

@@ -1,4 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useState
+} from 'react'
 import { push, goBack } from 'connected-react-router';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
@@ -10,18 +14,25 @@ import { AppState } from '../../../redux/reducer';
 import { useStyles } from '../../../styles/makeStyles'
 import { ArrowBackIcon } from '../../common/components/Icons';
 import UserForm from '../component/UserForm'
-import { UserFormValues, VendorDataProps } from '../../../models/userlist';
+import { UserFormValues } from '../../../models/userlist';
 import { setLoading } from '../../common/redux/loadingReducer';
 import { API_PATHS } from '../../../configs/api';
 import { fetchThunk } from '../../common/redux/thunk';
 import SnackBarCustom from '../../common/components/SnackBarCustom';
 import { SnackBarProps } from '../../../models/snackbar';
+import useVendorsDetail from '../../common/hooks/useVendorsDetail';
+import SpinnerLoading from '../../common/components/Loading/SpinnerLoading';
 
 const UserFormPage = () => {
   const classes = useStyles();
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const params = useParams<{ id: string }>();
-  const [vendorDetails, setVendorDetails] = useState<VendorDataProps>();
+  const {
+    data: vendorDetails,
+    account_status,
+    isLoading,
+    mutate
+  } = useVendorsDetail(params?.id)
 
   const [snackbarOptions, setSnackbarOptions] = useState<SnackBarProps>({
     message: '',
@@ -37,21 +48,6 @@ const UserFormPage = () => {
       duration: prev?.duration
     }))
   }, [])
-
-  const fetchVendorDetails = useCallback(async (id: string) => {
-    dispatch(setLoading(true));
-
-    const json = await dispatch(fetchThunk(API_PATHS.getVendorDetail, 'post', { id: id }));
-
-    dispatch(setLoading(false));
-
-    if (json.success) {
-      setVendorDetails({
-        account_status: json.data.account_status,
-        info: json.data.info
-      })
-    }
-  }, [dispatch])
 
   const onSubmit = useCallback(async (values: UserFormValues) => {
     const { status, id, statusComment, ...others } = values;
@@ -83,7 +79,7 @@ const UserFormPage = () => {
         // sau khi update thành công sẽ fetch lại detail
         if (id) {
           setTimeout(() => {
-            fetchVendorDetails(id)
+            mutate()
           }, 1000)
         }
 
@@ -138,14 +134,15 @@ const UserFormPage = () => {
       })
     }
 
-  }, [dispatch, fetchVendorDetails]);
+  }, [dispatch, mutate]);
 
   useEffect(() => {
-    if (params?.id) {
-      fetchVendorDetails(params.id)
-    }
     window.scrollTo(0, 0);
-  }, [params.id, fetchVendorDetails])
+  }, [])
+
+  if (!vendorDetails && params?.id) {
+    return <SpinnerLoading />
+  }
 
   return (
     <>
@@ -185,11 +182,16 @@ const UserFormPage = () => {
           <div>
             <UserForm
               title={vendorDetails
-                ? `${vendorDetails.info.email}${vendorDetails.info.companyName ? `(${vendorDetails.info.companyName})` : ''}`
+                ? `${vendorDetails.email}${vendorDetails.companyName
+                  ? `(${vendorDetails.companyName})`
+                  : ''}`
                 : 'Create account'
               }
               onSubmit={(values: UserFormValues) => onSubmit(values)}
-              vendorDetails={vendorDetails}
+              vendorDetails={{
+                account_status: account_status,
+                info: vendorDetails
+              }}
             />
           </div>
         </div>

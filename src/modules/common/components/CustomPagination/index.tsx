@@ -2,13 +2,12 @@ import React from 'react'
 import { makeStyles } from '@mui/styles'
 import { Pagination, Stack } from '@mui/material'
 import { WHITE_COLOR } from '../../../../configs/colors'
-
 interface Props {
   totalLengthProducts: number,
   numberProductsPerPage: number,
   onChangeFilter(filters: any): void,
   filters: any,
-  optionsLengthPerPage: string[]
+  optionsLengthPerPage: string[],
 }
 
 const useStyles = makeStyles(({
@@ -41,11 +40,12 @@ const CustomPagination = (props: Props) => {
     }}>
       <Pagination
         page={+props.filters.page}
-        onChange={(e, value) =>
+        onChange={(e, value) => {
           props.onChangeFilter({
             ...props.filters,
-            page: value
+            page: +value
           })
+        }
         }
         className={classes.pagination}
         variant="outlined"

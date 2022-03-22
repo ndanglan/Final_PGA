@@ -10,13 +10,15 @@ import { API_PATHS } from '../../../configs/api';
 import { useStyles } from '../../../styles/makeStyles'
 import ProductForm from '../components/ProductForm';
 import { AppState } from '../../../redux/reducer';
-import { fetchThunk, fetchThunkFormData } from '../../common/redux/thunk';
-import { FormValuesProps, detailsProductProps } from '../../../models/products';
+import { fetchThunkFormData } from '../../common/redux/thunk';
+import { FormValuesProps } from '../../../models/products';
 import { setLoading } from '../../common/redux/loadingReducer';
 import { ArrowBackIcon } from '../../common/components/Icons';
 import { dateTypeToStringType } from '../../common/utils';
 import SnackBarCustom from '../../common/components/SnackBarCustom';
 import { SnackBarProps } from '../../../models/snackbar';
+import useProductDetail from '../../common/hooks/useProductDetail';
+import SpinnerLoading from '../../common/components/Loading/SpinnerLoading';
 
 const ProductsFormPage = () => {
   const classes = useStyles();
@@ -25,7 +27,7 @@ const ProductsFormPage = () => {
 
   const params = useParams<{ id: string }>();
 
-  const [detailsProduct, setDetailsProduct] = useState<detailsProductProps>();
+  const { data: detailsProduct, isLoading, mutate } = useProductDetail(params?.id);
 
   const [snackbarOptions, setSnackbarOptions] = useState<SnackBarProps>({
     message: '',
@@ -39,19 +41,6 @@ const ProductsFormPage = () => {
       open: false,
     })
   }, [])
-
-  const fetchProductDetails = useCallback(async (id: string) => {
-
-    dispatch(setLoading(true));
-
-    const json = await dispatch(fetchThunk(API_PATHS.getProductDetail, 'post', { id: id }));
-
-    dispatch(setLoading(false));
-
-    if (json?.success) {
-      setDetailsProduct(json.data)
-    }
-  }, [dispatch])
 
   const onPostFile = useCallback(async (id: string, data: File[]) => {
 
@@ -73,7 +62,13 @@ const ProductsFormPage = () => {
   }, [dispatch])
 
   const onPostProduct = useCallback(async (values: FormValuesProps) => {
-    const { images, id, categories, shipping_to_zones, arrival_date, ...others } = values;
+    const {
+      images,
+      id,
+      categories,
+      shipping_to_zones,
+      arrival_date,
+      ...others } = values;
 
     let newData;
     // format lại values trước khi gửi lên server
@@ -143,7 +138,7 @@ const ProductsFormPage = () => {
         }
 
         // nếu có id thì ở lại 
-        fetchProductDetails(id)
+        mutate()
         return;
       }
 
@@ -158,7 +153,7 @@ const ProductsFormPage = () => {
 
       // nếu có id thì fetch lại detail sau khi update
       setTimeout(() => {
-        fetchProductDetails(id)
+        mutate()
       }, 1000)
       return;
     }
@@ -172,14 +167,16 @@ const ProductsFormPage = () => {
       type: 'error'
     })
 
-  }, [dispatch, onPostFile, fetchProductDetails])
+  }, [dispatch, onPostFile, mutate])
 
   useEffect(() => {
-    if (params?.id) {
-      fetchProductDetails(params.id)
-    }
     window.scrollTo(0, 0);
-  }, [params?.id, fetchProductDetails])
+  }, [])
+
+  // nếu không có data và có id thì nghĩa là đang fetch detail
+  if (isLoading && params?.id) {
+    return <SpinnerLoading />
+  }
 
   return (
     <>

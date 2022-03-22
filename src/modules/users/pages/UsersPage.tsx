@@ -1,4 +1,9 @@
-import React, { useCallback, useRef, useState, useEffect } from 'react'
+import React, {
+  useCallback,
+  useRef,
+  useState,
+  useEffect
+} from 'react'
 import { Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
@@ -24,7 +29,6 @@ import { SnackBarProps } from '../../../models/snackbar';
 import useFetchCommonData from '../../common/hooks/useFetchCommonData';
 import useUsers from '../../common/hooks/useUsers';
 import SpinnerLoading from '../../common/components/Loading/SpinnerLoading';
-import { useSWRConfig } from 'swr';
 
 const UsersPage = () => {
   const classes = useStyles();
@@ -66,10 +70,9 @@ const UsersPage = () => {
   const {
     data: usersState,
     total: numberUsers,
-    error,
     isLoading,
     mutate
-  } = useUsers(API_PATHS.getUsersList, filters)
+  } = useUsers(API_PATHS.getUsersList, filters);
 
   const [usersDeleted, setUsersDeleted] = useState<DeleteUsersProps[]>([]);
 
@@ -106,13 +109,13 @@ const UsersPage = () => {
   }
 
   // // add filter values to filter state
-  const handleChangeFilter = useCallback((filters: FilterUsersProps) => {
+  const handleChangeFilter = useCallback((newFilters: FilterUsersProps) => {
     const {
       date_range,
       types,
       memberships,
       ...others
-    } = filters
+    } = newFilters
 
     // string of others except date_range
     const othersQueryString = qs.stringify(others);
@@ -135,10 +138,7 @@ const UsersPage = () => {
 
     dispatch(replace(`${ROUTES.userList}?${userFilterQueryString}`));
 
-    setFilters({
-      ...filters,
-      page: 1
-    });
+    setFilters(newFilters)
   }, [dispatch]);
 
   // // call api edit product
@@ -160,14 +160,17 @@ const UsersPage = () => {
       setSnackbarOptions({
         open: true,
         message: 'Your change is success!',
-        type: 'success'
+        type: 'success',
+        duration: 1000
       })
 
       setUsersDeleted([])
 
       setTimeout(() => {
         mutate()
-      }, 1500)
+      }, 1500);
+
+      return;
     }
 
     setSnackbarOptions({
@@ -225,12 +228,39 @@ const UsersPage = () => {
     setUsersDeleted(prev => prev.filter(item => item.id !== id))
   }
 
+  useEffect(() => {
+    if (!location.search) {
+      console.log('vào')
+      setFilters({
+        address: "",
+        count: 25,
+        country: "0",
+        date_range: {
+          selection: {
+            startDate: undefined,
+            endDate: undefined,
+            key: ''
+          }
+        },
+        date_type: "R",
+        memberships: [],
+        order_by: "DESC",
+        page: 1,
+        phone: "",
+        search: "",
+        sort: "last_login",
+        state: "",
+        status: '',
+        types: [],
+        tz: 7
+      })
+    }
+    window.scrollTo(0, 0);
+  }, [location])
+
   if (isLoading) {
     return <SpinnerLoading />
   }
-
-  const { cache } = useSWRConfig();
-  console.log(cache)
 
   return (
     <>

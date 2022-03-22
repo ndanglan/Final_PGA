@@ -1,4 +1,9 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useRef,
+  useState,
+  useEffect
+} from 'react'
 import { Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
@@ -22,7 +27,6 @@ import SnackBarCustom from '../../common/components/SnackBarCustom';
 import { SnackBarProps } from '../../../models/snackbar';
 import useProducts from '../../common/hooks/useProducts';
 import SpinnerLoading from '../../common/components/Loading/SpinnerLoading';
-
 
 const ProductsPage = () => {
   const classes = useStyles();
@@ -75,7 +79,6 @@ const ProductsPage = () => {
     data: products,
     total,
     isLoading,
-    error,
     mutate
   } = useProducts(API_PATHS.getProductFiltering, filters);
 
@@ -105,8 +108,8 @@ const ProductsPage = () => {
   }, [])
 
   // add filter values to filter state
-  const handleChangeFilter = useCallback((filters: FilterProps) => {
-    const { vendor, ...others } = filters
+  const handleChangeFilter = useCallback((newFilters: FilterProps) => {
+    const { vendor, ...others } = newFilters
     const othersQueryString = qs.stringify(others);
 
     const vendorQueryString = qs.stringify({
@@ -117,11 +120,8 @@ const ProductsPage = () => {
 
     dispatch(replace(`${ROUTES.productList}?${filterQueryString}`));
 
-    setFilters({
-      ...filters,
-      page: 1
-    })
-  }, [dispatch]);
+    setFilters(newFilters)
+  }, [dispatch])
 
   // call api edit product
   const editProduct = useCallback(async (
@@ -281,6 +281,27 @@ const ProductsPage = () => {
     setProductsDeleted(prev => prev.filter(item => item.id !== id))
   }
 
+  useEffect(() => {
+    if (!location.search) {
+      setFilters({
+        category: "0",
+        count: 25,
+        order_by: "ASC",
+        page: '1',
+        search: "",
+        search_type: "",
+        sort: "name",
+        stock_status: "all",
+        vendor: {
+          id: '',
+          value: ''
+        },
+        availability: 'all'
+      })
+    }
+    window.scrollTo(0, 0);
+  }, [location])
+
   if (isLoading) {
     return <SpinnerLoading />
   }
@@ -289,7 +310,6 @@ const ProductsPage = () => {
     <>
       <div className={classes.mainPage}>
         <div style={{
-          overflow: 'auto',
           height: 'auto',
         }}>
           <div>

@@ -94,10 +94,10 @@ const UserListFilterForm = (props: Props) => {
     types: FilterUsersProps['types'],
   }) => {
     onChangeFilter({
-      ...props.filters,
-      ...data
+      ...filters,
+      ...data,
+      page: 1
     })
-
   }
 
   const toggleFilter = () => {
@@ -120,6 +120,28 @@ const UserListFilterForm = (props: Props) => {
       fetchState(country)
     }
   }, [country, fetchState])
+
+  useEffect(() => {
+    methods.setValue('address', filters.address)
+
+    methods.setValue('country', filters.country)
+
+    methods.setValue('date_range', filters.date_range)
+
+    methods.setValue('date_type', filters.date_type)
+
+    methods.setValue('memberships', filters.memberships)
+
+    methods.setValue('phone', filters.phone)
+
+    methods.setValue('search', filters.search)
+
+    methods.setValue('state', filters.state)
+
+    methods.setValue('status', filters.status[0] ? filters.status[0] : '0')
+
+    methods.setValue('types', filters.types)
+  }, [filters, methods])
 
   return (
     <FormProvider {...methods}>

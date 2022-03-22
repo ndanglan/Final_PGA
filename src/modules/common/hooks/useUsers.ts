@@ -17,6 +17,7 @@ export default function useUsers(
     urlFetcher: string,
     payloadFetcher?: any
   ) => {
+
     const json = await dispatch(
       fetchThunk(
         urlFetcher,
@@ -57,10 +58,14 @@ export default function useUsers(
   const {
     data,
     error,
-    mutate
+    mutate,
   } = useSWR(
     [url, newPayload],
     fetcher,
+    {
+      refreshWhenHidden: true,
+      refreshWhenOffline: true,
+    }
   );
 
   return {
@@ -69,6 +74,6 @@ export default function useUsers(
     filter: data?.recordsFiltered,
     error,
     mutate,
-    isLoading: !data && !error
+    isLoading: !data && !error,
   }
 }

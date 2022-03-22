@@ -59,7 +59,7 @@ const UserForm = (props: Props) => {
   }
 
   useEffect(() => {
-    if (vendorDetails) {
+    if (vendorDetails?.info) {
       methods.setValue('access_level', vendorDetails.info.access_level);
 
       methods.setValue('email', vendorDetails.info.email);
@@ -118,18 +118,18 @@ const UserForm = (props: Props) => {
           }}>
             {title}
           </Typography>
-          {vendorDetails && (
+          {vendorDetails?.info && (
             <AccountDetailTag
               info={vendorDetails.info}
             />
           )}
         </div>
-        {vendorDetails && (
+        {vendorDetails?.info && (
           <FormSeperateSpace />
         )}
         <div className="part1">
           <Typography variant="h4" sx={{
-            marginBottom: '30px'
+            margin: '15px 0'
           }}>
             Email & password
           </Typography>
@@ -186,7 +186,7 @@ const UserForm = (props: Props) => {
             inputSize={3}
             labelSize={3}
             required={{
-              value: vendorDetails ? false : true,
+              value: vendorDetails?.info ? false : true,
               message: 'This field is required'
             }}
             minLength={{
@@ -204,7 +204,7 @@ const UserForm = (props: Props) => {
             inputSize={3}
             labelSize={3}
             required={{
-              value: vendorDetails ? false : true,
+              value: vendorDetails?.info ? false : true,
               message: 'This field is required'
             }}
             validate={
@@ -226,7 +226,7 @@ const UserForm = (props: Props) => {
               { value: 'individual', name: 'Individual' }, { value: 'business', name: 'Business' }
             ]}
           />
-          {vendorDetails && vendorDetails.info.paymentRailsId ? (
+          {vendorDetails && vendorDetails?.info?.paymentRailsId ? (
             <Grid
               container
               columnGap={2.5}
@@ -266,13 +266,15 @@ const UserForm = (props: Props) => {
           }}>
             Access information
           </Typography>
-          {vendorDetails ? (
+          {vendorDetails?.info ? (
             <LabelGroup
               label={'Access level'}
               inputSize={3}
               labelSize={3}
               required={false}
-              value={vendorDetails.info.access_level === '10' ? 'Vendor' : 'Admin'}
+              value={vendorDetails?.info?.access_level === '10'
+                ? 'Vendor'
+                : 'Admin'}
             />
           ) : (
             <ControlSelectInput
@@ -304,7 +306,7 @@ const UserForm = (props: Props) => {
               data={ACCOUNT_ROLES}
             />
           )}
-          {vendorDetails && (
+          {vendorDetails?.info && (
             <ControlSelectInput
               label="Account status"
               required={{
@@ -321,7 +323,7 @@ const UserForm = (props: Props) => {
               ]}
             />
           )}
-          {vendorDetails && (
+          {vendorDetails?.info && (
             <ControlTextAreaAutoSizeInput
               label="Status comment (reason)"
               name="statusComment"
@@ -344,13 +346,13 @@ const UserForm = (props: Props) => {
               { value: '4', name: 'General' }
             ]}
           />
-          {vendorDetails && (
+          {vendorDetails?.info && (
             <LabelGroup
               label={'Pending membership'}
               inputSize={3}
               labelSize={3}
               required={false}
-              value={vendorDetails.info.pending_membership_id ? vendorDetails.info.pending_membership_id.toString() : 'none'}
+              value={vendorDetails?.info?.pending_membership_id ? vendorDetails?.info.pending_membership_id?.toString() : 'none'}
             />
           )}
           <ControlCheckBoxInput
@@ -392,7 +394,7 @@ const UserForm = (props: Props) => {
                   : true
               }
             >
-              {vendorDetails ? 'Update account' : 'Create account'}
+              {vendorDetails?.info ? 'Update account' : 'Create account'}
             </Button>
           </div>
         </UtilComponent >

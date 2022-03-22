@@ -1,14 +1,14 @@
-import { FilterProps, ProductsProps } from './../../../models/products';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import useSWR from 'swr';
 import { Action } from 'typesafe-actions';
+import { API_PATHS } from '../../../configs/api';
+import { VendorDataProps } from '../../../models/userlist';
 import { AppState } from '../../../redux/reducer';
 import { fetchThunk } from "../redux/thunk";
 
-export default function useProducts(
-  url: string,
-  payload?: FilterProps
+export default function useVendorsDetail(
+  id?: string,
 ) {
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
 
@@ -33,15 +33,12 @@ export default function useProducts(
     return;
   }
 
-  const newPayload = {
-    ...payload,
-    vendor: payload?.vendor?.id?.toString(),
-    page: payload?.page.toString(),
-    count: payload?.count.toString()
-  }
-
-  const { data, error, mutate } = useSWR(
-    [url, newPayload],
+  const {
+    data,
+    error,
+    mutate,
+  } = useSWR(
+    id ? [API_PATHS.getVendorDetail, { id: id }] : null,
     fetcher,
     {
       refreshWhenHidden: true,
@@ -50,9 +47,8 @@ export default function useProducts(
   );
 
   return {
-    data: data?.data as ProductsProps[],
-    total: data?.recordsTotal,
-    filter: data?.recordsFiltered,
+    data: data?.data?.info as VendorDataProps['info'],
+    account_status: data?.data?.account_status as VendorDataProps['account_status'],
     error,
     mutate,
     isLoading: !data && !error
