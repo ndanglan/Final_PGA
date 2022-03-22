@@ -49,15 +49,24 @@ export default function useUsers(
       : [],
     status: payload.status && payload.status !== '0' ? [payload.status] : [],
     country: payload.country === '0' ? '' : payload.country,
+    page: payload.page.toString()
   }
 
-  const { data, error } = useSWR([url, newPayload], fetcher);
+  const {
+    data,
+    error,
+    mutate
+  } = useSWR(
+    [url, newPayload],
+    fetcher,
+  );
 
   return {
     data: data?.data as UserDataProps[],
     total: data?.recordsTotal,
     filter: data?.recordsFiltered,
     error,
+    mutate,
     isLoading: !data && !error
   }
 }

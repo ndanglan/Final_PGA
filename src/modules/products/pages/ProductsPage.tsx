@@ -23,6 +23,7 @@ import { SnackBarProps } from '../../../models/snackbar';
 import useProducts from '../../common/hooks/useProducts';
 import SpinnerLoading from '../../common/components/Loading/SpinnerLoading';
 
+
 const ProductsPage = () => {
   const classes = useStyles();
   const { location } = useHistory()
@@ -45,7 +46,7 @@ const ProductsPage = () => {
         : "ASC",
       page: others.page
         ? others.page
-        : 1,
+        : '1',
       search: others.search
         ? others.search
         : "",
@@ -71,9 +72,11 @@ const ProductsPage = () => {
   });
 
   const {
+    data: products,
     total,
     isLoading,
-    error
+    error,
+    mutate
   } = useProducts(API_PATHS.getProductFiltering, filters);
 
   const [productsEdited, setProductsEdited] = useState<EditProps[] | []>([]);
@@ -144,7 +147,7 @@ const ProductsPage = () => {
       setProductsDeleted([]);
 
       setTimeout(() => {
-        setFilters((prev) => ({ ...prev }))
+        mutate()
       }, 1500)
 
       return;
@@ -155,7 +158,7 @@ const ProductsPage = () => {
       message: 'Your change is failed!',
       type: 'error'
     });
-  }, [dispatch])
+  }, [dispatch, mutate])
 
   //  options dialog
   const handleCloseDialog = useCallback(() => {
@@ -206,7 +209,11 @@ const ProductsPage = () => {
   }
 
   // add Product edited
-  const handleAddProductEdited = (changed: boolean, id: string, price: string, stock: string) => {
+  const handleAddProductEdited = (
+    changed: boolean,
+    id: string,
+    price: string,
+    stock: string) => {
     // nếu value sau khác value trước changed = true thì adđ vào array
     if (changed) {
       if (productsEdited?.length === 0) {
@@ -312,6 +319,7 @@ const ProductsPage = () => {
 
             {/* Table */}
             <ProductTable
+              products={products}
               handleAddProductEdited={handleAddProductEdited}
               handleAddDeleteProduct={handleAddDeleteProduct}
               onChangeFilter={handleChangeFilter}

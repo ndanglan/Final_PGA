@@ -160,7 +160,7 @@ const UserListTable = React.forwardRef<HTMLTableElement, Props>((props: Props, r
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
+          {users && users.map(user => (
             <UserListTableRow
               key={user.profile_id}
               user={user}

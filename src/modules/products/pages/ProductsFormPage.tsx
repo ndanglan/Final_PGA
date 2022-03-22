@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { ThunkDispatch } from 'redux-thunk';
 import { useDispatch } from 'react-redux';
-import { push, goBack, replace } from 'connected-react-router';
+import { goBack, replace } from 'connected-react-router';
 import { Action } from 'typesafe-actions';
 import { useParams } from 'react-router';
 import { ROUTES } from '../../../configs/routes';
@@ -178,7 +178,8 @@ const ProductsFormPage = () => {
     if (params?.id) {
       fetchProductDetails(params.id)
     }
-  }, [params.id, fetchProductDetails])
+    window.scrollTo(0, 0);
+  }, [params?.id, fetchProductDetails])
 
   return (
     <>

@@ -144,7 +144,7 @@ const UserFormPage = () => {
     if (params?.id) {
       fetchVendorDetails(params.id)
     }
-
+    window.scrollTo(0, 0);
   }, [params.id, fetchVendorDetails])
 
   return (

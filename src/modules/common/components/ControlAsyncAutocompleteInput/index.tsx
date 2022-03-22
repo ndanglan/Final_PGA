@@ -50,7 +50,7 @@ const useStyles = makeStyles(({
 }))
 
 const ControlAsyncAutocompleteInput = (props: Props) => {
-  const { control, watch } = useFormContext();
+  const { control } = useFormContext();
   const classes = useStyles()
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const [open, setOpen] = useState(false);

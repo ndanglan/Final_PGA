@@ -34,16 +34,21 @@ export default function useProducts(
 
   const newPayload = {
     ...payload,
-    vendor: payload?.vendor.id
+    vendor: payload?.vendor.id,
+    page: payload?.page.toString()
   }
 
-  const { data, error } = useSWR([url, newPayload], fetcher);
+  const { data, error, mutate } = useSWR(
+    [url, newPayload],
+    fetcher,
+  );
 
   return {
     data: data?.data as ProductsProps[],
     total: data?.recordsTotal,
     filter: data?.recordsFiltered,
     error,
+    mutate,
     isLoading: !data && !error
   }
 }

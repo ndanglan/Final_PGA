@@ -4,14 +4,13 @@ import { useStyles } from '../../../styles/makeStyles'
 import {
   EditProps,
   FilterProps,
-  DeleteProps
+  DeleteProps,
+  ProductsProps
 } from '../../../models/products';
 import ProductTableRow from './ProductTableRow';
 import { ArrowDownwardIcon, ArrowUpwardIcon } from '../../common/components/Icons';
-import useProducts from '../../common/hooks/useProducts';
-import { API_PATHS } from '../../../configs/api';
-
 interface Props {
+  products: ProductsProps[],
   productsDeleted: DeleteProps[],
   filters: FilterProps,
   onChangeFilter(filters: FilterProps): void,
@@ -23,6 +22,7 @@ interface Props {
 const ProductTable = React.forwardRef<HTMLTableElement, Props>((props: Props, ref) => {
   const classes = useStyles();
   const {
+    products,
     productsDeleted,
     filters,
     onChangeFilter,
@@ -30,10 +30,6 @@ const ProductTable = React.forwardRef<HTMLTableElement, Props>((props: Props, re
     handleAddDeleteProduct,
     openDialog
   } = props;
-
-  const {
-    data: products,
-  } = useProducts(API_PATHS.getProductFiltering, filters);
 
   const onSorting = (type: string) => {
     if (filters.order_by === 'ASC') {
@@ -77,9 +73,9 @@ const ProductTable = React.forwardRef<HTMLTableElement, Props>((props: Props, re
               <Checkbox
                 sx={{ color: '#fff' }}
                 checked={
-                  productsDeleted.length
-                  === products.length
-                  && productsDeleted.length !== 0
+                  productsDeleted?.length
+                  === products?.length
+                  && productsDeleted?.length !== 0
                 }
                 onChange={(e) => {
                   if (e.target.checked) {
@@ -179,7 +175,7 @@ const ProductTable = React.forwardRef<HTMLTableElement, Props>((props: Props, re
           </tr>
         </thead>
         <tbody>
-          {products.map(product => (
+          {products && products.map(product => (
             <ProductTableRow
               key={product.id}
               product={product}

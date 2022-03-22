@@ -24,7 +24,7 @@ import { SnackBarProps } from '../../../models/snackbar';
 import useFetchCommonData from '../../common/hooks/useFetchCommonData';
 import useUsers from '../../common/hooks/useUsers';
 import SpinnerLoading from '../../common/components/Loading/SpinnerLoading';
-
+import { useSWRConfig } from 'swr';
 const UsersPage = () => {
   const classes = useStyles();
   const { location } = useHistory()
@@ -66,7 +66,8 @@ const UsersPage = () => {
     data: usersState,
     total: numberUsers,
     error,
-    isLoading
+    isLoading,
+    mutate
   } = useUsers(API_PATHS.getUsersList, filters)
 
   const [usersDeleted, setUsersDeleted] = useState<DeleteUsersProps[]>([]);
@@ -161,7 +162,7 @@ const UsersPage = () => {
       setUsersDeleted([])
 
       setTimeout(() => {
-        setFilters((prev) => ({ ...prev }))
+        mutate()
       }, 1500)
     }
 
@@ -170,7 +171,7 @@ const UsersPage = () => {
       message: 'Your change is failed!',
       type: 'error'
     });
-  }, [dispatch])
+  }, [dispatch, mutate])
 
   //  options dialog
   const handleCloseDialog = useCallback(() => {
@@ -223,6 +224,10 @@ const UsersPage = () => {
   if (isLoading) {
     return <SpinnerLoading />
   }
+
+  const { cache } = useSWRConfig()
+
+  console.log(cache)
 
   return (
     <>

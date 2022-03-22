@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { FormGroup, FormHelperText, Grid, } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { LiteralUnion } from 'react-hook-form';
-import { BORDER_COLOR, MEDIUM_BLUE, WHITE_COLOR } from '../../../../configs/colors'
+import { MEDIUM_BLUE, WHITE_COLOR } from '../../../../configs/colors'
 
 interface Props {
   label?: string,
