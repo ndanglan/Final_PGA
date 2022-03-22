@@ -34,8 +34,9 @@ export default function useProducts(
 
   const newPayload = {
     ...payload,
-    vendor: payload?.vendor.id,
-    page: payload?.page.toString()
+    vendor: payload?.vendor?.id?.toString(),
+    page: payload?.page.toString(),
+    count: payload?.count.toString()
   }
 
   const { data, error, mutate } = useSWR(

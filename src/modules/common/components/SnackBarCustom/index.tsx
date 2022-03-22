@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Alert, Snackbar } from '@mui/material'
 
 interface Props {
@@ -32,4 +32,4 @@ const SnackBarCustom = (props: Props) => {
   )
 }
 
-export default SnackBarCustom
+export default memo(SnackBarCustom)

@@ -102,7 +102,6 @@ const DateRangePickerInput = (props: Props) => {
 
   const [dateRange, setDateRange] = useState(() => {
     if (watch(name).selection.key) {
-      console.log('test')
       return [
         watch(name).selection
       ]

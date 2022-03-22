@@ -49,7 +49,9 @@ export default function useUsers(
       : [],
     status: payload.status && payload.status !== '0' ? [payload.status] : [],
     country: payload.country === '0' ? '' : payload.country,
-    page: payload.page.toString()
+    page: payload.page.toString(),
+    tz: payload.tz.toString(),
+    count: payload.count.toString()
   }
 
   const {

@@ -33,12 +33,12 @@ const ProductsFormPage = () => {
   })
 
   // close snackbar
-  const onCloseSnackBar = () => {
+  const onCloseSnackBar = useCallback(() => {
     setSnackbarOptions({
       message: '',
       open: false,
     })
-  }
+  }, [])
 
   const fetchProductDetails = useCallback(async (id: string) => {
 

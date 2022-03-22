@@ -121,10 +121,6 @@ const UserListFilterForm = (props: Props) => {
     }
   }, [country, fetchState])
 
-  if (!countries) {
-    return <div>Test</div>
-  }
-
   return (
     <FormProvider {...methods}>
       <form

@@ -97,12 +97,12 @@ const ProductsPage = () => {
   const tableRef = useRef<HTMLTableElement>(null);
 
   // close snackbar
-  const onCloseSnackBar = () => {
+  const onCloseSnackBar = useCallback(() => {
     setSnackbarOptions({
       message: '',
       open: false,
     })
-  }
+  }, [])
 
   // add filter values to filter state
   const handleChangeFilter = useCallback((filters: FilterProps) => {
@@ -117,7 +117,10 @@ const ProductsPage = () => {
 
     dispatch(replace(`${ROUTES.productList}?${filterQueryString}`));
 
-    setFilters(filters)
+    setFilters({
+      ...filters,
+      page: 1
+    })
   }, [dispatch]);
 
   // call api edit product

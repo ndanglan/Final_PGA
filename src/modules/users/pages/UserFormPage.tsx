@@ -29,14 +29,14 @@ const UserFormPage = () => {
   })
 
   // close snackbar
-  const onCloseSnackBar = () => {
-    setSnackbarOptions({
+  const onCloseSnackBar = useCallback(() => {
+    setSnackbarOptions((prev) => ({
       message: '',
       open: false,
-      type: snackbarOptions.type,
-      duration: snackbarOptions.duration
-    })
-  }
+      type: prev?.type,
+      duration: prev?.duration
+    }))
+  }, [])
 
   const fetchVendorDetails = useCallback(async (id: string) => {
     dispatch(setLoading(true));

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState, useEffect } from 'react'
 import { Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
@@ -25,6 +25,7 @@ import useFetchCommonData from '../../common/hooks/useFetchCommonData';
 import useUsers from '../../common/hooks/useUsers';
 import SpinnerLoading from '../../common/components/Loading/SpinnerLoading';
 import { useSWRConfig } from 'swr';
+
 const UsersPage = () => {
   const classes = useStyles();
   const { location } = useHistory()
@@ -86,12 +87,12 @@ const UsersPage = () => {
   const tableRef = useRef<HTMLTableElement>(null);
 
   // close snackbar
-  const onCloseSnackBar = () => {
+  const onCloseSnackBar = useCallback(() => {
     setSnackbarOptions({
       message: '',
       open: false,
     })
-  };
+  }, []);
 
   const flattenObject = (obj: {}) => {
     let formatedObject: GroupInputProps[] = [];
@@ -134,7 +135,10 @@ const UsersPage = () => {
 
     dispatch(replace(`${ROUTES.userList}?${userFilterQueryString}`));
 
-    setFilters(filters);
+    setFilters({
+      ...filters,
+      page: 1
+    });
   }, [dispatch]);
 
   // // call api edit product
@@ -225,15 +229,13 @@ const UsersPage = () => {
     return <SpinnerLoading />
   }
 
-  const { cache } = useSWRConfig()
-
+  const { cache } = useSWRConfig();
   console.log(cache)
 
   return (
     <>
       <div className={classes.mainPage}>
         <div style={{
-          overflow: 'auto',
           height: 'auto',
         }}>
           <div>
