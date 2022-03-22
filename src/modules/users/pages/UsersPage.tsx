@@ -71,7 +71,8 @@ const UsersPage = () => {
     data: usersState,
     total: numberUsers,
     isLoading,
-    mutate
+    error,
+    mutate,
   } = useUsers(API_PATHS.getUsersList, filters);
 
   const [usersDeleted, setUsersDeleted] = useState<DeleteUsersProps[]>([]);
@@ -108,7 +109,7 @@ const UsersPage = () => {
     return formatedObject
   }
 
-  // // add filter values to filter state
+  // add filter values to filter state
   const handleChangeFilter = useCallback((newFilters: FilterUsersProps) => {
     const {
       date_range,
@@ -260,6 +261,10 @@ const UsersPage = () => {
 
   if (isLoading) {
     return <SpinnerLoading />
+  }
+
+  if (error) {
+    return <Typography variant="h1" component='h1'>Sorry, fetching data is failed</Typography>
   }
 
   return (

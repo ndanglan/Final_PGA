@@ -22,6 +22,7 @@ import SnackBarCustom from '../../common/components/SnackBarCustom';
 import { SnackBarProps } from '../../../models/snackbar';
 import useVendorsDetail from '../../common/hooks/useVendorsDetail';
 import SpinnerLoading from '../../common/components/Loading/SpinnerLoading';
+import { Typography } from '@mui/material';
 
 const UserFormPage = () => {
   const classes = useStyles();
@@ -30,6 +31,7 @@ const UserFormPage = () => {
   const {
     data: vendorDetails,
     account_status,
+    error,
     isLoading,
     mutate
   } = useVendorsDetail(params?.id)
@@ -140,8 +142,12 @@ const UserFormPage = () => {
     window.scrollTo(0, 0);
   }, [])
 
-  if (!vendorDetails && params?.id) {
+  if (isLoading && params?.id) {
     return <SpinnerLoading />
+  }
+
+  if (error) {
+    return <Typography variant='h1' component='h1'>Fetching data is failed</Typography>
   }
 
   return (

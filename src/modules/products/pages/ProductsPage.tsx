@@ -79,6 +79,7 @@ const ProductsPage = () => {
     data: products,
     total,
     isLoading,
+    error,
     mutate
   } = useProducts(API_PATHS.getProductFiltering, filters);
 
@@ -304,6 +305,10 @@ const ProductsPage = () => {
 
   if (isLoading) {
     return <SpinnerLoading />
+  }
+
+  if (error) {
+    return <Typography variant="h1" component='h1'>Sorry, fetching data is failed</Typography>
   }
 
   return (

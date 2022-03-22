@@ -19,6 +19,7 @@ import SnackBarCustom from '../../common/components/SnackBarCustom';
 import { SnackBarProps } from '../../../models/snackbar';
 import useProductDetail from '../../common/hooks/useProductDetail';
 import SpinnerLoading from '../../common/components/Loading/SpinnerLoading';
+import { Typography } from '@mui/material';
 
 const ProductsFormPage = () => {
   const classes = useStyles();
@@ -27,7 +28,12 @@ const ProductsFormPage = () => {
 
   const params = useParams<{ id: string }>();
 
-  const { data: detailsProduct, isLoading, mutate } = useProductDetail(params?.id);
+  const {
+    data: detailsProduct,
+    isLoading,
+    error,
+    mutate
+  } = useProductDetail(params?.id);
 
   const [snackbarOptions, setSnackbarOptions] = useState<SnackBarProps>({
     message: '',
@@ -176,6 +182,10 @@ const ProductsFormPage = () => {
   // nếu không có data và có id thì nghĩa là đang fetch detail
   if (isLoading && params?.id) {
     return <SpinnerLoading />
+  }
+
+  if (error) {
+    return <Typography variant='h1' component='h1'> Fetching data is failed</Typography>
   }
 
   return (
