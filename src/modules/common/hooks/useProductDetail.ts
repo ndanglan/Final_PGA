@@ -24,7 +24,6 @@ export default function useProductDetail(
         payloadFetcher ? payloadFetcher : undefined
       )
     );
-
     if (json.success) {
       return json;
     }
@@ -41,6 +40,7 @@ export default function useProductDetail(
     id ? [API_PATHS.getProductDetail, { id: id }] : null,
     fetcher,
     {
+      revalidateOnFocus: false,
       refreshWhenHidden: true,
       refreshWhenOffline: true,
     }

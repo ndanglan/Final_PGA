@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Checkbox } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
 import FormControlGroup from '../FormControlGroup';
@@ -46,4 +46,4 @@ const ControlCheckBoxInput = (props: Props) => {
   )
 }
 
-export default ControlCheckBoxInput
+export default memo(ControlCheckBoxInput)

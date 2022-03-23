@@ -223,8 +223,8 @@ const ProductForm = (props: Props) => {
   };
 
   useEffect(() => {
-    if (productDetails) {
 
+    if (productDetails) {
       methods.setValue('id', productDetails.id)
 
       methods.setValue('vendor_id',
@@ -415,10 +415,12 @@ const ProductForm = (props: Props) => {
               value: true,
               message: 'This field is required'
             }}
-            images={productDetails?.images?.map(image => ({
-              id: image.id,
-              file: image.thumbs[0]
-            }))}
+            images={productDetails?.images?.map(image => {
+              return ({
+                id: image.id,
+                file: image.thumbs[0]
+              })
+            })}
           />
 
           {/* categories autocomplete */}

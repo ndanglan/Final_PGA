@@ -80,9 +80,7 @@ const UserFormPage = () => {
 
         // sau khi update thành công sẽ fetch lại detail
         if (id) {
-          setTimeout(() => {
-            mutate()
-          }, 1000)
+          mutate()
         }
 
         return;

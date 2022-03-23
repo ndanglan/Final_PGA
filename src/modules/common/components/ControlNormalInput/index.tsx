@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { InputBase } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useFormContext } from 'react-hook-form';
@@ -79,4 +79,4 @@ const ControlNormalInput = (props: Props) => {
   )
 }
 
-export default ControlNormalInput
+export default memo(ControlNormalInput)

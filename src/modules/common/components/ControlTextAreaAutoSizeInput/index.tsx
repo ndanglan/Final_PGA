@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { TextareaAutosize } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
 import { MEDIUM_BLUE, WHITE_COLOR } from '../../../../configs/colors';
@@ -47,4 +47,4 @@ const ControlTextAreaAutoSizeInput = (props: Props) => {
   )
 }
 
-export default ControlTextAreaAutoSizeInput
+export default memo(ControlTextAreaAutoSizeInput)

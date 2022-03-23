@@ -167,9 +167,7 @@ const UsersPage = () => {
 
       setUsersDeleted([])
 
-      setTimeout(() => {
-        mutate()
-      }, 1500);
+      mutate()
 
       return;
     }
@@ -231,7 +229,6 @@ const UsersPage = () => {
 
   useEffect(() => {
     if (!location.search) {
-      console.log('vào')
       setFilters({
         address: "",
         count: 25,
@@ -261,10 +258,6 @@ const UsersPage = () => {
 
   if (isLoading) {
     return <SpinnerLoading />
-  }
-
-  if (error) {
-    return <Typography variant="h1" component='h1'>Sorry, fetching data is failed</Typography>
   }
 
   return (
@@ -301,16 +294,20 @@ const UsersPage = () => {
                 </Button>
               </div>
             </div>
-
+            {error
+              &&
+              <Typography variant="h1" component='h1'>Sorry, fetching data is failed</Typography>}
             {/* Table */}
-            <UserListTable
-              handleAddDeleteUser={handleAddDeleteUser}
-              onChangeFilter={handleChangeFilter}
-              users={usersState}
-              usersDeleted={usersDeleted}
-              filters={filters}
-              ref={tableRef}
-            />
+            {usersState && (
+              <UserListTable
+                handleAddDeleteUser={handleAddDeleteUser}
+                onChangeFilter={handleChangeFilter}
+                users={usersState}
+                usersDeleted={usersDeleted}
+                filters={filters}
+                ref={tableRef}
+              />
+            )}
           </div>
           <CustomPagination
             filters={filters}

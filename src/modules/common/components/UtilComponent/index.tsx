@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { makeStyles } from '@mui/styles'
 
 interface Props {
@@ -28,6 +28,7 @@ const useStyles = makeStyles(({
 
 const UtilComponent = (props: Props) => {
   const classes = useStyles();
+
   return (
     <div className={classes.utilsContainer}>
       <div >
@@ -43,4 +44,4 @@ const UtilComponent = (props: Props) => {
   )
 }
 
-export default UtilComponent
+export default memo(UtilComponent)

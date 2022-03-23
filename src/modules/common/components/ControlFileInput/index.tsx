@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import Dropzone from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { CloseIcon, CameraAltIcon } from '../Icons';
@@ -32,7 +32,7 @@ const ControlFileInput = (props: IFileInputProps) => {
     // lấy giá trị deleted_images từ react hook form 
     const imagesDeletedArray = getValues('deleted_images');
 
-    // xóa trong images và imagesOrder
+    // xóa trong images và imagesOrder của react hook form 
     const afterDeletedFileArray = fileArray.filter((item, index) => index !== id);
     const afterDeletedImageOrdersArray = imagesOrderArray.filter((item: string, index: number) => index !== id);
 
@@ -41,12 +41,14 @@ const ControlFileInput = (props: IFileInputProps) => {
 
     // lưu id của image được xóa vào mảng deleted_images
     if (props.images && props.images.length > 0) {
-      const deletedImagesArray = props.images.filter((image, index) => index === id).map(item => +item.id);
+      const deletedImagesArrayAvailable = props.images.filter((image, index) => index === id).map(item => +item.id);
 
-      setValue('deleted_images', [...imagesDeletedArray, ...deletedImagesArray])
+      setValue('deleted_images', [...imagesDeletedArray, ...deletedImagesArrayAvailable])
     }
 
+    // xóa image selected để display
     const newArrayDisplayImages = imagesSelected.filter((image, index) => index !== id);
+
     setImagesSelected(newArrayDisplayImages)
   }
 
@@ -57,6 +59,7 @@ const ControlFileInput = (props: IFileInputProps) => {
     // lọc name để thêm vào imagesOrder
     const nameArray = [...files].map(file => file.name);
 
+    // set image để hiển thị 
     setImagesSelected((prev) => ([...prev, ...urlArray]))
 
     // lưu tên theo order
@@ -68,9 +71,10 @@ const ControlFileInput = (props: IFileInputProps) => {
 
   useEffect(() => {
     if (props.images && props.images.length > 0) {
-      setImagesSelected(props.images.map(image => image.file))
+      const newArrayImages = props.images.map(image => image.file)
+      setImagesSelected(newArrayImages)
     }
-  }, [props.images])
+  }, [])
 
   return (
     <FormControlGroup
@@ -101,49 +105,51 @@ const ControlFileInput = (props: IFileInputProps) => {
               alignItems: 'flex-start',
               flexWrap: 'wrap'
             }}>
-              {!!imagesSelected?.length && imagesSelected.map((image, index) => {
+              {!!imagesSelected?.length
+                &&
+                imagesSelected.map((image, index) => {
 
-                return (
-                  <span
-                    style={{
-                      position: 'relative'
-                    }}
-                    key={index}>
-                    <img
-                      src={image}
-                      alt='image'
+                  return (
+                    <span
                       style={{
-                        width: '130px',
-                        height: '130px',
-                        marginRight: '15px',
+                        position: 'relative'
                       }}
-                      onError={({ currentTarget }) => {
-                        currentTarget.onerror = null;
-                        currentTarget.src = defaultImg
-                      }}
-                    />
-                    <div
-                      style={{
-                        width: '20px',
-                        height: '20px',
-                        position: 'absolute',
-                        backgroundColor: DARK_PURPLE,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        right: '10px',
-                        top: '0px',
-                        cursor: 'pointer'
-                      }}
-                      onClick={() => {
-                        removeImage(index)
-                      }}
-                    >
-                      <CloseIcon sx={{ color: '#000' }} />
-                    </div>
-                  </span>
-                )
-              })}
+                      key={index}>
+                      <img
+                        src={image}
+                        alt='image'
+                        style={{
+                          width: '130px',
+                          height: '130px',
+                          marginRight: '15px',
+                        }}
+                        onError={({ currentTarget }) => {
+                          currentTarget.onerror = null;
+                          currentTarget.src = defaultImg
+                        }}
+                      />
+                      <div
+                        style={{
+                          width: '20px',
+                          height: '20px',
+                          position: 'absolute',
+                          backgroundColor: DARK_PURPLE,
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          right: '10px',
+                          top: '0px',
+                          cursor: 'pointer'
+                        }}
+                        onClick={() => {
+                          removeImage(index)
+                        }}
+                      >
+                        <CloseIcon sx={{ color: '#000' }} />
+                      </div>
+                    </span>
+                  )
+                })}
               <div
                 style={{
                   width: '130px',
@@ -171,4 +177,4 @@ const ControlFileInput = (props: IFileInputProps) => {
   )
 }
 
-export default ControlFileInput
+export default memo(ControlFileInput)

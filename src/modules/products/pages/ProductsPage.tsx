@@ -150,10 +150,7 @@ const ProductsPage = () => {
 
       setProductsDeleted([]);
 
-      setTimeout(() => {
-        mutate()
-      }, 1500)
-
+      mutate()
       return;
     }
 
@@ -307,10 +304,6 @@ const ProductsPage = () => {
     return <SpinnerLoading />
   }
 
-  if (error) {
-    return <Typography variant="h1" component='h1'>Sorry, fetching data is failed</Typography>
-  }
-
   return (
     <>
       <div className={classes.mainPage}>
@@ -344,18 +337,22 @@ const ProductsPage = () => {
                 </Button>
               </div>
             </div>
-
+            {error
+              &&
+              <Typography variant="h1" component='h1'>Sorry, fetching data is failed</Typography>}
             {/* Table */}
-            <ProductTable
-              products={products}
-              handleAddProductEdited={handleAddProductEdited}
-              handleAddDeleteProduct={handleAddDeleteProduct}
-              onChangeFilter={handleChangeFilter}
-              openDialog={openConfirmEnable}
-              productsDeleted={productsDeleted}
-              filters={filters}
-              ref={tableRef}
-            />
+            {products && (
+              <ProductTable
+                products={products}
+                handleAddProductEdited={handleAddProductEdited}
+                handleAddDeleteProduct={handleAddDeleteProduct}
+                onChangeFilter={handleChangeFilter}
+                openDialog={openConfirmEnable}
+                productsDeleted={productsDeleted}
+                filters={filters}
+                ref={tableRef}
+              />
+            )}
           </div>
           <CustomPagination
             filters={filters}

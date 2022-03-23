@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import {
   Controller,
   useFormContext
@@ -136,4 +136,4 @@ const ControlAutocompleteMultipleInput = (props: Props) => {
   )
 }
 
-export default ControlAutocompleteMultipleInput
+export default memo(ControlAutocompleteMultipleInput)

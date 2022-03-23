@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { makeStyles } from '@mui/styles';
 import { Switch } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -83,4 +83,4 @@ const ControlSwitchInput = (props: Props) => {
   )
 }
 
-export default ControlSwitchInput
+export default memo(ControlSwitchInput)

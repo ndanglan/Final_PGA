@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import {
   Controller,
   useFormContext
@@ -154,4 +154,4 @@ const ControlAsyncAutocompleteInput = (props: Props) => {
   )
 }
 
-export default ControlAsyncAutocompleteInput
+export default memo(ControlAsyncAutocompleteInput)

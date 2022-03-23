@@ -158,9 +158,7 @@ const ProductsFormPage = () => {
       })
 
       // nếu có id thì fetch lại detail sau khi update
-      setTimeout(() => {
-        mutate()
-      }, 1000)
+      mutate()
       return;
     }
 
@@ -182,10 +180,6 @@ const ProductsFormPage = () => {
   // nếu không có data và có id thì nghĩa là đang fetch detail
   if (isLoading && params?.id) {
     return <SpinnerLoading />
-  }
-
-  if (error) {
-    return <Typography variant='h1' component='h1'> Fetching data is failed</Typography>
   }
 
   return (
@@ -224,6 +218,9 @@ const ProductsFormPage = () => {
             </div>
           </div>
           <div>
+            {error
+              &&
+              <Typography variant='h1' component='h1'> Fetching data is failed</Typography>}
             <ProductForm
               productDetails={
                 detailsProduct
