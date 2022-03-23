@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useState
 } from 'react'
-import { push, goBack } from 'connected-react-router';
+import { push, goBack, replace } from 'connected-react-router';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'typesafe-actions';
@@ -109,9 +109,10 @@ const UserFormPage = () => {
           type: 'success',
           duration: 1000
         });
+
         // sau khi tạo thành công chuyển về trang userlist
         setTimeout(() => {
-          dispatch(push(ROUTES.userList))
+          dispatch(replace(`${ROUTES.userDetail}/${json?.data?.info?.profile_id}`))
         }, 1000)
 
         return;

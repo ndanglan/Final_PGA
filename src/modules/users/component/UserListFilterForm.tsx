@@ -117,9 +117,10 @@ const UserListFilterForm = (props: Props) => {
 
   useEffect(() => {
     if (country) {
-      fetchState(country)
+      fetchState(country);
+      methods.setValue('state', '')
     }
-  }, [country, fetchState])
+  }, [country, fetchState, methods])
 
   useEffect(() => {
     methods.setValue('address', filters.address)
