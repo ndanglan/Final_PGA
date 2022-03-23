@@ -15,9 +15,11 @@ import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
 import { ROUTES } from '../../../configs/routes';
 import { getErrorMessageResponse } from '../../../utils';
 import { setLoading } from '../../common/redux/loadingReducer';
+import { Redirect } from 'react-router';
 
 const LoginPage = () => {
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
+  const auth = Cookies.get(ACCESS_TOKEN_KEY);
   const [errorMessage, setErrorMessage] = useState('');
 
   const onLogin = React.useCallback(
@@ -47,6 +49,14 @@ const LoginPage = () => {
     },
     [dispatch],
   );
+
+  if (auth) {
+    return <Redirect
+      to={{
+        pathname: ROUTES.productList,
+      }}
+    />
+  }
 
   return (
     <div

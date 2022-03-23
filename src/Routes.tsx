@@ -19,8 +19,8 @@ export const Routes = () => {
       <Switch location={location}>
         {/* main layout cho cacs phaanf sau login */}
         <Route exact path={ROUTES.login} component={LoginPage} />
-        <Route exact path="/" component={LoginPage} />
         <MainLayout>
+          <ProtectedRoute exact path="/" component={ProductsPage} />
           <ProtectedRoute path={ROUTES.productList} component={ProductsPage} />
           <ProtectedRoute path={`${ROUTES.addProduct}`} component={ProductsFormPage} />
           <ProtectedRoute path={`${ROUTES.productDetail}/:id`} component={ProductsFormPage} />
