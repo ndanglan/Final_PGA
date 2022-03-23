@@ -37,8 +37,8 @@ const ProductFilterForm = (props: Props) => {
       search_type: filters.search_type,
       stock_status: filters.stock_status,
       vendor: {
-        value: filters.vendor.value,
-        id: filters.vendor.id
+        value: filters?.vendor?.value ? filters.vendor.value : '',
+        id: filters?.vendor?.id ? filters.vendor.id : ''
       },
       availability: filters.availability,
       count: filters.count,
@@ -49,6 +49,7 @@ const ProductFilterForm = (props: Props) => {
   });
 
   const onSubmit = (data: FilterProps) => {
+    console.log(data)
     onChangeFilter({
       ...data,
       page: 1
@@ -92,8 +93,8 @@ const ProductFilterForm = (props: Props) => {
       methods.setValue('stock_status', filters.stock_status)
 
       methods.setValue('vendor', {
-        value: filters.vendor.value,
-        id: filters.vendor.id
+        value: filters.vendor?.value ? filters.vendor?.value : '',
+        id: filters.vendor?.id ? filters.vendor?.id : ''
       })
 
       methods.setValue('availability', filters.availability)

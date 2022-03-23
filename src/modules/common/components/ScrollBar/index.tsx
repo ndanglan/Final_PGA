@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from 'react'
+import React, { useRef, useLayoutEffect, useMemo, useState, useEffect } from 'react'
 import { makeStyles } from '@mui/styles'
 
 interface Props {
@@ -12,7 +12,6 @@ const useStyles = makeStyles(({
     height: '20px',
     position: 'fixed',
     zIndex: 9999,
-    width: '1200px',
     bottom: 0,
 
     '& div': {
@@ -26,6 +25,8 @@ const ScrollBar = (props: Props) => {
   const { tableRef } = props
   const scrollRef = useRef<HTMLDivElement>(null)
   // handle remote scrollbar
+  const [scrollTrackWidth, setScrollTrackWidth] = useState<number | undefined>();
+
   useLayoutEffect(() => {
     const scrollbar = scrollRef.current;
 
@@ -56,11 +57,19 @@ const ScrollBar = (props: Props) => {
     }
   }, [tableRef])
 
+  useEffect(() => {
+    setScrollTrackWidth(tableRef.current?.clientWidth)
+  }, [tableRef])
+
   return (
     <div
       ref={scrollRef}
       id='scrollbar'
-      className={classes.scrollbar}>
+      className={classes.scrollbar}
+      style={{
+        width: scrollTrackWidth
+      }}
+    >
       <div style={{
         width: '1500px'
       }}></div>

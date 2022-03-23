@@ -140,7 +140,8 @@ const UsersPage = () => {
     dispatch(replace(`${ROUTES.userList}?${userFilterQueryString}`));
 
     setFilters(newFilters)
-  }, [dispatch]);
+    mutate(newFilters)
+  }, [dispatch, mutate]);
 
   // // call api edit product
   const deleteUsers = useCallback(async (
@@ -253,6 +254,7 @@ const UsersPage = () => {
         tz: 7
       })
     }
+    setUsersDeleted([])
     window.scrollTo(0, 0);
   }, [location])
 
