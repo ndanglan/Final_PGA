@@ -298,9 +298,10 @@ const ProductsPage = () => {
       })
     }
 
-    // option 2 xóa product theo từng trang
-    // setProductsEdited([]);
+    // chỉ edit được ở trong trang đang nhìn 
+    setProductsEdited([]);
 
+    // option 2 xóa product theo từng trang
     // setProductsDeleted([]);
     window.scrollTo(0, 0);
   }, [location])

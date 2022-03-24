@@ -39,16 +39,17 @@ const ProductTableRow = (props: Props) => {
 
   const [stockState, setStockState] = useState({
     isEditing: false,
-    value: ''
+    value: product.amount
   })
 
   const [priceState, setPriceState] = useState({
     isEditing: false,
-    value: ''
+    value: product.price
   })
 
   useEffect(() => {
     // check neu product da edited inline hay chua neu chua thi disable button con neu co thi enable button
+    console.log('')
     if (
       +priceState.value === +product.price
       && +stockState.value === +product.amount
@@ -70,18 +71,6 @@ const ProductTableRow = (props: Props) => {
     );
 
   }, [priceState.value, stockState.value])
-
-  useEffect(() => {
-    setStockState({
-      isEditing: false,
-      value: product.amount
-    });
-
-    setPriceState({
-      isEditing: false,
-      value: product.price
-    })
-  }, [product.amount, product.price])
 
   return (
     <tr style={{
@@ -193,7 +182,7 @@ const ProductTableRow = (props: Props) => {
                     if (e.formattedValue === '') {
                       return {
                         ...prev,
-                        value: ''
+                        value: '0'
                       }
                     }
                     return {

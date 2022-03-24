@@ -49,7 +49,7 @@ const ProductFilterForm = (props: Props) => {
   });
 
   const onSubmit = (data: FilterProps) => {
-    console.log(data)
+    // console.log(data)
     onChangeFilter({
       ...data,
       page: 1
