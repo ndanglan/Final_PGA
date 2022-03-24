@@ -122,8 +122,7 @@ const ProductsPage = () => {
     dispatch(replace(`${ROUTES.productList}?${filterQueryString}`));
 
     setFilters(newFilters)
-    mutate(newFilters)
-  }, [dispatch, mutate])
+  }, [dispatch])
 
   // call api edit product
   const editProduct = useCallback(async (
@@ -298,9 +297,11 @@ const ProductsPage = () => {
         availability: 'all'
       })
     }
-    setProductsEdited([]);
 
-    setProductsDeleted([]);
+    // option 2 xóa product theo từng trang
+    // setProductsEdited([]);
+
+    // setProductsDeleted([]);
     window.scrollTo(0, 0);
   }, [location])
 

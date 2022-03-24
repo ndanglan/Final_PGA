@@ -140,8 +140,8 @@ const UsersPage = () => {
     dispatch(replace(`${ROUTES.userList}?${userFilterQueryString}`));
 
     setFilters(newFilters)
-    mutate(newFilters)
-  }, [dispatch, mutate]);
+
+  }, [dispatch]);
 
   // // call api edit product
   const deleteUsers = useCallback(async (
@@ -254,7 +254,9 @@ const UsersPage = () => {
         tz: 7
       })
     }
-    setUsersDeleted([])
+
+    // option 2 xóa user theo từng trang
+    // setUsersDeleted([])
     window.scrollTo(0, 0);
   }, [location])
 
