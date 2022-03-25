@@ -222,6 +222,26 @@ const ProductForm = (props: Props) => {
     onPostProduct(data)
   };
 
+  const handleAddShippingLocationField = (location: {
+    id: number | null | string,
+    name: string,
+    price: string
+  }) => {
+    const isExisted = fields.find(item => item.zone_id.toString() === location.id);
+    if (isExisted) {
+      return;
+    }
+
+    if (location.id) {
+      append({
+        id: location?.id.toString(),
+        price: location.price,
+        zone_id: location?.id.toString(),
+        zone_name: location.name,
+      })
+    }
+  }
+
   useEffect(() => {
 
     if (productDetails) {
@@ -326,6 +346,10 @@ const ProductForm = (props: Props) => {
       }
     }
   }, [productDetails, methods, replace, append])
+
+  useEffect(() => {
+    console.log(fields)
+  }, [fields])
 
   return (
     <FormProvider {...methods}>
@@ -885,11 +909,7 @@ const ProductForm = (props: Props) => {
                   }}
                   onClick={() => {
                     if (shippingLocation.id) {
-                      append({
-                        id: shippingLocation?.id.toString(),
-                        price: shippingLocation.price,
-                        zone_name: shippingLocation.name,
-                      })
+                      handleAddShippingLocationField(shippingLocation)
 
                       setShippingLocation({
                         id: null,

@@ -49,7 +49,6 @@ const ProductTableRow = (props: Props) => {
 
   useEffect(() => {
     // check neu product da edited inline hay chua neu chua thi disable button con neu co thi enable button
-    console.log('')
     if (
       +priceState.value === +product.price
       && +stockState.value === +product.amount
