@@ -5,7 +5,6 @@ import productsReducer, { ProductsState } from './../modules/products/redux/prod
 import loadingReducer, { LoadingProps } from './../modules/common/redux/loadingReducer';
 import authReducer, { AuthState } from '../modules/auth/redux/authReducer';
 import intlReducer, { IntlState } from '../modules/intl/redux/intlReducer';
-
 export interface AppState {
   router: RouterState;
   intl: IntlState;

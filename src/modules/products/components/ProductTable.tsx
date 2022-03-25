@@ -12,6 +12,7 @@ import { ArrowDownwardIcon, ArrowUpwardIcon } from '../../common/components/Icon
 interface Props {
   products: ProductsProps[],
   productsDeleted: DeleteProps[],
+  isDeletingAll: boolean,
   filters: FilterProps,
   onChangeFilter(filters: FilterProps): void,
   handleAddProductEdited(changed: boolean, id: string, price: string, stock: string): void,
@@ -24,6 +25,7 @@ const ProductTable = React.forwardRef<HTMLTableElement, Props>((props: Props, re
   const {
     products,
     productsDeleted,
+    isDeletingAll,
     filters,
     onChangeFilter,
     handleAddProductEdited,
@@ -73,9 +75,7 @@ const ProductTable = React.forwardRef<HTMLTableElement, Props>((props: Props, re
               <Checkbox
                 sx={{ color: '#fff' }}
                 checked={
-                  productsDeleted?.length
-                  === products?.length
-                  && productsDeleted?.length !== 0
+                  isDeletingAll
                 }
                 onChange={(e) => {
                   if (e.target.checked) {

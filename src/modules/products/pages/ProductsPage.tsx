@@ -2,7 +2,7 @@ import React, {
   useCallback,
   useRef,
   useState,
-  useEffect
+  useEffect,
 } from 'react'
 import { Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
@@ -87,6 +87,8 @@ const ProductsPage = () => {
 
   const [productsDeleted, setProductsDeleted] = useState<DeleteProps[] | []>([]);
 
+  const [isDeletingAll, setIsDeletingAll] = useState(false)
+
   const [dialogOptions, setDialogOptions] = useState<DialogProps>({
     open: false,
     title: '',
@@ -147,7 +149,7 @@ const ProductsPage = () => {
       });
 
       setProductsEdited([]);
-
+      setIsDeletingAll(false)
       setProductsDeleted([]);
 
       mutate()
@@ -159,6 +161,11 @@ const ProductsPage = () => {
       message: 'Your change is failed!',
       type: 'error'
     });
+
+    setProductsEdited([]);
+    setIsDeletingAll(false)
+    setProductsDeleted([]);
+
   }, [dispatch, mutate])
 
   //  options dialog
@@ -279,6 +286,40 @@ const ProductsPage = () => {
     setProductsDeleted(prev => prev.filter(item => item.id !== id))
   }
 
+  const checkDeletingAll = useCallback(() => {
+    if (products && products.length > 0) {
+      // check nếu tất cả sản phẩm trong product đều ở trong productDeleted
+      const hasAll = products.every(product => {
+
+        const isInDeleteArr = productsDeleted?.find(item => +item.id === +product.id)
+
+        if (isInDeleteArr) {
+          return true;
+        }
+
+        return false
+      })
+
+      if (hasAll) {
+        setIsDeletingAll(true);
+        return;
+      }
+
+      console.log('chạy')
+      setIsDeletingAll(false);
+
+      return;
+    }
+
+    setIsDeletingAll(false);
+  }, [products, productsDeleted])
+
+  useEffect(() => {
+    if (productsDeleted && productsDeleted.length > 0) {
+      checkDeletingAll()
+    }
+  }, [productsDeleted])
+
   useEffect(() => {
     if (!location.search) {
       setFilters({
@@ -302,7 +343,10 @@ const ProductsPage = () => {
     setProductsEdited([]);
 
     // option 2 xóa product theo từng trang
-    // setProductsDeleted([]);
+    // sau khi chuyển location sẽ check lại trạng thái của delete all 
+    checkDeletingAll()
+
+    // chuyển trang MỚI thì scroll to top
     window.scrollTo(0, 0);
   }, [location])
 
@@ -349,6 +393,7 @@ const ProductsPage = () => {
             {/* Table */}
             {products && (
               <ProductTable
+                isDeletingAll={isDeletingAll}
                 products={products}
                 handleAddProductEdited={handleAddProductEdited}
                 handleAddDeleteProduct={handleAddDeleteProduct}
