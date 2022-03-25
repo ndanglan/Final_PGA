@@ -337,6 +337,7 @@ const UserListFilterForm = (props: Props) => {
                 </div>
                 <DateRangePickerInput
                   inputSize={12}
+                  labelSize={0}
                   required={false}
                   name="date_range"
                 />

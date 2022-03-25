@@ -17,4 +17,5 @@ export { default as PersonOutlineOutlinedIcon } from '@mui/icons-material/Person
 
 export { default as ArrowDownwardIcon } from '@mui/icons-material/ArrowDownward';
 export { default as ArrowUpwardIcon } from '@mui/icons-material/ArrowUpward';
+export { default as ClearIcon } from '@mui/icons-material/Clear';
 

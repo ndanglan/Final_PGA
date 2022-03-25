@@ -11,12 +11,14 @@ import {
   MEDIUM_PURPLE
 } from '../../../configs/colors';
 import { InputBase, Popover } from '@mui/material';
+import { ClearIcon } from '../../common/components/Icons';
 
 interface Props {
   label?: string,
   name: string,
   placeHolder?: string,
   inputSize?: number,
+  labelSize?: number,
   required: boolean,
 }
 
@@ -85,9 +87,10 @@ const DateRangePickerInput = (props: Props) => {
     label,
     placeHolder,
     inputSize,
+    labelSize,
     required,
     name } = props;
-  const { control, watch } = useFormContext()
+  const { control, watch, setValue } = useFormContext()
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState<HTMLInputElement | null>(null);
@@ -121,8 +124,13 @@ const DateRangePickerInput = (props: Props) => {
       label={label}
       required={required}
       inputSize={inputSize ? inputSize : undefined}
+      labelSize={labelSize}
     >
       <InputBase
+        style={{
+          width: '100%',
+          position: 'relative'
+        }}
         value={
           moment(dateRange[0].startDate).format('MMM DD,YYYY')
           +
@@ -147,9 +155,38 @@ const DateRangePickerInput = (props: Props) => {
             textAlign: 'left',
             fontWeight: '500',
             borderRadius: '0.25rem',
-            backgroundColor: '#252547'
+            backgroundColor: '#252547',
+            width: '100%'
           }
         }}
+        endAdornment={<>
+          <ClearIcon
+            sx={{
+              position: 'absolute',
+              right: '10px',
+              cursor: 'pointer'
+            }}
+            onClick={() => {
+              // set lại hiển thị về thời gian hiện tại
+              setDateRange([
+                {
+                  startDate: new Date(),
+                  endDate: new Date(),
+                  key: 'selection'
+                }
+              ])
+
+              // set value cho date_range trong form về undefined
+              setValue('date_range', {
+                selection: {
+                  startDate: undefined,
+                  endDate: undefined,
+                  key: ''
+                }
+              })
+            }}
+          />
+        </>}
       />
       <Popover
         open={Boolean(anchorEl)}
@@ -181,7 +218,6 @@ const DateRangePickerInput = (props: Props) => {
                     endDate: item.selection.endDate,
                     key: item.selection.key,
                   }])
-
                   field.onChange(item)
                 }
               }}
