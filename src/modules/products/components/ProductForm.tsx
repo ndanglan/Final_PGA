@@ -219,6 +219,7 @@ const ProductForm = (props: Props) => {
   })
 
   const onSubmit = (data: FormValuesProps) => {
+    console.log(data)
     onPostProduct(data)
   };
 
@@ -346,10 +347,6 @@ const ProductForm = (props: Props) => {
       }
     }
   }, [productDetails, methods, replace, append])
-
-  useEffect(() => {
-    console.log(fields)
-  }, [fields])
 
   return (
     <FormProvider {...methods}>

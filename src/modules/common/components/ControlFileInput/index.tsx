@@ -22,9 +22,12 @@ const ControlFileInput = (props: IFileInputProps) => {
     formState: { errors }
   } = useFormContext();
 
-  const [imagesSelected, setImagesSelected] = useState<string[]>([]);
+  const [imagesSelected, setImagesSelected] = useState<{
+    id: number | string | null,
+    file: string
+  }[]>();
 
-  const removeImage = (id: number) => {
+  const removeImage = (id: number | string | null, indexOfSelectedImage: number) => {
     // lấy file array từ react hook form 
     const fileArray: File[] = getValues('images');
     // lấy giá trị imagesOrder từ react hook form 
@@ -33,34 +36,47 @@ const ControlFileInput = (props: IFileInputProps) => {
     const imagesDeletedArray = getValues('deleted_images');
 
     // xóa trong images và imagesOrder của react hook form 
-    const afterDeletedFileArray = fileArray.filter((item, index) => index !== id);
-    const afterDeletedImageOrdersArray = imagesOrderArray.filter((item: string, index: number) => index !== id);
+    const afterDeletedFileArray = fileArray.filter((item, index: number) => index !== indexOfSelectedImage);
+    const afterDeletedImageOrdersArray = imagesOrderArray.filter((_: any, index: number) => index !== indexOfSelectedImage);
 
     setValue('images', afterDeletedFileArray);
     setValue('imagesOrder', afterDeletedImageOrdersArray);
 
     // lưu id của image được xóa vào mảng deleted_images
-    if (props.images && props.images.length > 0) {
-      const deletedImagesArrayAvailable = props.images.filter((image, index) => index === id).map(item => +item.id);
-
+    if (id && props.images && props.images.length > 0) {
+      const deletedImagesArrayAvailable = props.images.filter((image) => +image.id === +id).map(item => +item.id);
       setValue('deleted_images', [...imagesDeletedArray, ...deletedImagesArrayAvailable])
     }
 
-    // xóa image selected để display
-    const newArrayDisplayImages = imagesSelected.filter((image, index) => index !== id);
+    setImagesSelected((prev) => {
+      if (prev) {
+        const newArrayDisplayImages = prev.filter((image, index) => index !== indexOfSelectedImage);
 
-    setImagesSelected(newArrayDisplayImages)
+        return newArrayDisplayImages
+      }
+
+      return prev
+    })
   }
 
   const addImages = (files: any) => {
     // create URL để hiển thị 
-    const urlArray = [...files].map(file => URL.createObjectURL(file));
+    const urlArray = [...files].map(file => ({
+      id: null,
+      file: URL.createObjectURL(file)
+    }));
 
     // lọc name để thêm vào imagesOrder
     const nameArray = [...files].map(file => file.name);
 
     // set image để hiển thị 
-    setImagesSelected((prev) => ([...prev, ...urlArray]))
+    setImagesSelected((prev) => {
+      if (prev) {
+        return ([...prev, ...urlArray])
+      }
+
+      return [...urlArray]
+    })
 
     // lưu tên theo order
     setValue('imagesOrder', [...getValues('imagesOrder'), ...nameArray])
@@ -71,7 +87,10 @@ const ControlFileInput = (props: IFileInputProps) => {
 
   useEffect(() => {
     if (props.images && props.images.length > 0) {
-      const newArrayImages = props.images.map(image => image.file)
+      const newArrayImages = props.images.map(image => ({
+        id: image.id,
+        file: image.file
+      }))
       setImagesSelected(newArrayImages)
     }
   }, [])
@@ -116,7 +135,7 @@ const ControlFileInput = (props: IFileInputProps) => {
                       }}
                       key={index}>
                       <img
-                        src={image}
+                        src={image.file}
                         alt='image'
                         style={{
                           width: '130px',
@@ -142,7 +161,7 @@ const ControlFileInput = (props: IFileInputProps) => {
                           cursor: 'pointer'
                         }}
                         onClick={() => {
-                          removeImage(index)
+                          removeImage(image.id, index)
                         }}
                       >
                         <CloseIcon sx={{ color: '#000' }} />
