@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect, useMemo, useState, useEffect } from 'react'
+import React, { useRef, useLayoutEffect, useState, useEffect } from 'react'
 import { makeStyles } from '@mui/styles'
 
 interface Props {
@@ -23,8 +23,8 @@ const useStyles = makeStyles(({
 const ScrollBar = (props: Props) => {
   const classes = useStyles();
   const { tableRef } = props
-  const scrollRef = useRef<HTMLDivElement>(null)
-  // handle remote scrollbar
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const [scrollTrackWidth, setScrollTrackWidth] = useState<number | undefined>();
 
   useLayoutEffect(() => {
@@ -62,18 +62,21 @@ const ScrollBar = (props: Props) => {
   }, [tableRef])
 
   return (
-    <div
-      ref={scrollRef}
-      id='scrollbar'
-      className={classes.scrollbar}
-      style={{
-        width: scrollTrackWidth
-      }}
-    >
-      <div style={{
-        width: '1500px'
-      }}></div>
-    </div>
+    <>
+      <div
+        ref={scrollRef}
+        id='scrollbar'
+        className={classes.scrollbar}
+        style={{
+          width: scrollTrackWidth
+        }}
+      >
+        <div style={{
+          width: '1500px'
+        }}></div>
+      </div>
+    </>
+
   )
 }
 

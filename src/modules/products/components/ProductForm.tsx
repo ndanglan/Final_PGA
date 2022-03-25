@@ -219,7 +219,6 @@ const ProductForm = (props: Props) => {
   })
 
   const onSubmit = (data: FormValuesProps) => {
-    console.log(data)
     onPostProduct(data)
   };
 

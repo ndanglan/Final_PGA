@@ -22,7 +22,9 @@ const MainLayout = (props: Props) => {
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
 
   // điều khiển side bar
-  const handleSideBarAction = useCallback(() => setSideBarOpen(prev => !prev), []);
+  const handleSideBarAction = useCallback(() => {
+    setSideBarOpen(prev => !prev)
+  }, []);
 
   // logout function
   const handleLogOut = useCallback(() => {

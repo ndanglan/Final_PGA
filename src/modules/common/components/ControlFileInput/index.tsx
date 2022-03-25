@@ -19,6 +19,7 @@ const ControlFileInput = (props: IFileInputProps) => {
   const {
     setValue,
     getValues,
+    setError,
     formState: { errors }
   } = useFormContext();
 
@@ -94,6 +95,15 @@ const ControlFileInput = (props: IFileInputProps) => {
       setImagesSelected(newArrayImages)
     }
   }, [])
+
+  useEffect(() => {
+    if (imagesSelected?.length === 0) {
+      setError('images', {
+        type: 'required',
+        message: 'This field is required'
+      })
+    }
+  }, [imagesSelected])
 
   return (
     <FormControlGroup
