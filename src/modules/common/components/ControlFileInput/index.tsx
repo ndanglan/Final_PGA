@@ -7,7 +7,6 @@ import defaultImg from '../../../../no-image-icon.png';
 import { DARK_PURPLE } from '../../../../configs/colors'
 import { RequiredRuleProps } from '../../../../models/input';
 
-
 interface IFileInputProps {
   name: string,
   label: string,
@@ -20,6 +19,7 @@ const ControlFileInput = (props: IFileInputProps) => {
     setValue,
     getValues,
     setError,
+    clearErrors,
     formState: { errors }
   } = useFormContext();
 
@@ -102,7 +102,11 @@ const ControlFileInput = (props: IFileInputProps) => {
         type: 'required',
         message: 'This field is required'
       })
+
+      return;
     }
+    console.log('clear')
+    clearErrors('images')
   }, [imagesSelected])
 
   return (

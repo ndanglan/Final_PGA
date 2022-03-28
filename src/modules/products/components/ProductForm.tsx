@@ -208,6 +208,8 @@ const ProductForm = (props: Props) => {
     name: "shipping_to_zones",
   });
 
+  console.log(methods.formState.isValid)
+
   const [shippingLocation, setShippingLocation] = useState<{
     id: number | null | string,
     name: string,
@@ -1030,7 +1032,7 @@ const ProductForm = (props: Props) => {
                 backgroundColor: "#f0ad4e",
                 color: '#fff'
               }}
-              disabled={!methods.formState.isValid}
+              disabled={Object.keys(methods.formState.errors).length !== 0}
             >
               {methods.watch('id')
                 ? 'Update Product'
