@@ -315,7 +315,7 @@ const ProductsPage = () => {
   }, [products, productsDeleted])
 
   useEffect(() => {
-    if (productsDeleted && productsDeleted.length > 0) {
+    if (productsDeleted) {
       checkDeletingAll()
     }
   }, [productsDeleted])

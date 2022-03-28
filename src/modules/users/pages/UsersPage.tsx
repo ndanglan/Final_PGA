@@ -77,6 +77,8 @@ const UsersPage = () => {
 
   const [usersDeleted, setUsersDeleted] = useState<DeleteUsersProps[]>([]);
 
+  const [isDeletingAll, setIsDeletingAll] = useState(false)
+
   const [dialogOptions, setDialogOptions] = useState<DialogProps>({
     open: false,
     title: '',
@@ -167,7 +169,7 @@ const UsersPage = () => {
       })
 
       setUsersDeleted([])
-
+      setIsDeletingAll(false)
       mutate()
 
       return;
@@ -178,6 +180,8 @@ const UsersPage = () => {
       message: 'Your change is failed!',
       type: 'error'
     });
+
+    setIsDeletingAll(false)
   }, [dispatch, mutate])
 
   //  options dialog
@@ -228,6 +232,40 @@ const UsersPage = () => {
     setUsersDeleted(prev => prev.filter(item => item.id !== id))
   }
 
+  const checkDeletingAll = useCallback(() => {
+    if (usersState && usersState.length > 0) {
+      // check nếu tất cả sản phẩm trong product đều ở trong productDeleted
+      const hasAll = usersState.every(user => {
+
+        const isInDeleteArr = usersDeleted?.find(item => +item.id === +user.profile_id)
+
+        if (isInDeleteArr) {
+          return true;
+        }
+
+        return false
+      })
+
+      if (hasAll) {
+        setIsDeletingAll(true);
+        return;
+      }
+
+      setIsDeletingAll(false);
+
+      return;
+    }
+
+    setIsDeletingAll(false);
+  }, [usersState, usersDeleted])
+
+  useEffect(() => {
+    if (usersDeleted) {
+      checkDeletingAll()
+    }
+  }, [usersDeleted])
+
+
   useEffect(() => {
     if (!location.search) {
       setFilters({
@@ -255,6 +293,7 @@ const UsersPage = () => {
       })
     }
 
+    checkDeletingAll()
     // option 2 xóa user theo từng trang
     // setUsersDeleted([])
     window.scrollTo(0, 0);
@@ -304,6 +343,7 @@ const UsersPage = () => {
             {/* Table */}
             {usersState && (
               <UserListTable
+                isDeletingAll={isDeletingAll}
                 handleAddDeleteUser={handleAddDeleteUser}
                 onChangeFilter={handleChangeFilter}
                 users={usersState}

@@ -8,6 +8,7 @@ import { ArrowDownwardIcon, ArrowUpwardIcon } from '../../common/components/Icon
 interface Props {
   users: UserDataProps[],
   usersDeleted: DeleteUsersProps[],
+  isDeletingAll: boolean,
   filters: FilterUsersProps,
   onChangeFilter(filters: FilterUsersProps): void,
   handleAddDeleteUser(id: string, isDeleting: boolean): void,
@@ -17,6 +18,7 @@ const UserListTable = React.forwardRef<HTMLTableElement, Props>((props: Props, r
   const {
     users,
     usersDeleted,
+    isDeletingAll,
     onChangeFilter,
     filters,
     handleAddDeleteUser,
@@ -67,8 +69,7 @@ const UserListTable = React.forwardRef<HTMLTableElement, Props>((props: Props, r
             <th>
               <Checkbox
                 checked={
-                  usersDeleted.length
-                  === users.length && usersDeleted.length !== 0
+                  isDeletingAll
                 }
                 onChange={(e) => {
                   if (e.target.checked) {
